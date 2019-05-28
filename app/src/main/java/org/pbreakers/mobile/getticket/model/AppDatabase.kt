@@ -27,7 +27,7 @@ import java.util.*
 )
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun agenceDao(): AgentDao
+    abstract fun agenceDao(): AgenceDao
     abstract fun etatDao(): EtatDao
     abstract fun busDao(): BusDao
     abstract fun lieuDao(): LieuDao
