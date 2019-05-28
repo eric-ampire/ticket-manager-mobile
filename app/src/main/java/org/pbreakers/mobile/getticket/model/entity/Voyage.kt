@@ -9,11 +9,13 @@ import kotlinx.android.parcel.Parcelize
 import java.util.*
 
 @Entity(
-    indices = [Index("idProvenance", "idDestination", "idBus")],
+    indices = [Index("idProvenance", "idDestination", "idBus", "idTransit", "idEtat")],
     foreignKeys = [
         ForeignKey(entity = Lieu::class, parentColumns = ["id"], childColumns = ["idProvenance"]),
         ForeignKey(entity = Lieu::class, parentColumns = ["id"], childColumns = ["idProvenance"]),
-        ForeignKey(entity = Bus::class, parentColumns = ["id"], childColumns = ["idBus"])
+        ForeignKey(entity = Bus::class, parentColumns = ["id"], childColumns = ["idBus"]),
+        ForeignKey(entity = Etat::class, parentColumns = ["id"], childColumns = ["idEtat"]),
+        ForeignKey(entity = Transit::class, parentColumns = ["id"], childColumns = ["idTransit"])
     ]
 )
 @Parcelize
@@ -24,5 +26,10 @@ data class Voyage(
     val idDestination: Long,
     val idBus: Long,
     val dateDepart: Date,
-    val heureDepart: Date
+    val heureDepart: Date,
+    val dateDestination: Date,
+    val heureDestinatin: Date,
+    val idTransit: Long,
+    val prix: Double,
+    val idEtat: Long
 ) : Parcelable
