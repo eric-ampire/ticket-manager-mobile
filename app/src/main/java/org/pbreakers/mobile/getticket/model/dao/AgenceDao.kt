@@ -5,7 +5,7 @@ import androidx.room.*
 import org.pbreakers.mobile.getticket.model.entity.Agence
 
 @Dao
-interface AgentDao {
+interface AgenceDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(vararg data: Agence)
 
