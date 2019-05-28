@@ -17,5 +17,4 @@ interface AppComponent {
 
 
     // Constructor injection
-    fun agenceDao(): Agence
 }
