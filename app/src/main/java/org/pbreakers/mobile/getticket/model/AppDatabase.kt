@@ -4,15 +4,39 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverter
 import androidx.room.TypeConverters
-import org.pbreakers.mobile.getticket.model.dao.AgentDao
-import org.pbreakers.mobile.getticket.model.entity.Agence
+import org.pbreakers.mobile.getticket.model.dao.*
+import org.pbreakers.mobile.getticket.model.entity.*
 import java.util.*
 
 @TypeConverters(value = [AppDatabase.DateConverter::class])
-@Database(entities = [Agence::class], version = 2, exportSchema = true)
+@Database(
+    entities = [
+        Agence::class,
+        Etat::class,
+        Bus::class,
+        Lieu::class,
+        Role::class,
+        Utilisateur::class,
+        Transit::class,
+        Voyage::class,
+        PointArret::class,
+        Billet::class
+    ],
+    version = 1,
+    exportSchema = true
+)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun agenceDao(): AgentDao
+    abstract fun etatDao(): EtatDao
+    abstract fun busDao(): BusDao
+    abstract fun lieuDao(): LieuDao
+    abstract fun roleDao(): RoleDao
+    abstract fun pointArretDao(): PointArretDao
+    abstract fun billetDao(): BilletDao
+    abstract fun transitDao(): TransitDao
+    abstract fun voyageDao(): VoyageDao
+    abstract fun utilisateurDao(): UtilisateurDao
 
     class DateConverter {
         @TypeConverter
