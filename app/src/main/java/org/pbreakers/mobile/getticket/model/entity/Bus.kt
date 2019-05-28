@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
 @Entity(
-    indices = [Index("idAgent")],
+    indices = [Index("idAgence")],
     foreignKeys = [ForeignKey(entity = Agence::class, parentColumns = ["id"], childColumns = ["idAgence"])]
 )
 @Parcelize
