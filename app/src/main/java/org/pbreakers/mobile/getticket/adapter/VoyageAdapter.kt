@@ -1,4 +1,4 @@
-package org.pbreakers.mobile.getticket
+package org.pbreakers.mobile.getticket.adapter
 
 import androidx.recyclerview.widget.DiffUtil
 import org.pbreakers.mobile.getticket.model.entity.Voyage
