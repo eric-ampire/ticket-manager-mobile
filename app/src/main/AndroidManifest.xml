@@ -22,7 +22,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.activity.AuthActivity" />
+        <activity
+            android:theme="@style/AppTheme.Auth"
+            android:name=".view.activity.AuthActivity" />
         <activity android:name=".view.activity.MainActivity">
         </activity>
     </application>
