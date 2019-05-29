@@ -9,7 +9,7 @@ interface EtatDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(vararg data: Etat)
 
-    @Query("SELECT * FROM Etat WHERE id=:id")
+    @Query("SELECT * FROM Etat WHERE idEtat=:id")
     fun findById(id: Int): LiveData<Etat>
 
     @Query("SELECT * FROM Etat")

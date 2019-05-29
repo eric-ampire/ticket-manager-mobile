@@ -9,13 +9,13 @@ import kotlinx.android.parcel.Parcelize
 
 @Entity(
     indices = [Index("idRole")],
-    foreignKeys = [ForeignKey(entity = Role::class, parentColumns = ["id"], childColumns = ["idRole"])]
+    foreignKeys = [ForeignKey(entity = Role::class, parentColumns = ["idRole"], childColumns = ["idRole"])]
 )
 @Parcelize
 class Utilisateur(
-    @PrimaryKey val id: Long,
-    val nom: String,
-    val pseudo: String,
-    val password: String,
+    @PrimaryKey val idUtilisateur: Long,
+    val nomUtilisateur: String,
+    val pseudoUtilisateur: String,
+    val passwordUtilisateur: String,
     val idRole: Long
 ) : Parcelable

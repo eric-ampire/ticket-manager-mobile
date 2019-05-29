@@ -9,7 +9,7 @@ interface BusDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(vararg data: Bus)
 
-    @Query("SELECT * FROM Bus WHERE id=:id")
+    @Query("SELECT * FROM Bus WHERE idAgence=:id")
     fun findById(id: Int): LiveData<Bus>
 
     @Query("SELECT * FROM Bus")

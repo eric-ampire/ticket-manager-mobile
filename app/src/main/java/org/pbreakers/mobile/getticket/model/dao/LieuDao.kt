@@ -9,7 +9,7 @@ interface LieuDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(vararg data: Lieu)
 
-    @Query("SELECT * FROM Lieu WHERE id=:id")
+    @Query("SELECT * FROM Lieu WHERE idLieu=:id")
     fun findById(id: Int): LiveData<Lieu>
 
     @Query("SELECT * FROM Lieu")

@@ -9,7 +9,7 @@ interface PointArretDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(vararg data: PointArret)
 
-    @Query("SELECT * FROM PointArret WHERE id=:id")
+    @Query("SELECT * FROM PointArret WHERE idPointArret=:id")
     fun findById(id: Int): LiveData<PointArret>
 
     @Query("SELECT * FROM PointArret")

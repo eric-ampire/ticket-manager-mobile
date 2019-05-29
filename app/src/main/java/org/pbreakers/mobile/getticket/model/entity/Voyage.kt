@@ -11,17 +11,17 @@ import java.util.*
 @Entity(
     indices = [Index("idProvenance", "idDestination", "idBus", "idTransit", "idEtat")],
     foreignKeys = [
-        ForeignKey(entity = Lieu::class, parentColumns = ["id"], childColumns = ["idProvenance"]),
-        ForeignKey(entity = Lieu::class, parentColumns = ["id"], childColumns = ["idProvenance"]),
-        ForeignKey(entity = Bus::class, parentColumns = ["id"], childColumns = ["idBus"]),
-        ForeignKey(entity = Etat::class, parentColumns = ["id"], childColumns = ["idEtat"]),
-        ForeignKey(entity = Transit::class, parentColumns = ["id"], childColumns = ["idTransit"])
+        ForeignKey(entity = Lieu::class, parentColumns = ["idLieu"], childColumns = ["idProvenance"]),
+        ForeignKey(entity = Lieu::class, parentColumns = ["idLieu"], childColumns = ["idDestination"]),
+        ForeignKey(entity = Bus::class, parentColumns = ["idBus"], childColumns = ["idBus"]),
+        ForeignKey(entity = Etat::class, parentColumns = ["idEtat"], childColumns = ["idEtat"]),
+        ForeignKey(entity = Transit::class, parentColumns = ["idTransit"], childColumns = ["idTransit"])
     ]
 )
 @Parcelize
 data class Voyage(
-    @PrimaryKey val id: Long,
-    val reference: String,
+    @PrimaryKey val idVoyage: Long,
+    val referenceVoyage: String,
     val idProvenance: Long,
     val idDestination: Long,
     val idBus: Long,
@@ -30,6 +30,6 @@ data class Voyage(
     val dateDestination: Date,
     val heureDestinatin: Date,
     val idTransit: Long,
-    val prix: Double,
+    val prixVoyage: Double,
     val idEtat: Long
 ) : Parcelable

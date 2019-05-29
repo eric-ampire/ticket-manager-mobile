@@ -11,15 +11,15 @@ import java.util.*
 @Entity(
     indices = [Index("idVoyage", "idUtilisateur", "idEtat")],
     foreignKeys = [
-        ForeignKey(entity = Etat::class, parentColumns = ["id"], childColumns = ["idEtat"]),
-        ForeignKey(entity = Utilisateur::class, parentColumns = ["id"], childColumns = ["idUtilisateur"]),
-        ForeignKey(entity = Voyage::class, parentColumns = ["id"], childColumns = ["idVoyage"])
+        ForeignKey(entity = Etat::class, parentColumns = ["idEtat"], childColumns = ["idEtat"]),
+        ForeignKey(entity = Utilisateur::class, parentColumns = ["idUtilisateur"], childColumns = ["idUtilisateur"]),
+        ForeignKey(entity = Voyage::class, parentColumns = ["idVoyage"], childColumns = ["idVoyage"])
     ]
 )
 @Parcelize
 class Billet(
-    @PrimaryKey val id: Long,
-    val date: Date,
+    @PrimaryKey val idBillet: Long,
+    val dateBillet: Date,
     val idVoyage: Long,
     val idUtilisateur: Long,
     val idEtat: Long

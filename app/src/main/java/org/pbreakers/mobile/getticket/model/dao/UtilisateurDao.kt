@@ -9,7 +9,7 @@ interface UtilisateurDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(vararg data: Utilisateur)
 
-    @Query("SELECT * FROM Utilisateur WHERE id=:id")
+    @Query("SELECT * FROM Utilisateur WHERE idUtilisateur=:id")
     fun findById(id: Int): LiveData<Utilisateur>
 
     @Query("SELECT * FROM Utilisateur")
@@ -20,4 +20,7 @@ interface UtilisateurDao {
 
     @Delete
     fun remove(vararg data: Utilisateur)
+
+    @Query("SELECT * FROM Utilisateur WHERE pseudoUtilisateur=:pseudo AND passwordUtilisateur=:password")
+    fun findByPseudoAndPassword(pseudo: String, password: String): LiveData<Utilisateur>
 }

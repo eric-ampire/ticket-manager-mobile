@@ -9,7 +9,7 @@ interface AgenceDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(vararg data: Agence)
 
-    @Query("SELECT * FROM Agence WHERE id=:id")
+    @Query("SELECT * FROM Agence WHERE idAgence=:id")
     fun findById(id: Int): LiveData<Agence>
 
     @Query("SELECT * FROM Agence")

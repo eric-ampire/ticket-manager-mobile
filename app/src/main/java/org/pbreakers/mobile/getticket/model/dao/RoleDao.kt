@@ -9,7 +9,7 @@ interface RoleDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(vararg data: Role)
 
-    @Query("SELECT * FROM Role WHERE id=:id")
+    @Query("SELECT * FROM Role WHERE idRole=:id")
     fun findById(id: Int): LiveData<Role>
 
     @Query("SELECT * FROM Role")

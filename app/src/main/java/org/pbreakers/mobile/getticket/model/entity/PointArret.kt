@@ -10,13 +10,13 @@ import kotlinx.android.parcel.Parcelize
 @Entity(
     indices = [Index("idLieu", "idVoyage")],
     foreignKeys = [
-        ForeignKey(entity = Lieu::class, parentColumns = ["id"], childColumns = ["idLieu"]),
-        ForeignKey(entity = Voyage::class, parentColumns = ["id"], childColumns = ["idVoyage"])
+        ForeignKey(entity = Lieu::class, parentColumns = ["idLieu"], childColumns = ["idLieu"]),
+        ForeignKey(entity = Voyage::class, parentColumns = ["idVoyage"], childColumns = ["idVoyage"])
     ]
 )
 @Parcelize
 class PointArret(
-    @PrimaryKey val id: Long,
+    @PrimaryKey val idPointArret: Long,
     val idLieu: Long,
     val idVoyage: Long
 ) : Parcelable

@@ -8,6 +8,6 @@ import kotlinx.android.parcel.Parcelize
 @Entity
 @Parcelize
 class Etat(
-    @PrimaryKey val id: Long,
-    val nom: String
+    @PrimaryKey val idEtat: Long,
+    val nomEtat: String
 ) : Parcelable

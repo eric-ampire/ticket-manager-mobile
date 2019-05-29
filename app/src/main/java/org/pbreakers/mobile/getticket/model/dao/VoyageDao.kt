@@ -9,7 +9,7 @@ interface VoyageDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(vararg data: Voyage)
 
-    @Query("SELECT * FROM Voyage WHERE id=:id")
+    @Query("SELECT * FROM Voyage WHERE idVoyage=:id")
     fun findById(id: Int): LiveData<Voyage>
 
     @Query("SELECT * FROM Voyage")

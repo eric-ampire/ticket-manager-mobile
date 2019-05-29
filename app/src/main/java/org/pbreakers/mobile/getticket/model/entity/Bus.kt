@@ -9,12 +9,12 @@ import kotlinx.android.parcel.Parcelize
 
 @Entity(
     indices = [Index("idAgence")],
-    foreignKeys = [ForeignKey(entity = Agence::class, parentColumns = ["id"], childColumns = ["idAgence"])]
+    foreignKeys = [ForeignKey(entity = Agence::class, parentColumns = ["idAgence"], childColumns = ["idAgence"])]
 )
 @Parcelize
 class Bus(
-    @PrimaryKey val id: Long,
-    val nom: String,
+    @PrimaryKey val idBus: Long,
+    val nomBus: String,
     val nombreRange: Int,
     val nombreSiege: Int,
     val idAgence: Long

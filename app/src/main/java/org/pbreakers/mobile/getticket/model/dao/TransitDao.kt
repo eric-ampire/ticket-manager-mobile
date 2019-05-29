@@ -9,7 +9,7 @@ interface TransitDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(vararg data: Transit)
 
-    @Query("SELECT * FROM Transit WHERE id=:id")
+    @Query("SELECT * FROM Transit WHERE idTransit=:id")
     fun findById(id: Int): LiveData<Transit>
 
     @Query("SELECT * FROM Transit")

@@ -8,6 +8,6 @@ import kotlinx.android.parcel.Parcelize
 @Entity
 @Parcelize
 class Agence(
-    @PrimaryKey val id: Long,
-    val nom: String
+    @PrimaryKey val idAgence: Long,
+    val nomAgence: String
 ) : Parcelable

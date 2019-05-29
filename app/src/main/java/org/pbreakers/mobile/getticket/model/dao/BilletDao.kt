@@ -9,7 +9,7 @@ interface BilletDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(vararg data: Billet)
 
-    @Query("SELECT * FROM Billet WHERE id=:id")
+    @Query("SELECT * FROM Billet WHERE idBillet=:id")
     fun findById(id: Int): LiveData<Billet>
 
     @Query("SELECT * FROM Billet")
