@@ -27,7 +27,12 @@
         <activity
             android:name=".view.activity.AuthActivity"
             android:theme="@style/AppTheme.Auth" />
-        <activity android:name=".view.activity.MainActivity"></activity>
+        <activity
+            android:theme="@style/AppTheme.Main"
+            android:parentActivityName=".view.activity.MainActivity"
+            android:name=".view.activity.MainActivity">
+
+        </activity>
     </application>
 
 </manifest>
