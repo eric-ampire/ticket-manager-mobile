@@ -13,20 +13,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".view.activity.DetailBusActivity"></activity>
         <activity
-            android:theme="@style/AppTheme.Splash"
-            android:name=".view.activity.SplashActivity">
+            android:name=".view.activity.SplashActivity"
+            android:theme="@style/AppTheme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
-            android:theme="@style/AppTheme.Auth"
-            android:name=".view.activity.AuthActivity" />
-        <activity android:name=".view.activity.MainActivity">
-        </activity>
+            android:name=".view.activity.AuthActivity"
+            android:theme="@style/AppTheme.Auth" />
+        <activity android:name=".view.activity.MainActivity"></activity>
     </application>
 
 </manifest>
