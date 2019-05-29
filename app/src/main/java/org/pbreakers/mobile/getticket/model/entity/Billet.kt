@@ -17,7 +17,7 @@ import java.util.*
     ]
 )
 @Parcelize
-class Billet(
+data class Billet(
     @PrimaryKey val idBillet: Long,
     val dateBillet: Date,
     val idVoyage: Long,

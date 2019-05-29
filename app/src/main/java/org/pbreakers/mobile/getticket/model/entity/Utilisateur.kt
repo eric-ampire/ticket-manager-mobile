@@ -12,7 +12,7 @@ import kotlinx.android.parcel.Parcelize
     foreignKeys = [ForeignKey(entity = Role::class, parentColumns = ["idRole"], childColumns = ["idRole"])]
 )
 @Parcelize
-class Utilisateur(
+data class Utilisateur(
     @PrimaryKey val idUtilisateur: Long,
     val nomUtilisateur: String,
     val pseudoUtilisateur: String,

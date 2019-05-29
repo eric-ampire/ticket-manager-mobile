@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Entity
 @Parcelize
-class Transit(
+data class Transit(
     @PrimaryKey val idTransit: Long,
     val nomTransit: String
 ) : Parcelable

@@ -15,7 +15,7 @@ import kotlinx.android.parcel.Parcelize
     ]
 )
 @Parcelize
-class PointArret(
+data class PointArret(
     @PrimaryKey val idPointArret: Long,
     val idLieu: Long,
     val idVoyage: Long

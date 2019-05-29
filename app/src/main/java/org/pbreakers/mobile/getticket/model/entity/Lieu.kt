@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Entity
 @Parcelize
-class Lieu(
+data class Lieu(
     @PrimaryKey val idLieu: Long,
     val nomLieu: String
 ) : Parcelable

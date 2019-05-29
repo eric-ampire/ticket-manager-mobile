@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Entity
 @Parcelize
-class Agence(
+data class Agence(
     @PrimaryKey val idAgence: Long,
     val nomAgence: String
 ) : Parcelable

@@ -7,7 +7,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Entity
 @Parcelize
-class Role(
+data class Role(
     @PrimaryKey val idRole: Long,
     val nomRole: String
 ) : Parcelable
