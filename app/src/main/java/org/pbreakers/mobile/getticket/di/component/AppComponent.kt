@@ -8,6 +8,9 @@ import org.pbreakers.mobile.getticket.view.activity.SplashActivity
 import org.pbreakers.mobile.getticket.viewmodel.AuthViewModel
 import org.pbreakers.mobile.getticket.util.Session
 import org.pbreakers.mobile.getticket.view.activity.MainActivity
+import org.pbreakers.mobile.getticket.view.fragment.BusFragment
+import org.pbreakers.mobile.getticket.viewmodel.BusViewModel
+import org.pbreakers.mobile.getticket.viewmodel.HomeViewModel
 import javax.inject.Singleton
 
 @Singleton
@@ -23,8 +26,9 @@ interface AppComponent {
     fun inject(splashActivity: SplashActivity)
     fun inject(companion: Session)
     fun inject(mainActivity: MainActivity)
-
-
+    fun inject(busViewModel: BusViewModel)
+    fun inject(busFragment: BusFragment)
+    fun inject(homeViewModel: HomeViewModel)
 
     // Constructor injection
     fun utilisateurDao(): UtilisateurDao
