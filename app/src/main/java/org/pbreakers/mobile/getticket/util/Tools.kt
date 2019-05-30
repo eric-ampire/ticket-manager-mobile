@@ -1,11 +1,10 @@
-package org.pbreakers.mobile.eduquelib.util
+package org.pbreakers.mobile.getticket.util
 
 import android.app.Activity
 import android.app.Dialog
 import android.content.*
 import android.content.pm.PackageManager
 import android.content.res.Resources
-import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.net.Uri
@@ -15,25 +14,23 @@ import android.util.TypedValue
 import android.view.Menu
 import android.view.View
 import android.view.WindowManager
-import android.webkit.URLUtil
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
-import androidx.annotation.DrawableRes
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.widget.NestedScrollView
-import org.pbreakers.mobile.eduquelib.R
 import org.pbreakers.mobile.getticket.R
-
 import java.net.URI
 import java.net.URISyntaxException
-import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
 
 object Tools {
+
+    fun getHeightScreen(): Int {
+        return Resources.getSystem().displayMetrics.heightPixels
+    }
 
     val screenWidth: Int
         get() = Resources.getSystem().displayMetrics.widthPixels
