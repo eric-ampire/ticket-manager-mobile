@@ -11,6 +11,7 @@ import androidx.navigation.ui.NavigationUI.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.header_drawer.*
 import org.pbreakers.mobile.getticket.R
+import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.util.Session
 import javax.inject.Inject
 
@@ -28,6 +29,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setupDrawerLayout()
+        val app = application as App
+        app.appComponent.inject(this)
     }
 
     private fun setupDrawerLayout() {
@@ -45,13 +48,19 @@ class MainActivity : AppCompatActivity() {
 
         // Connect listener to navigation view
         setupWithNavController(navigationView, navController)
+
+        // Change title
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            supportActionBar?.title = destination.label
+        }
     }
 
     private fun loadUserInfo() {
         // Get current user
         session.getCurrentUser {
             if (it != null) {
-                textViewUsername?.text = String.format("%s", it.nom)
+                tvUsername.text = String.format("%s", it.nomUtilisateur)
+                tvRole.text = "Admin"
             }
         }
     }
