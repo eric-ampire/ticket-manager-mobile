@@ -2,20 +2,29 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorPrimary">@android:color/black</item>
+        <item name="android:fontFamily">@font/adobe_clean_regular</item>
+        <item name="homeAsUpIndicator">@drawable/ic_chevron_left</item>
     </style>
 
+    <style name="AppTheme.Main" parent="Theme.MaterialComponents.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:fontFamily">@font/adobe_clean_regular</item>
+        <item name="homeAsUpIndicator">@drawable/ic_chevron_left</item>
+    </style>
+
+
     <style name="AppTheme.Splash" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@drawable/bg_splash</item>
-        <item name="android:textColorPrimary">@android:color/black</item>
+        <item name="android:fontFamily">@font/adobe_clean_regular</item>
+        <item name="homeAsUpIndicator">@drawable/ic_chevron_left</item>
     </style>
 
     <style name="AppTheme.Auth" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -23,7 +32,8 @@
         <item name="colorPrimary">@color/blue_500</item>
         <item name="colorPrimaryDark">@color/blue_500</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorPrimary">@android:color/black</item>
+        <item name="android:fontFamily">@font/adobe_clean_regular</item>
+        <item name="homeAsUpIndicator">@drawable/ic_chevron_left</item>
     </style>
 
 </resources>
