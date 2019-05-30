@@ -15,13 +15,9 @@
         tools:context=".view.fragment.HomeFragment">
 
         <androidx.recyclerview.widget.RecyclerView
-            setAdapter="@{viewModel.voyageAdapter}"
+            setAdapter="@{viewModel.adapter}"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-
-        </androidx.recyclerview.widget.RecyclerView>
-
+            android:layout_height="match_parent"/>
     </FrameLayout>
 </layout>
