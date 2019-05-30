@@ -16,9 +16,25 @@
         <action
             android:id="@+id/action_homeFragment_to_busFragment2"
             app:destination="@id/busFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_detailVoyageFragment"
+            app:destination="@id/detailVoyageFragment" />
     </fragment>
     <fragment
         android:id="@+id/busFragment"
         android:name="org.pbreakers.mobile.getticket.view.fragment.BusFragment"
-        android:label="Bus" />
+        android:label="Bus" >
+        <action
+            android:id="@+id/action_busFragment_to_detailBusActivity"
+            app:destination="@id/detailBusActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/detailBusActivity"
+        android:name="org.pbreakers.mobile.getticket.view.activity.DetailBusActivity"
+        android:label="activity_detail_bus"
+        tools:layout="@layout/activity_detail_bus" />
+    <fragment
+        android:id="@+id/detailVoyageFragment"
+        android:name="org.pbreakers.mobile.getticket.view.fragment.DetailVoyageFragment"
+        android:label="DetailVoyageFragment" />
 </navigation>
