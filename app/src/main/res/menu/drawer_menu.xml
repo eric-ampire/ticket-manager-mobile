@@ -1,4 +1,62 @@
-<?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group
+        android:id="@+id/grp_1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/homeFragment"
+            android:icon="@drawable/ic_home"
+            android:title="Acceuil" />
+    </group>
+    <group
+        android:id="@+id/grp_2"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/busFragment"
+            android:icon="@drawable/ic_favorite_border"
+            android:title="Bus"
+            app:actionLayout="@layout/badge_navigation_colored" />
+        <item
+            android:id="@+id/billetFragment"
+            android:icon="@drawable/ic_shopping_cart"
+            android:title="Mes billets"
+            app:actionLayout="@layout/badge_navigation_colored" />
+        <item
+            android:id="@+id/rechercheFragment"
+            android:icon="@drawable/ic_palette"
+            android:title="Recherche" />
+    </group>
 
+    <item
+        android:checkableBehavior="single"
+        android:title="Checking">
+        <group
+            android:id="@+id/grp_3"
+            android:checkableBehavior="single">
+            <item
+                android:id="@+id/scannerBilletFragment"
+                android:icon="@drawable/ic_notifications_outline"
+                android:title="Scanner Biller"
+                app:actionLayout="@layout/badge_navigation_colored" />
+        </group>
+    </item>
+
+    <group
+        android:id="@+id/grp_5"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/settingFragment"
+            android:icon="@drawable/ic_settings"
+            android:title="Settings" />
+
+        <item
+            android:id="@+id/abus"
+            android:icon="@drawable/ic_settings"
+            android:title="Signale un abus" />
+
+        <item
+            android:id="@+id/aboutFragment"
+            android:icon="@drawable/ic_help"
+            android:title="A propos" />
+    </group>
 </menu>
