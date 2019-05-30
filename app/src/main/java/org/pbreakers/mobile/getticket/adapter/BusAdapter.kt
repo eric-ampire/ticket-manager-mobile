@@ -13,25 +13,24 @@ import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.ItemBusBinding
 import org.pbreakers.mobile.getticket.model.entity.Bus
 
-class BusAdapter(private val listener: OnItemClickListener<Bus>) : PagedListAdapter<Bus, BusAdapter.BusViewHolder>(COMPARATOR)  {
+class BusAdapter(private val listener: OnItemClickListener<Bus>) : PagedListAdapter<Bus, CustomViewHolder>(COMPARATOR)  {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BusViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = DataBindingUtil.inflate<ItemBusBinding>(inflater, R.layout.item_bus, parent, false)
 
-        return BusViewHolder(binding)
+        return CustomViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: BusViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         val currentBus = getItem(position) ?: return
+        val binding = holder.binding as ItemBusBinding
 
-        holder.binding.bus = currentBus
-        holder.binding.itemBusLayout.setOnClickListener {
+        binding.bus = currentBus
+        binding.root.setOnClickListener {
             listener.onClick(it, currentBus, position)
         }
     }
-
-    class BusViewHolder(val binding: ItemBusBinding) : RecyclerView.ViewHolder(binding.root)
 
     companion object {
         val COMPARATOR = object : DiffUtil.ItemCallback<Bus>() {
