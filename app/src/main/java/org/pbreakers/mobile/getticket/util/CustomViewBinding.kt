@@ -1,12 +1,17 @@
 package org.pbreakers.mobile.getticket.util
 
 import android.graphics.drawable.Drawable
+import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.Spinner
 import androidx.constraintlayout.widget.Placeholder
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import android.R
+
+
 
 
 @BindingAdapter(value = ["setAdapter"])
@@ -23,4 +28,13 @@ fun bindImageUrl(imageView: ImageView, url: String?, placeholder: Drawable) {
         .error(placeholder)
         .placeholder(placeholder)
         .into(imageView)
+}
+
+@BindingAdapter(value = ["setAdapter"])
+fun bindSpinnerAdapter(spinner: Spinner, data: List<*>) {
+
+    ArrayAdapter(spinner.context, R.layout.simple_spinner_item, data).run {
+        setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = this
+    }
 }
