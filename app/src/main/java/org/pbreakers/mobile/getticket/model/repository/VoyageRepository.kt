@@ -5,9 +5,14 @@ import org.pbreakers.mobile.getticket.model.dao.VoyageDao
 import org.pbreakers.mobile.getticket.model.entity.Voyage
 import javax.inject.Inject
 
-class VoyageRepository @Inject constructor(val dao: VoyageDao) {
+class VoyageRepository @Inject constructor(private val dao: VoyageDao) {
+
     fun findAll(): DataSource.Factory<Int, Voyage> {
+        refresh()
         return dao.findAll()
+    }
+
+    private fun refresh() {
 
     }
 }
