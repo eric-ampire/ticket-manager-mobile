@@ -1,6 +1,7 @@
 package org.pbreakers.mobile.getticket.model.dao
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.*
 import org.pbreakers.mobile.getticket.model.entity.Voyage
 
@@ -13,7 +14,7 @@ interface VoyageDao {
     fun findById(id: Int): LiveData<Voyage>
 
     @Query("SELECT * FROM Voyage")
-    fun findAll(): LiveData<List<Voyage>>
+    fun findAll(): DataSource.Factory<Int, Voyage>
 
     @Update
     fun update(vararg data: Voyage)
