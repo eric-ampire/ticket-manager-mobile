@@ -19,22 +19,69 @@
         <action
             android:id="@+id/action_homeFragment_to_detailVoyageFragment"
             app:destination="@id/detailVoyageFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_billetFragment"
+            app:destination="@id/billetFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_scanningFragment"
+            app:destination="@+id/scanningFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_rechercheFragment"
+            app:destination="@id/rechercheFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_settingFragment"
+            app:destination="@id/settingFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_signalerAbusFragment"
+            app:destination="@id/signalerAbusFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_aboutFragment2"
+            app:destination="@id/aboutFragment" />
     </fragment>
     <fragment
         android:id="@+id/busFragment"
         android:name="org.pbreakers.mobile.getticket.view.fragment.BusFragment"
         android:label="Bus" >
         <action
-            android:id="@+id/action_busFragment_to_detailBusActivity"
-            app:destination="@id/detailBusActivity" />
+            android:id="@+id/action_busFragment_to_busDetailFragment"
+            app:destination="@id/busDetailFragment" />
     </fragment>
-    <activity
-        android:id="@+id/detailBusActivity"
-        android:name="org.pbreakers.mobile.getticket.view.activity.DetailBusActivity"
-        android:label="activity_detail_bus"
-        tools:layout="@layout/activity_detail_bus" />
     <fragment
         android:id="@+id/detailVoyageFragment"
         android:name="org.pbreakers.mobile.getticket.view.fragment.DetailVoyageFragment"
-        android:label="DetailVoyageFragment" />
+        android:label="Detail Voyage" />
+    <fragment
+        android:id="@+id/busDetailFragment"
+        android:name="org.pbreakers.mobile.getticket.view.fragment.BusDetailFragment"
+        android:label="Detail Bus" />
+    <fragment
+        android:id="@+id/billetFragment"
+        android:name="org.pbreakers.mobile.getticket.view.fragment.BilletFragment"
+        android:label="Mes billets"
+        tools:layout="@layout/fragment_billet" />
+    <fragment
+        android:id="@+id/scanningFragment"
+        android:name="org.pbreakers.mobile.getticket.view.fragment.ScanningFragment"
+        android:label="Scanner Billet"
+        tools:layout="@layout/fragment_scanning" />
+    <fragment
+        android:id="@+id/rechercheFragment"
+        android:name="org.pbreakers.mobile.getticket.view.fragment.RechercheFragment"
+        android:label="Recherche"
+        tools:layout="@layout/fragment_recherche" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="org.pbreakers.mobile.getticket.view.fragment.SettingFragment"
+        android:label="Paramètre"
+        tools:layout="@layout/fragment_setting" />
+    <fragment
+        android:id="@+id/signalerAbusFragment"
+        android:name="org.pbreakers.mobile.getticket.view.fragment.SignalerAbusFragment"
+        android:label="Signaler un Abus"
+        tools:layout="@layout/fragment_signaler_abus" />
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="org.pbreakers.mobile.getticket.view.fragment.AboutFragment"
+        android:label="A propos"
+        tools:layout="@layout/fragment_about" />
 </navigation>

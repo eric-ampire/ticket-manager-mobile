@@ -13,17 +13,17 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/busFragment"
-            android:icon="@drawable/ic_favorite_border"
+            android:icon="@drawable/ic_directions_bus"
             android:title="Bus"
             app:actionLayout="@layout/badge_navigation_colored" />
         <item
             android:id="@+id/billetFragment"
-            android:icon="@drawable/ic_shopping_cart"
+            android:icon="@drawable/ic_receipt_black"
             android:title="Mes billets"
             app:actionLayout="@layout/badge_navigation_colored" />
         <item
             android:id="@+id/rechercheFragment"
-            android:icon="@drawable/ic_palette"
+            android:icon="@drawable/ic_search"
             android:title="Recherche" />
     </group>
 
@@ -34,8 +34,8 @@
             android:id="@+id/grp_3"
             android:checkableBehavior="single">
             <item
-                android:id="@+id/scannerBilletFragment"
-                android:icon="@drawable/ic_notifications_outline"
+                android:id="@+id/scanningFragment"
+                android:icon="@drawable/ic_print"
                 android:title="Scanner Biller"
                 app:actionLayout="@layout/badge_navigation_colored" />
         </group>
@@ -50,8 +50,8 @@
             android:title="Settings" />
 
         <item
-            android:id="@+id/abus"
-            android:icon="@drawable/ic_settings"
+            android:id="@+id/signalerAbusFragment"
+            android:icon="@drawable/ic_report_black"
             android:title="Signale un abus" />
 
         <item
