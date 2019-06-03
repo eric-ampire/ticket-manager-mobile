@@ -29,24 +29,17 @@ class BusAdapter(private val listener: OnItemClickListener<Bus>) : RecyclerView.
         val binding = holder.binding as ItemBusBinding
 
         binding.bus = currentBus
-        binding.root.setOnClickListener {
+        binding.itemBusLayout.setOnClickListener {
             listener.onClick(it, currentBus, position)
         }
     }
 
     override fun getItemCount(): Int = data.size
 
-    fun submitData(data: List<Bus>) {
+    fun submitList(t: List<Bus>) {
         this.data.clear()
-        this.data.addAll(data)
+        this.data.addAll(t)
 
         notifyDataSetChanged()
-    }
-
-    companion object {
-        val COMPARATOR = object : DiffUtil.ItemCallback<Bus>() {
-            override fun areItemsTheSame(oldItem: Bus, newItem: Bus): Boolean = newItem.idBus == oldItem.idBus
-            override fun areContentsTheSame(oldItem: Bus, newItem: Bus): Boolean = newItem == oldItem
-        }
     }
 }
