@@ -50,8 +50,7 @@
             <item
                 android:id="@+id/enregFragment"
                 android:icon="@drawable/ic_edit_black"
-                android:title="Enregistrement"
-                app:actionLayout="@layout/badge_navigation_colored" />
+                android:title="Enregistrement" />
         </group>
     </item>
 
