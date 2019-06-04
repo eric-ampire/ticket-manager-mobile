@@ -41,6 +41,20 @@
         </group>
     </item>
 
+    <item
+        android:checkableBehavior="single"
+        android:title="Checking">
+        <group
+            android:id="@+id/grp_4"
+            android:checkableBehavior="single">
+            <item
+                android:id="@+id/enregFragment"
+                android:icon="@drawable/ic_edit_black"
+                android:title="Enregistrement"
+                app:actionLayout="@layout/badge_navigation_colored" />
+        </group>
+    </item>
+
     <group
         android:id="@+id/grp_5"
         android:checkableBehavior="single">

@@ -15,28 +15,49 @@
             app:destination="@id/homeFragment" />
         <action
             android:id="@+id/action_homeFragment_to_busFragment2"
-            app:destination="@id/busFragment" />
+            app:destination="@id/busFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim" />
         <action
             android:id="@+id/action_homeFragment_to_detailVoyageFragment"
-            app:destination="@id/detailVoyageFragment" />
+            app:destination="@id/detailVoyageFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim" />
         <action
             android:id="@+id/action_homeFragment_to_billetFragment"
-            app:destination="@id/billetFragment" />
+            app:destination="@id/billetFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim" />
         <action
             android:id="@+id/action_homeFragment_to_scanningFragment"
-            app:destination="@+id/scanningFragment" />
+            app:destination="@+id/scanningFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim" />
         <action
             android:id="@+id/action_homeFragment_to_rechercheFragment"
-            app:destination="@id/rechercheFragment" />
+            app:destination="@id/rechercheFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim" />
         <action
             android:id="@+id/action_homeFragment_to_settingFragment"
-            app:destination="@id/settingFragment" />
+            app:destination="@id/settingFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim" />
         <action
             android:id="@+id/action_homeFragment_to_signalerAbusFragment"
-            app:destination="@id/signalerAbusFragment" />
+            app:destination="@id/signalerAbusFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim" />
         <action
-            android:id="@+id/action_homeFragment_to_aboutFragment2"
-            app:destination="@id/aboutFragment" />
+            android:id="@+id/action_homeFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim" />
+        <action
+            android:id="@+id/action_homeFragment_to_enregFragment"
+            app:destination="@id/enregFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:popEnterAnim="@anim/nav_default_enter_anim" />
     </fragment>
     <fragment
         android:id="@+id/busFragment"
@@ -84,4 +105,9 @@
         android:name="org.pbreakers.mobile.getticket.view.fragment.AboutFragment"
         android:label="A propos"
         tools:layout="@layout/fragment_about" />
+    <fragment
+        android:id="@+id/enregFragment"
+        android:name="org.pbreakers.mobile.getticket.view.fragment.EnregFragment"
+        android:label="Enregistrement"
+        tools:layout="@layout/fragment_enreg" />
 </navigation>
