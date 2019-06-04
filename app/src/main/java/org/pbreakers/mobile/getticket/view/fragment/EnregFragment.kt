@@ -33,6 +33,9 @@ class EnregFragment : Fragment() {
 
         // Agency
         initAgencyComponent(view)
+
+        // Etat
+        initEtatComponent(view)
     }
 
     private fun initAgencyComponent(view: View) {
@@ -49,6 +52,24 @@ class EnregFragment : Fragment() {
                 view.edtNomAgency.error = getString(R.string.input_empty)
             } else {
                 // Todo: Save agency
+            }
+        }
+    }
+    private fun initEtatComponent(view: View) {
+        view.btnToggleEtat.setOnClickListener {
+            toggleSection(it, view.lytExpandEtat)
+        }
+
+        view.btnHideEtat.setOnClickListener {
+            toggleSection(view.btnToggleEtat, view.lytExpandEtat)
+        }
+
+        view.btnEnregEtat.setOnClickListener {
+            if (view.edtNomEtat.text.isBlank()) {
+                view.edtNomEtat.error = getString(R.string.input_empty)
+            } else {
+                // Todo: Save agency
+                // Todo: Hide
             }
         }
     }
