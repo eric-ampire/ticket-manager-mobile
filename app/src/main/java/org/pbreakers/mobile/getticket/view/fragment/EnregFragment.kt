@@ -36,6 +36,9 @@ class EnregFragment : Fragment() {
 
         // Etat
         initEtatComponent(view)
+
+        // Lieu
+        initLieuComponent(view)
     }
 
     private fun initAgencyComponent(view: View) {
@@ -55,6 +58,7 @@ class EnregFragment : Fragment() {
             }
         }
     }
+
     private fun initEtatComponent(view: View) {
         view.btnToggleEtat.setOnClickListener {
             toggleSection(it, view.lytExpandEtat)
@@ -69,6 +73,25 @@ class EnregFragment : Fragment() {
                 view.edtNomEtat.error = getString(R.string.input_empty)
             } else {
                 // Todo: Save agency
+                // Todo: Hide
+            }
+        }
+    }
+
+    private fun initLieuComponent(view: View) {
+        view.btnToggleLieu.setOnClickListener {
+            toggleSection(it, view.lytExpandLieu)
+        }
+
+        view.btnHideLieu.setOnClickListener {
+            toggleSection(view.btnToggleLieu, view.lytExpandLieu)
+        }
+
+        view.btnEnregLieu.setOnClickListener {
+            if (view.edtNomLieu.text.isBlank()) {
+                view.edtNomLieu.error = getString(R.string.input_empty)
+            } else {
+                // Todo: Save Lieu
                 // Todo: Hide
             }
         }
