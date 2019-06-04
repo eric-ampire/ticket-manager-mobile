@@ -57,6 +57,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0-alpha06'
     implementation 'com.balysv:material-ripple:1.0.2'
     implementation 'me.zhanghai.android.materialprogressbar:library:1.4.2'
+    implementation 'com.wdullaer:materialdatetimepicker:3.2.0'
 
     // ----------------------------------------------
     implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
@@ -65,7 +66,7 @@ dependencies {
     // ----------------------------------------------
     implementation "androidx.room:room-runtime:2.1.0-beta01"
     implementation "androidx.room:room-coroutines:2.1.0-alpha04"
-    implementation "android.arch.persistence.room:rxjava2:1.1.1"
+    implementation 'androidx.room:room-rxjava2:2.0.0'
     kapt "androidx.room:room-compiler:2.1.0-beta01"
 
     // ----------------------------------------------
@@ -85,8 +86,8 @@ dependencies {
     implementation "org.jetbrains.anko:anko-design:0.10.8"
 
     // ----------------------------------------------
-    implementation 'android.arch.navigation:navigation-fragment:1.0.0'
-    implementation 'android.arch.navigation:navigation-ui:1.0.0'
+    implementation 'androidx.navigation:navigation-fragment:2.0.0-rc02'
+    implementation 'androidx.navigation:navigation-ui:2.0.0-rc02'
     implementation 'androidx.fragment:fragment-ktx:1.0.0'
     implementation 'androidx.viewpager:viewpager:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
