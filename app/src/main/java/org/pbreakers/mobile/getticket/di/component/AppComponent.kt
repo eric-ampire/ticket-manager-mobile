@@ -31,6 +31,8 @@ interface AppComponent {
     fun inject(busDetailViewModel: BusDetailViewModel)
     fun inject(enregFragment: EnregFragment)
     fun inject(enregViewModel: EnregViewModel)
+    fun inject(signalerAbusViewModel: SignalerAbusViewModel)
+
 
 
     // Constructor injection
