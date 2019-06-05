@@ -1,19 +1,18 @@
 package org.pbreakers.mobile.getticket.model.repository
 
-import io.reactivex.Maybe
+import androidx.lifecycle.LiveData
 import org.pbreakers.mobile.getticket.model.dao.AgenceDao
 import org.pbreakers.mobile.getticket.model.entity.Agence
-import org.pbreakers.mobile.getticket.model.entity.Bus
 import javax.inject.Inject
 
 class AgenceRepository @Inject constructor(private val dao: AgenceDao) {
 
-    fun findAll(): Maybe<List<Agence>> {
+    fun findAll(): LiveData<List<Agence>> {
         refresh()
         return dao.findAll()
     }
 
-    fun findById(id: Int): Maybe<Agence> {
+    fun findById(id: Int): LiveData<Agence> {
         refresh()
         return dao.findById(id)
     }
