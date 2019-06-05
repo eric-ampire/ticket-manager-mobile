@@ -1,55 +1,56 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
 import android.app.Application
-import android.app.Dialog
-import android.view.View
-import android.view.WindowManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.AndroidViewModel
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
-import org.pbreakers.mobile.eduquelib.adapter.OnItemClickListener
-import org.pbreakers.mobile.getticket.R
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import io.reactivex.MaybeObserver
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
+import org.jetbrains.anko.toast
 import org.pbreakers.mobile.getticket.adapter.BusAdapter
 import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.model.entity.Bus
 import org.pbreakers.mobile.getticket.model.repository.BusRepository
-import org.pbreakers.mobile.getticket.view.fragment.BusDetailFragment
+import org.pbreakers.mobile.getticket.util.LoadingState
 import javax.inject.Inject
 
-class BusViewModel(val app: Application) : AndroidViewModel(app), OnItemClickListener<Bus> {
+class BusViewModel(val app: Application) : AndroidViewModel(app) {
 
     @Inject lateinit var repository: BusRepository
-
-    var busAdapter = BusAdapter(this)
-    private lateinit var fragment: Fragment
+    lateinit var busAdapter: BusAdapter
+    val loadingState = MutableLiveData<LoadingState>()
 
     init {
         val application = app as App
         application.appComponent.inject(this)
     }
 
-    fun init(fragment: Fragment) {
+    fun init() {
 
-        this.fragment = fragment
+        repository.findAll()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : MaybeObserver<List<Bus>> {
+                override fun onSuccess(t: List<Bus>) {
+                    busAdapter.submitList(t)
+                    loadingState.postValue(LoadingState.LOADED)
+                }
 
-        val config = PagedList.Config.Builder()
-            .setPageSize(3)
-            .build()
-        val data = LivePagedListBuilder(repository.findAll(), config).build()
+                override fun onComplete() {
+                    loadingState.postValue(LoadingState.LOADED)
+                }
 
-        data.observeForever {
-            busAdapter.submitList(it)
-        }
-    }
+                override fun onSubscribe(d: Disposable) {
+                    loadingState.postValue(LoadingState.RUNNING)
+                }
 
-    override fun onClick(view: View, item: Bus, position: Int) {
-        val busDetailFragment = BusDetailFragment().apply {
-            this.bus = item
-        }
+                override fun onError(e: Throwable) {
+                    loadingState.postValue(LoadingState.error(e.message))
+                }
+            })
 
-        val hostActivity = fragment.activity as AppCompatActivity
-        busDetailFragment.show(hostActivity.supportFragmentManager, busDetailFragment.tag)
     }
 }

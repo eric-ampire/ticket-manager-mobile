@@ -10,4 +10,6 @@ import kotlinx.android.parcel.Parcelize
 data class Role(
     @PrimaryKey val idRole: Long,
     val nomRole: String
-) : Parcelable
+) : Parcelable {
+    override fun toString() = nomRole
+}

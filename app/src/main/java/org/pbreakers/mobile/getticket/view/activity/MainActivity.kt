@@ -1,5 +1,6 @@
 package org.pbreakers.mobile.getticket.view.activity
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -13,9 +14,13 @@ import kotlinx.android.synthetic.main.header_drawer.*
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.util.Session
+import org.pbreakers.mobile.getticket.view.fragment.EnregFragment
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), EnregFragment.OnFragmentInteractionListener {
+    override fun onFragmentInteraction(uri: Uri) {
+
+    }
 
     @Inject
     lateinit var session: Session
@@ -51,7 +56,7 @@ class MainActivity : AppCompatActivity() {
 
         // Change title
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            supportActionBar?.title = destination.label
+            supportActionBar?.subtitle = destination.label
         }
     }
 
@@ -71,6 +76,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.aboutFragment -> navController.navigate(R.id.action_homeFragment_to_aboutFragment)
+            R.id.settingFragment -> navController.navigate(R.id.action_homeFragment_to_settingFragment)
+        }
         return true
     }
 }

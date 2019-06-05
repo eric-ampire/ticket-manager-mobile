@@ -1,336 +1,721 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/grey_10"
-    android:orientation="vertical">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.core.widget.NestedScrollView
-        android:id="@+id/nestedScrollView"
+    <data>
+        <import type="org.pbreakers.mobile.getticket.model.entity.Role" />
+        <variable
+            name="roles"
+            type="java.util.List&lt;Role>" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none"
-        android:scrollingCache="true">
+        android:background="@color/grey_10"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nestedScrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="@dimen/spacing_medium">
+            android:layout_height="match_parent"
+            android:scrollbars="none"
+            android:scrollingCache="true">
 
-            <androidx.cardview.widget.CardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_medium"
-                android:layout_marginLeft="@dimen/spacing_middle"
-                android:layout_marginRight="@dimen/spacing_middle"
-                android:layout_marginTop="@dimen/spacing_medium"
-                android:visibility="visible"
-                app:cardCornerRadius="2dp"
-                app:cardElevation="2dp">
+                android:orientation="vertical"
+                android:paddingTop="@dimen/spacing_medium">
 
-                <LinearLayout
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:layout_marginLeft="@dimen/spacing_middle"
+                    android:layout_marginRight="@dimen/spacing_middle"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:visibility="visible"
+                    app:cardCornerRadius="2dp"
+                    app:cardElevation="2dp">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/white"
-                        android:gravity="center_vertical"
-                        android:minHeight="?attr/actionBarSize"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="@dimen/spacing_large"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Agence"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/grey_80" />
-
-                        <ImageButton
-                            android:id="@+id/btnToggleAgency"
-                            android:layout_width="?attr/actionBarSize"
-                            android:layout_height="?attr/actionBarSize"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:tint="@color/grey_80"
-                            app:srcCompat="@drawable/ic_expand_arrow" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:visibility="gone"
-                        android:id="@+id/lytExpandAgency"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <EditText
-                            android:id="@+id/edtNomAgency"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_marginLeft="@dimen/spacing_large"
-                            android:layout_marginRight="@dimen/spacing_large"
-                            android:layout_marginTop="@dimen/spacing_large"
-                            android:background="@color/grey_5"
-                            android:gravity="center_vertical"
-                            android:hint="@string/lbl_nom"
-                            android:layout_margin="@dimen/spacing_large"
-                            android:padding="@dimen/spacing_middle"
-                            android:textColor="@color/grey_60" />
-
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/grey_10" />
-
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:background="@android:color/white"
+                            android:gravity="center_vertical"
+                            android:minHeight="?attr/actionBarSize"
                             android:orientation="horizontal">
 
-                            <Button
-                                android:id="@+id/btnHideAgency"
-                                style="@style/Widget.MaterialComponents.Button.TextButton"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="@string/HIDE" />
+                            <View
+                                android:layout_width="@dimen/spacing_large"
+                                android:layout_height="wrap_content" />
 
-                            <Button
-                                style="@style/Widget.MaterialComponents.Button.TextButton"
-                                android:id="@+id/btnEnregAgency"
-                                android:layout_width="wrap_content"
+                            <TextView
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="@string/SAVE" />
+                                android:layout_weight="1"
+                                android:text="Agence"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/grey_80" />
+
+                            <ImageButton
+                                android:id="@+id/btnToggleAgency"
+                                android:layout_width="?attr/actionBarSize"
+                                android:layout_height="?attr/actionBarSize"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:tint="@color/grey_80"
+                                app:srcCompat="@drawable/ic_expand_arrow" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:id="@+id/lytExpandAgency"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <EditText
+                                android:inputType="textShortMessage"
+                                android:id="@+id/edtNomAgency"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:background="@color/grey_5"
+                                android:gravity="center_vertical"
+                                android:hint="@string/lbl_nom"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:padding="@dimen/spacing_middle"
+                                android:textColor="@color/grey_60" />
+
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/grey_10" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:orientation="horizontal">
+
+                                <Button
+                                    android:id="@+id/btnHideAgency"
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="@string/HIDE" />
+
+                                <Button
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:id="@+id/btnEnregAgency"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="@string/SAVE" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
                     </LinearLayout>
 
-                </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_medium"
-                android:layout_marginLeft="@dimen/spacing_middle"
-                android:layout_marginRight="@dimen/spacing_middle"
-                android:layout_marginTop="@dimen/spacing_medium"
-                android:visibility="visible"
-                app:cardCornerRadius="2dp"
-                app:cardElevation="2dp">
-
-                <LinearLayout
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:layout_marginLeft="@dimen/spacing_middle"
+                    android:layout_marginRight="@dimen/spacing_middle"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:visibility="visible"
+                    app:cardCornerRadius="2dp"
+                    app:cardElevation="2dp">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/white"
-                        android:gravity="center_vertical"
-                        android:minHeight="?attr/actionBarSize"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="@dimen/spacing_large"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Etat"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/grey_80" />
-
-                        <ImageButton
-                            android:id="@+id/btnToggleEtat"
-                            android:layout_width="?attr/actionBarSize"
-                            android:layout_height="?attr/actionBarSize"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:tint="@color/grey_80"
-                            app:srcCompat="@drawable/ic_expand_arrow" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:visibility="gone"
-                        android:id="@+id/lytExpandEtat"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <EditText
-                            android:id="@+id/edtNomEtat"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_marginLeft="@dimen/spacing_large"
-                            android:layout_marginRight="@dimen/spacing_large"
-                            android:layout_marginTop="@dimen/spacing_large"
-                            android:background="@color/grey_5"
-                            android:gravity="center_vertical"
-                            android:hint="@string/lbl_nom"
-                            android:layout_margin="@dimen/spacing_large"
-                            android:padding="@dimen/spacing_middle"
-                            android:textColor="@color/grey_60" />
-
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/grey_10" />
-
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:background="@android:color/white"
+                            android:gravity="center_vertical"
+                            android:minHeight="?attr/actionBarSize"
                             android:orientation="horizontal">
 
-                            <Button
-                                android:id="@+id/btnHideEtat"
-                                style="@style/Widget.MaterialComponents.Button.TextButton"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="@string/HIDE" />
+                            <View
+                                android:layout_width="@dimen/spacing_large"
+                                android:layout_height="wrap_content" />
 
-                            <Button
-                                style="@style/Widget.MaterialComponents.Button.TextButton"
-                                android:id="@+id/btnEnregEtat"
-                                android:layout_width="wrap_content"
+                            <TextView
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="@string/SAVE" />
+                                android:layout_weight="1"
+                                android:text="Etat"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/grey_80" />
+
+                            <ImageButton
+                                android:id="@+id/btnToggleEtat"
+                                android:layout_width="?attr/actionBarSize"
+                                android:layout_height="?attr/actionBarSize"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:tint="@color/grey_80"
+                                app:srcCompat="@drawable/ic_expand_arrow" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:id="@+id/lytExpandEtat"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <EditText
+                                android:inputType="textShortMessage"
+                                android:id="@+id/edtNomEtat"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:background="@color/grey_5"
+                                android:gravity="center_vertical"
+                                android:hint="@string/lbl_nom"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:padding="@dimen/spacing_middle"
+                                android:textColor="@color/grey_60" />
+
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/grey_10" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:orientation="horizontal">
+
+                                <Button
+                                    android:id="@+id/btnHideEtat"
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="@string/HIDE" />
+
+                                <Button
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:id="@+id/btnEnregEtat"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="@string/SAVE" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
                     </LinearLayout>
 
-                </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_medium"
-                android:layout_marginLeft="@dimen/spacing_middle"
-                android:layout_marginRight="@dimen/spacing_middle"
-                android:layout_marginTop="@dimen/spacing_medium"
-                android:visibility="visible"
-                app:cardCornerRadius="2dp"
-                app:cardElevation="2dp">
-
-                <LinearLayout
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:layout_marginLeft="@dimen/spacing_middle"
+                    android:layout_marginRight="@dimen/spacing_middle"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:visibility="visible"
+                    app:cardCornerRadius="2dp"
+                    app:cardElevation="2dp">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/white"
-                        android:gravity="center_vertical"
-                        android:minHeight="?attr/actionBarSize"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="@dimen/spacing_large"
-                            android:layout_height="wrap_content" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="Lieu"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                            android:textColor="@color/grey_80" />
-
-                        <ImageButton
-                            android:id="@+id/btnToggleLieu"
-                            android:layout_width="?attr/actionBarSize"
-                            android:layout_height="?attr/actionBarSize"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:tint="@color/grey_80"
-                            app:srcCompat="@drawable/ic_expand_arrow" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:visibility="gone"
-                        android:id="@+id/lytExpandLieu"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
 
-                        <EditText
-                            android:id="@+id/edtNomLieu"
-                            android:layout_width="match_parent"
-                            android:layout_height="50dp"
-                            android:layout_marginLeft="@dimen/spacing_large"
-                            android:layout_marginRight="@dimen/spacing_large"
-                            android:layout_marginTop="@dimen/spacing_large"
-                            android:background="@color/grey_5"
-                            android:gravity="center_vertical"
-                            android:hint="@string/lbl_nom"
-                            android:layout_margin="@dimen/spacing_large"
-                            android:padding="@dimen/spacing_middle"
-                            android:textColor="@color/grey_60" />
-
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:background="@color/grey_10" />
-
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:gravity="end"
+                            android:background="@android:color/white"
+                            android:gravity="center_vertical"
+                            android:minHeight="?attr/actionBarSize"
                             android:orientation="horizontal">
 
-                            <Button
-                                android:id="@+id/btnHideLieu"
-                                style="@style/Widget.MaterialComponents.Button.TextButton"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="@string/HIDE" />
+                            <View
+                                android:layout_width="@dimen/spacing_large"
+                                android:layout_height="wrap_content" />
 
-                            <Button
-                                style="@style/Widget.MaterialComponents.Button.TextButton"
-                                android:id="@+id/btnEnregLieu"
-                                android:layout_width="wrap_content"
+                            <TextView
+                                android:layout_width="0dp"
                                 android:layout_height="wrap_content"
-                                android:gravity="center"
-                                android:text="@string/SAVE" />
+                                android:layout_weight="1"
+                                android:text="Lieu"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/grey_80" />
+
+                            <ImageButton
+                                android:id="@+id/btnToggleLieu"
+                                android:layout_width="?attr/actionBarSize"
+                                android:layout_height="?attr/actionBarSize"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:tint="@color/grey_80"
+                                app:srcCompat="@drawable/ic_expand_arrow" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:id="@+id/lytExpandLieu"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <EditText
+                                android:inputType="textShortMessage"
+                                android:id="@+id/edtNomLieu"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:background="@color/grey_5"
+                                android:gravity="center_vertical"
+                                android:hint="@string/lbl_nom"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:padding="@dimen/spacing_middle"
+                                android:textColor="@color/grey_60" />
+
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/grey_10" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:orientation="horizontal">
+
+                                <Button
+                                    android:id="@+id/btnHideLieu"
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="@string/HIDE" />
+
+                                <Button
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:id="@+id/btnEnregLieu"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="@string/SAVE" />
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
                     </LinearLayout>
 
-                </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-            </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:layout_marginLeft="@dimen/spacing_middle"
+                    android:layout_marginRight="@dimen/spacing_middle"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:visibility="visible"
+                    app:cardCornerRadius="2dp"
+                    app:cardElevation="2dp">
 
-        </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-    </androidx.core.widget.NestedScrollView>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/white"
+                            android:gravity="center_vertical"
+                            android:minHeight="?attr/actionBarSize"
+                            android:orientation="horizontal">
 
-</LinearLayout>
+                            <View
+                                android:layout_width="@dimen/spacing_large"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Role"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/grey_80" />
+
+                            <ImageButton
+                                android:id="@+id/btnToggleRole"
+                                android:layout_width="?attr/actionBarSize"
+                                android:layout_height="?attr/actionBarSize"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:tint="@color/grey_80"
+                                app:srcCompat="@drawable/ic_expand_arrow" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:id="@+id/lytExpandRole"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <EditText
+                                android:inputType="textShortMessage"
+                                android:id="@+id/edtNomRole"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:background="@color/grey_5"
+                                android:gravity="center_vertical"
+                                android:hint="@string/lbl_nom"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:padding="@dimen/spacing_middle"
+                                android:textColor="@color/grey_60" />
+
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/grey_10" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:orientation="horizontal">
+
+                                <Button
+                                    android:id="@+id/btnHideRole"
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="@string/HIDE" />
+
+                                <Button
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:id="@+id/btnEnregRole"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="@string/SAVE" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:layout_marginLeft="@dimen/spacing_middle"
+                    android:layout_marginRight="@dimen/spacing_middle"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:visibility="visible"
+                    app:cardCornerRadius="2dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/white"
+                            android:gravity="center_vertical"
+                            android:minHeight="?attr/actionBarSize"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="@dimen/spacing_large"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Transit"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/grey_80" />
+
+                            <ImageButton
+                                android:id="@+id/btnToggleTransit"
+                                android:layout_width="?attr/actionBarSize"
+                                android:layout_height="?attr/actionBarSize"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:tint="@color/grey_80"
+                                app:srcCompat="@drawable/ic_expand_arrow" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:id="@+id/lytExpandTransit"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <EditText
+                                android:inputType="textShortMessage"
+                                android:id="@+id/edtNomTransit"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:background="@color/grey_5"
+                                android:gravity="center_vertical"
+                                android:hint="@string/lbl_nom"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:padding="@dimen/spacing_middle"
+                                android:textColor="@color/grey_60" />
+
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/grey_10" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:orientation="horizontal">
+
+                                <Button
+                                    android:id="@+id/btnHideTransit"
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="@string/HIDE" />
+
+                                <Button
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:id="@+id/btnEnregTransit"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="@string/SAVE" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:layout_marginLeft="@dimen/spacing_middle"
+                    android:layout_marginRight="@dimen/spacing_middle"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:visibility="visible"
+                    app:cardCornerRadius="2dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/white"
+                            android:gravity="center_vertical"
+                            android:minHeight="?attr/actionBarSize"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="@dimen/spacing_large"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Utilisateur"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/grey_80" />
+
+                            <ImageButton
+                                android:id="@+id/btnToggleUser"
+                                android:layout_width="?attr/actionBarSize"
+                                android:layout_height="?attr/actionBarSize"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:tint="@color/grey_80"
+                                app:srcCompat="@drawable/ic_expand_arrow" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:id="@+id/lytExpandUser"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <Spinner
+                                android:id="@+id/edtRoleUser"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:background="@color/grey_5"
+                                android:gravity="center_vertical"
+                                setAdapter="@{roles}"
+                                android:hint="Role"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:padding="@dimen/spacing_middle"
+                                android:textColor="@color/grey_60" />
+
+                            <EditText
+                                android:inputType="textShortMessage"
+                                android:id="@+id/edtNomUser"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:background="@color/grey_5"
+                                android:gravity="center_vertical"
+                                android:hint="@string/lbl_nom"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:padding="@dimen/spacing_middle"
+                                android:textColor="@color/grey_60" />
+
+                            <EditText
+                                android:inputType="textShortMessage"
+                                android:id="@+id/edtPseudoUser"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:background="@color/grey_5"
+                                android:gravity="center_vertical"
+                                android:hint="Pseudo"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:padding="@dimen/spacing_middle"
+                                android:textColor="@color/grey_60" />
+
+                            <EditText
+                                android:id="@+id/edtPasswordUser"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:inputType="textPassword"
+                                android:background="@color/grey_5"
+                                android:gravity="center_vertical"
+                                android:hint="Mot de passe"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:padding="@dimen/spacing_middle"
+                                android:textColor="@color/grey_60" />
+
+                            <EditText
+                                android:inputType="textPassword"
+                                android:id="@+id/edtPasswordConfirmUser"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:background="@color/grey_5"
+                                android:gravity="center_vertical"
+                                android:hint="Confirmation"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:padding="@dimen/spacing_middle"
+                                android:textColor="@color/grey_60" />
+
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/grey_10" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:orientation="horizontal">
+
+                                <Button
+                                    android:id="@+id/btnHideUser"
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="@string/HIDE" />
+
+                                <Button
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:id="@+id/btnEnregUser"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="@string/SAVE" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </LinearLayout>
+</layout>
 

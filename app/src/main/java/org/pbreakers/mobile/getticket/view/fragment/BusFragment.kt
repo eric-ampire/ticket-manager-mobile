@@ -47,9 +47,7 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
         super.onViewCreated(view, savedInstanceState)
         addNewBus(view)
 
-        if (savedInstanceState == null) {
-            busViewModel.init()
-        }
+        busViewModel.init()
 
         view.swipeRefreshLayoutBus.setOnRefreshListener {
             busViewModel.init()

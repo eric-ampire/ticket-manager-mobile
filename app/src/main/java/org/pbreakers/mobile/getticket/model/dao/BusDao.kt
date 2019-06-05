@@ -1,6 +1,7 @@
 package org.pbreakers.mobile.getticket.model.dao
 
 import androidx.room.*
+import io.reactivex.Completable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import org.pbreakers.mobile.getticket.model.entity.Bus
@@ -15,7 +16,7 @@ interface BusDao {
     fun findAll(): Maybe<List<Bus>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun add(vararg data: Bus) : Single<Int>
+    fun add(vararg data: Bus) : Completable
 
     @Update
     fun update(vararg data: Bus) : Single<Int>

@@ -2,12 +2,13 @@ package org.pbreakers.mobile.getticket.model.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import io.reactivex.Completable
 import org.pbreakers.mobile.getticket.model.entity.Utilisateur
 
 @Dao
 interface UtilisateurDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun add(vararg data: Utilisateur)
+    fun add(vararg data: Utilisateur): Completable
 
     @Query("SELECT * FROM Utilisateur WHERE idUtilisateur=:id")
     fun findById(id: Int): LiveData<Utilisateur>

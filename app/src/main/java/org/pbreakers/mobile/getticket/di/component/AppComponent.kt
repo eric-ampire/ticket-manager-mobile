@@ -5,12 +5,11 @@ import org.pbreakers.mobile.getticket.di.module.*
 import org.pbreakers.mobile.getticket.model.dao.UtilisateurDao
 import org.pbreakers.mobile.getticket.model.entity.Agence
 import org.pbreakers.mobile.getticket.view.activity.SplashActivity
-import org.pbreakers.mobile.getticket.viewmodel.AuthViewModel
 import org.pbreakers.mobile.getticket.util.Session
 import org.pbreakers.mobile.getticket.view.activity.MainActivity
 import org.pbreakers.mobile.getticket.view.fragment.BusFragment
-import org.pbreakers.mobile.getticket.viewmodel.BusViewModel
-import org.pbreakers.mobile.getticket.viewmodel.HomeViewModel
+import org.pbreakers.mobile.getticket.view.fragment.EnregFragment
+import org.pbreakers.mobile.getticket.viewmodel.*
 import javax.inject.Singleton
 
 @Singleton
@@ -29,7 +28,14 @@ interface AppComponent {
     fun inject(busViewModel: BusViewModel)
     fun inject(busFragment: BusFragment)
     fun inject(homeViewModel: HomeViewModel)
+    fun inject(busDetailViewModel: BusDetailViewModel)
+    fun inject(enregFragment: EnregFragment)
+    fun inject(enregViewModel: EnregViewModel)
+
 
     // Constructor injection
     fun utilisateurDao(): UtilisateurDao
+
+
+
 }
