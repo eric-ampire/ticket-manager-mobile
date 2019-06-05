@@ -16,6 +16,7 @@ class EnregViewModel(val app: Application) : AndroidViewModel(app) {
     @Inject lateinit var transitRepository: TransitRepository
     @Inject lateinit var lieuRepository: LieuRepository
     @Inject lateinit var userRepository: UtilisateurRepository
+    @Inject lateinit var busRepository: BusRepository
 
     val role = arrayListOf<Role>()
 
@@ -55,5 +56,9 @@ class EnregViewModel(val app: Application) : AndroidViewModel(app) {
 
     fun saveUser(user: Utilisateur, function: () -> Unit) {
         userRepository.add(user, function)
+    }
+
+    fun saveBus(bus: Bus, function: () -> Unit) {
+        busRepository.add(bus, function)
     }
 }
