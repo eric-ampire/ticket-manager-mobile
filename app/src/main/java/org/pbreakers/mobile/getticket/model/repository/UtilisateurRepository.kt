@@ -11,7 +11,12 @@ class UtilisateurRepository @Inject constructor(private val dao: UtilisateurDao)
         return dao.findByPseudoAndPassword(pseudo, password)
     }
 
-    fun add(utilisateur: Utilisateur) {
+    fun add(utilisateur: Utilisateur, function: () -> Unit) {
+        dao.add(utilisateur)
+        function()
+    }
 
+    fun add(utilisateur: Utilisateur) {
+        dao.add(utilisateur)
     }
 }

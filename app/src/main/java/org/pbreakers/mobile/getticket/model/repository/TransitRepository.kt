@@ -14,4 +14,9 @@ class TransitRepository @Inject constructor(private val dao: TransitDao)  {
     private fun refresh() {
         // Todo: You have to implement this method
     }
+
+    fun add(transit: Transit, function: () -> Unit) {
+        dao.add(transit)
+        function()
+    }
 }

@@ -14,4 +14,9 @@ class LieuRepository @Inject constructor(val dao: LieuDao) {
     private fun refresh() {
         // Todo: You have to implement this method
     }
+
+    fun add(lieu: Lieu, function: () -> Unit) {
+        dao.add(lieu)
+        function()
+    }
 }

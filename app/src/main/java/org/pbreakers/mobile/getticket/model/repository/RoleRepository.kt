@@ -17,4 +17,9 @@ class RoleRepository @Inject constructor(private val dao: RoleDao) {
     private fun refresh() {
         // Todo: You have to implement this method
     }
+
+    fun add(role: Role, function: () -> Unit) {
+        dao.add(role)
+        function()
+    }
 }

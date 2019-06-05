@@ -15,4 +15,9 @@ class EtatRepository @Inject constructor(private val dao: EtatDao) {
     private fun refresh() {
         // Todo: You have to implement this method
     }
+
+    fun add(etat: Etat, function: () -> Unit) {
+        dao.add(etat)
+        function()
+    }
 }

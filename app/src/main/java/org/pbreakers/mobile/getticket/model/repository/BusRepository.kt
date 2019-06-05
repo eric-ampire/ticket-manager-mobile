@@ -1,15 +1,16 @@
 package org.pbreakers.mobile.getticket.model.repository
 
 import androidx.paging.DataSource
+import io.reactivex.Maybe
 import org.pbreakers.mobile.getticket.model.dao.BusDao
 import org.pbreakers.mobile.getticket.model.entity.Bus
 import javax.inject.Inject
 
 // Todo: You have to inject bus Api
-class BusRepository @Inject constructor(val dao: BusDao) {
+class BusRepository @Inject constructor(private val dao: BusDao) {
 
 
-    fun findAll(): DataSource.Factory<Int, Bus> {
+    fun findAll(): Maybe<List<Bus>> {
         refresh()
         return dao.findAll()
     }
