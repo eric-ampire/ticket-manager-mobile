@@ -10,3 +10,9 @@ fun EditText.isInvalidInput(errorMessage: String): Boolean {
         false
     }
 }
+
+fun cleanText(vararg inputs: EditText) {
+    for (input in inputs) {
+        input.text.clear()
+    }
+}
