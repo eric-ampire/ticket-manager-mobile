@@ -1,6 +1,8 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
 import android.app.Application
+import android.view.View
+import androidx.databinding.ObservableInt
 import androidx.lifecycle.AndroidViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -13,6 +15,8 @@ class HomeViewModel(val app: Application) : AndroidViewModel(app) {
 
     lateinit var adapter: VoyageAdapter
     @Inject lateinit var repository: VoyageRepository
+
+    val isEmptyData = ObservableInt(View.VISIBLE)
 
     init {
         val application = app as App
@@ -29,6 +33,11 @@ class HomeViewModel(val app: Application) : AndroidViewModel(app) {
 
         data.observeForever {
             adapter.submitList(it)
+            if (adapter.itemCount == 0) {
+                isEmptyData.set(View.VISIBLE)
+            } else {
+                isEmptyData.set(View.GONE)
+            }
         }
     }
 }
