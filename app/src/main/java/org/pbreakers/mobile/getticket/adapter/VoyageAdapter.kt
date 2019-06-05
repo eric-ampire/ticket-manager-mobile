@@ -26,7 +26,7 @@ class VoyageAdapter(val listener: OnItemClickListener<Voyage>) : PagedListAdapte
         val item = getItem(position) ?: return
         val binding = holder.binding as ItemVoyageBinding
 
-        //holder.binding.bus = currentBus
+        holder.binding.voyage = item
         binding.root.setOnClickListener {
             listener.onClick(it, item, position)
         }
