@@ -1,17 +1,13 @@
 package org.pbreakers.mobile.getticket.util
 
+import android.R
 import android.graphics.drawable.Drawable
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Spinner
-import androidx.constraintlayout.widget.Placeholder
 import androidx.databinding.BindingAdapter
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
-import android.R
-
-
 
 
 @BindingAdapter(value = ["setAdapter"])
