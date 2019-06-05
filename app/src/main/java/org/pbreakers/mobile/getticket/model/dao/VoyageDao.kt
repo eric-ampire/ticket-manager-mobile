@@ -21,4 +21,7 @@ interface VoyageDao {
 
     @Delete
     fun remove(vararg data: Voyage)
+
+    @Query("SELECT * FROM Voyage")
+    fun findAllLiveData(): LiveData<List<Voyage>>
 }

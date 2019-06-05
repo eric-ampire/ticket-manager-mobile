@@ -1,5 +1,6 @@
 package org.pbreakers.mobile.getticket.model.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Maybe
@@ -14,6 +15,9 @@ interface BusDao {
 
     @Query("SELECT * FROM Bus")
     fun findAll(): Maybe<List<Bus>>
+
+    @Query("SELECT * FROM Bus")
+    fun findAllLiveData(): LiveData<List<Bus>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(vararg data: Bus)
