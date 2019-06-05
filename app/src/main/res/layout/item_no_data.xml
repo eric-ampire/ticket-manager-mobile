@@ -42,27 +42,13 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_medium"
                         android:lineSpacingExtra="@dimen/spacing_middle"
-                        android:text="There is no account available \nTap button below to add new account"
+                        android:text="Aucun element a afficher\npour le moment"
                         android:gravity="center"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
                         android:textColor="@color/grey_60" />
                 </LinearLayout>
 
             </RelativeLayout>
-
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|end|right"
-                android:layout_margin="@dimen/spacing_smlarge"
-                android:clickable="true"
-                android:tint="@color/colorPrimary"
-                app:backgroundTint="@android:color/white"
-                app:fabSize="normal"
-                app:rippleColor="@color/grey_80"
-                app:srcCompat="@drawable/ic_person_add" />
-
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     </LinearLayout>
