@@ -13,15 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_anchorGravity="bottom|right|end"
-            app:layout_anchor="@id/swipeRefreshLayoutBus"
-            app:srcCompat="@drawable/ic_add"
-            android:id="@+id/fabAddBus"
-            android:layout_margin="16dp" />
-
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayoutBus"
             android:layout_width="match_parent"
@@ -44,7 +35,16 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <include
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="@{viewModel.isEmptyData.get()}"
+                    layout="@layout/item_no_data" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
+
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
