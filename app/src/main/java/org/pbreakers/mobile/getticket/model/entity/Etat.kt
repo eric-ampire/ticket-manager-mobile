@@ -10,4 +10,6 @@ import kotlinx.android.parcel.Parcelize
 data class Etat(
     @PrimaryKey val idEtat: Long,
     val nomEtat: String
-) : Parcelable
+) : Parcelable {
+    override fun toString(): String = nomEtat
+}

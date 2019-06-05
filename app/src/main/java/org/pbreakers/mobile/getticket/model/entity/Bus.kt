@@ -18,4 +18,6 @@ data class Bus(
     val nombreRange: Int,
     val nombreSiege: Int,
     val idAgence: Long
-) : Parcelable
+) : Parcelable {
+    override fun toString(): String = nomBus
+}

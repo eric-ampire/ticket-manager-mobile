@@ -10,4 +10,6 @@ import kotlinx.android.parcel.Parcelize
 data class Lieu(
     @PrimaryKey val idLieu: Long,
     val nomLieu: String
-) : Parcelable
+) : Parcelable {
+    override fun toString(): String = nomLieu
+}

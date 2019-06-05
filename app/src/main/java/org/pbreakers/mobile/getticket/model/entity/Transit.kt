@@ -10,4 +10,6 @@ import kotlinx.android.parcel.Parcelize
 data class Transit(
     @PrimaryKey val idTransit: Long,
     val nomTransit: String
-) : Parcelable
+) : Parcelable {
+    override fun toString(): String = nomTransit
+}
