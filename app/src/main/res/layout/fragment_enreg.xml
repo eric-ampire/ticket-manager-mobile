@@ -3,15 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <import type="org.pbreakers.mobile.getticket.model.entity.Role" />
-        <import type="org.pbreakers.mobile.getticket.model.entity.Agence" />
-        <variable
-            name="roles"
-            type="java.util.List&lt;Role>" />
 
         <variable
-            name="agences"
-            type="java.util.List&lt;Agence>" />
+            name="viewModel"
+            type="org.pbreakers.mobile.getticket.viewmodel.EnregViewModel" />
     </data>
 
     <LinearLayout
@@ -615,7 +610,7 @@
                                 android:layout_marginTop="@dimen/spacing_large"
                                 android:background="@color/grey_5"
                                 android:gravity="center_vertical"
-                                setAdapter="@{roles}"
+                                setAdapter="@{viewModel.role}"
                                 android:hint="Role"
                                 android:layout_margin="@dimen/spacing_large"
                                 android:padding="@dimen/spacing_middle"
@@ -826,7 +821,7 @@
                                 android:layout_marginTop="@dimen/spacing_large"
                                 android:background="@color/grey_5"
                                 android:gravity="center_vertical"
-                                setAdapter="@{agences}"
+                                setAdapter="@{viewModel.agences}"
                                 android:layout_margin="@dimen/spacing_large"
                                 android:padding="@dimen/spacing_middle"
                                 android:textColor="@color/grey_60" />
@@ -854,6 +849,419 @@
                                 <Button
                                     style="@style/Widget.MaterialComponents.Button.TextButton"
                                     android:id="@+id/btnEnregBus"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="@string/SAVE" />
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_medium"
+                    android:layout_marginLeft="@dimen/spacing_middle"
+                    android:layout_marginRight="@dimen/spacing_middle"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:visibility="visible"
+                    app:cardCornerRadius="2dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/white"
+                            android:gravity="center_vertical"
+                            android:minHeight="?attr/actionBarSize"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="@dimen/spacing_large"
+                                android:layout_height="wrap_content" />
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Voyage"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                                android:textColor="@color/grey_80" />
+
+                            <ImageButton
+                                android:id="@+id/btnToggleVoyage"
+                                android:layout_width="?attr/actionBarSize"
+                                android:layout_height="?attr/actionBarSize"
+                                android:background="?attr/selectableItemBackgroundBorderless"
+                                android:tint="@color/grey_80"
+                                app:srcCompat="@drawable/ic_expand_arrow" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:visibility="gone"
+                            android:id="@+id/lytExpandVoyage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <EditText
+                                android:inputType="textShortMessage"
+                                android:id="@+id/edtRefVoyage"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:background="@color/grey_5"
+                                android:gravity="center_vertical"
+                                android:hint="Reference"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:padding="@dimen/spacing_middle"
+                                android:textColor="@color/grey_60" />
+
+                            <LinearLayout
+                                android:weightSum="4"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:orientation="horizontal"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_weight="2"
+                                    android:textSize="16sp"
+                                    android:layout_gravity="center|left"
+                                    android:text="Provenance"
+                                    android:layout_marginRight="8dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+                                <Spinner
+                                    android:layout_weight="2"
+                                    android:id="@+id/spinnerProvVoyage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@color/grey_5"
+                                    android:gravity="center_vertical|right"
+                                    android:prompt="@string/provenance_prompte"
+                                    setAdapter="@{viewModel.lieu}"
+                                    android:textColor="@color/grey_60" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:weightSum="4"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:orientation="horizontal"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_weight="2"
+                                    android:textSize="16sp"
+                                    android:layout_gravity="center|left"
+                                    android:text="Destination"
+                                    android:layout_marginRight="8dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+                                <Spinner
+                                    android:layout_weight="2"
+                                    android:id="@+id/spinnerDestiVoyage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@color/grey_5"
+                                    android:gravity="center_vertical|right"
+                                    android:prompt="@string/provenance_prompte"
+                                    setAdapter="@{viewModel.lieu}"
+                                    android:textColor="@color/grey_60" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:weightSum="4"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:orientation="horizontal"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_weight="2"
+                                    android:textSize="16sp"
+                                    android:layout_gravity="center|left"
+                                    android:text="Transit"
+                                    android:layout_marginRight="8dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+                                <Spinner
+                                    android:layout_weight="2"
+                                    android:id="@+id/spinnerTransitVoyage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@color/grey_5"
+                                    android:gravity="center_vertical|right"
+                                    android:prompt="@string/provenance_prompte"
+                                    setAdapter="@{viewModel.transits}"
+                                    android:textColor="@color/grey_60" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:weightSum="4"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:orientation="horizontal"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_weight="2"
+                                    android:textSize="16sp"
+                                    android:layout_gravity="center|left"
+                                    android:text="Etat"
+                                    android:layout_marginRight="8dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+                                <Spinner
+                                    android:layout_weight="2"
+                                    android:id="@+id/spinnerEtatVoyage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@color/grey_5"
+                                    android:gravity="center_vertical|right"
+                                    android:prompt="@string/provenance_prompte"
+                                    setAdapter="@{viewModel.etats}"
+                                    android:textColor="@color/grey_60" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:weightSum="4"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:orientation="horizontal"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_weight="2"
+                                    android:textSize="16sp"
+                                    android:layout_gravity="center|left"
+                                    android:text="Bus"
+                                    android:layout_marginRight="8dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+                                <Spinner
+                                    android:layout_weight="2"
+                                    android:id="@+id/spinnerBusVoyage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@color/grey_5"
+                                    android:gravity="center_vertical|right"
+                                    android:prompt="@string/provenance_prompte"
+                                    setAdapter="@{viewModel.bus}"
+                                    android:textColor="@color/grey_60" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:weightSum="4"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:orientation="horizontal"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_weight="2"
+                                    android:textSize="16sp"
+                                    android:layout_gravity="center|left"
+                                    android:text="Date Depart"
+                                    android:layout_marginRight="8dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+                                <EditText
+                                    android:layout_weight="2"
+                                    android:inputType="date"
+                                    android:maxLength="10"
+                                    android:textAlignment="center"
+                                    android:hint="JJ/MM/AAAA"
+                                    android:id="@+id/edtDateDepartVoyage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@color/grey_5"
+                                    android:gravity="center_vertical|right"
+                                    android:textColor="@color/grey_60" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:weightSum="4"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:orientation="horizontal"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_weight="2"
+                                    android:textSize="16sp"
+                                    android:layout_gravity="center|left"
+                                    android:text="Heure depart"
+                                    android:layout_marginRight="8dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+                                <EditText
+                                    android:inputType="time"
+                                    android:layout_weight="2"
+                                    android:maxLength="5"
+                                    android:hint="HH:MM"
+                                    android:textAlignment="center"
+                                    android:id="@+id/edtHeureDepartVoyage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@color/grey_5"
+                                    android:gravity="center_vertical|right"
+                                    android:textColor="@color/grey_60" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:weightSum="4"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:orientation="horizontal"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_weight="2"
+                                    android:textSize="16sp"
+                                    android:layout_gravity="center|left"
+                                    android:text="Date destination"
+                                    android:layout_marginRight="8dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+                                <EditText
+                                    android:inputType="date"
+                                    android:layout_weight="2"
+                                    android:hint="JJ/MM/AAAA"
+                                    android:textAlignment="center"
+                                    android:id="@+id/edtDateDestiVoyage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@color/grey_5"
+                                    android:gravity="center_vertical|right"
+                                    android:textColor="@color/grey_60" />
+
+                            </LinearLayout>
+
+                            <LinearLayout
+                                android:weightSum="4"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:orientation="horizontal"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <TextView
+                                    android:layout_weight="2"
+                                    android:textSize="16sp"
+                                    android:layout_gravity="center|left"
+                                    android:text="Heure destination"
+                                    android:layout_marginRight="8dp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content" />
+
+                                <EditText
+                                    android:inputType="time"
+                                    android:layout_weight="2"
+                                    android:hint="HH:MM"
+                                    android:textAlignment="center"
+                                    android:maxLength="5"
+                                    android:id="@+id/edtHeureArriveVoyage"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="50dp"
+                                    android:background="@color/grey_5"
+                                    android:gravity="center_vertical|right"
+                                    android:textColor="@color/grey_60" />
+
+                            </LinearLayout>
+
+                            <EditText
+                                android:inputType="numberDecimal"
+                                android:id="@+id/edtPrixVoyage"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:layout_marginLeft="@dimen/spacing_large"
+                                android:layout_marginRight="@dimen/spacing_large"
+                                android:layout_marginTop="@dimen/spacing_large"
+                                android:background="@color/grey_5"
+                                android:gravity="center_vertical"
+                                android:hint="Prix"
+                                android:layout_margin="@dimen/spacing_large"
+                                android:padding="@dimen/spacing_middle"
+                                android:textColor="@color/grey_60" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:background="@color/grey_10" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="end"
+                                android:orientation="horizontal">
+
+                                <Button
+                                    android:id="@+id/btnHideVoyage"
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center"
+                                    android:text="@string/HIDE" />
+
+                                <Button
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:id="@+id/btnEnregVoyage"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:gravity="center"
