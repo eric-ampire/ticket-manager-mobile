@@ -1,5 +1,6 @@
 package org.pbreakers.mobile.getticket.model.repository
 
+import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import io.reactivex.Maybe
 import org.pbreakers.mobile.getticket.model.dao.BusDao
@@ -10,9 +11,15 @@ import javax.inject.Inject
 class BusRepository @Inject constructor(private val dao: BusDao) {
 
 
+    // Todo: You have to remove it
     fun findAll(): Maybe<List<Bus>> {
         refresh()
         return dao.findAll()
+    }
+
+    fun findAllLiveData(): LiveData<List<Bus>> {
+        refresh()
+        return dao.findAllLiveData()
     }
 
     private fun refresh() {
