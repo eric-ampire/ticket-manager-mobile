@@ -41,6 +41,7 @@ class EnregFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = inflate<FragmentEnregBinding>(inflater, R.layout.fragment_enreg, container, false).apply {
             roles = listOf()
+            agences = listOf()
             lifecycleOwner = this@EnregFragment
         }
 
