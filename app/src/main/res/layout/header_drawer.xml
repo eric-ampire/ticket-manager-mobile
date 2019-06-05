@@ -23,6 +23,7 @@
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/avatar"
             android:layout_width="64dp"
+            android:layout_centerHorizontal="true"
             android:layout_height="64dp"
             android:layout_margin="@dimen/spacing_large"
             android:src="@drawable/default_user"
@@ -44,17 +45,19 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:textAlignment="center"
                     android:textStyle="bold"
                     android:id="@+id/tvUsername"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/spacing_medium"
                     tools:text="Eric Ampire"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
                 <TextView
+                    android:textAlignment="center"
                     android:id="@+id/tvRole"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     tools:text="ericampire@mail.com"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
