@@ -26,22 +26,5 @@ class BusDetailViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     fun init() {
-        repository.findAll()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : MaybeObserver<List<Agence>> {
-                override fun onSuccess(t: List<Agence>) {
-                }
-
-                override fun onComplete() {
-                }
-
-                override fun onSubscribe(d: Disposable) {
-                }
-
-                override fun onError(e: Throwable) {
-                }
-            })
-
     }
 }
