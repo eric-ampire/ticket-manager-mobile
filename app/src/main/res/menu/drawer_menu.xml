@@ -36,8 +36,7 @@
             <item
                 android:id="@+id/scanningFragment"
                 android:icon="@drawable/ic_print"
-                android:title="Scanner Biller"
-                app:actionLayout="@layout/badge_navigation_colored" />
+                android:title="Scanner Biller" />
         </group>
     </item>
 
