@@ -18,6 +18,8 @@
             android:layout_height="wrap_content">
 
             <androidx.appcompat.widget.Toolbar
+                app:contentInsetStartWithNavigation="0dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 android:id="@+id/mainToolbar"
                 android:layout_width="match_parent"
