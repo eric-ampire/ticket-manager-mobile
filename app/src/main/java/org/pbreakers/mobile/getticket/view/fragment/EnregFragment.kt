@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
+import androidx.databinding.DataBindingUtil.bind
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -23,6 +24,7 @@ import org.pbreakers.mobile.getticket.databinding.FragmentEnregBinding
 import org.pbreakers.mobile.getticket.model.entity.*
 import org.pbreakers.mobile.getticket.util.Tools
 import org.pbreakers.mobile.getticket.util.ViewAnimation
+import org.pbreakers.mobile.getticket.util.cleanText
 import org.pbreakers.mobile.getticket.util.isInvalidInput
 import org.pbreakers.mobile.getticket.viewmodel.EnregViewModel
 import java.util.*
@@ -40,18 +42,9 @@ class EnregFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         binding = inflate<FragmentEnregBinding>(inflater, R.layout.fragment_enreg, container, false).apply {
-            roles = listOf()
-            agences = listOf()
             lifecycleOwner = this@EnregFragment
+            viewModel = enregViewModel
         }
-
-        enregViewModel.findRole().observe(viewLifecycleOwner, Observer {
-            binding.roles = it
-        })
-
-        enregViewModel.findAgency().observe(viewLifecycleOwner, Observer {
-            binding.agences = it
-        })
 
         return binding.root
     }
@@ -70,6 +63,119 @@ class EnregFragment : Fragment() {
         initTransitComponent(view)      // Transit
         initUserComponent(view)         // User
         initBusComponent(view)          // Bus
+        initVoyageComponent(view)       // Voyage
+        initPointArretComponent(view)   // Point Arret
+    }
+
+    private fun initPointArretComponent(view: View) {
+        view.btnTogglePointArret.setOnClickListener { toggleSection(it, view.lytExpandPointArret) }
+        view.btnHidePointArret.setOnClickListener { toggleSection(view.btnTogglePointArret, view.lytExpandPointArret) }
+
+        view.btnEnregPointArret.setOnClickListener {
+            when {
+                binding.spinnerLieuPointArret.selectedItem == null -> {
+                    context?.toast("Ajouter une un lieu")
+                    return@setOnClickListener
+                }
+
+                binding.spinnerVoyagePointArret.selectedItem == null -> {
+                    context?.toast("Ajouter un voyage")
+                    return@setOnClickListener
+                }
+            }
+
+            val lieu = spinnerLieuPointArret.selectedItem as Lieu
+            val voyage = spinnerVoyagePointArret.selectedItem as Voyage
+
+            val pointArret = PointArret(
+                idPointArret = System.nanoTime(),
+                idVoyage = voyage.idVoyage,
+                idLieu = lieu.idLieu
+            )
+
+            enregViewModel.savePointArret(pointArret) {
+                toggleSection(view.btnTogglePointArret, view.lytExpandPointArret)
+                context?.toast("Success")
+            }
+        }
+    }
+
+    private fun initVoyageComponent(view: View) {
+        view.btnToggleVoyage.setOnClickListener { toggleSection(it, view.lytExpandVoyage) }
+        view.btnHideVoyage.setOnClickListener { toggleSection(view.btnToggleVoyage, view.lytExpandVoyage) }
+
+        view.btnEnregVoyage.setOnClickListener {
+            when {
+                edtRefVoyage.isInvalidInput(getString(R.string.input_empty)) -> return@setOnClickListener
+                binding.spinnerProvVoyage.selectedItem == null -> {
+                    context?.toast("Ajouter un lieu")
+                    return@setOnClickListener
+                }
+
+                binding.spinnerDestiVoyage.selectedItem == null -> {
+                    context?.toast("Ajouter une un lieu")
+                    return@setOnClickListener
+                }
+
+                binding.spinnerTransitVoyage.selectedItem == null -> {
+                    context?.toast("Ajouter transit")
+                    return@setOnClickListener
+                }
+
+                binding.spinnerEtatVoyage.selectedItem == null -> {
+                    context?.toast("Ajouter un etat")
+                    return@setOnClickListener
+                }
+
+                binding.spinnerBusVoyage.selectedItem == null -> {
+                    context?.toast("Ajouter un bus")
+                    return@setOnClickListener
+                }
+
+                edtHeureDepartVoyage.isInvalidInput(getString(R.string.input_empty)) -> return@setOnClickListener
+                edtDateDepartVoyage.isInvalidInput(getString(R.string.input_empty))  -> return@setOnClickListener
+                edtHeureArriveVoyage.isInvalidInput(getString(R.string.input_empty)) -> return@setOnClickListener
+                edtDateDestiVoyage.isInvalidInput(getString(R.string.input_empty))   -> return@setOnClickListener
+                edtPrixVoyage.isInvalidInput(getString(R.string.input_empty))        -> return@setOnClickListener
+            }
+
+            val bus = spinnerBusVoyage.selectedItem as Bus
+            val destination = spinnerDestiVoyage.selectedItem as Lieu
+            val provenance = spinnerProvVoyage.selectedItem as Lieu
+            val transit = spinnerTransitVoyage.selectedItem as Transit
+            val etat = spinnerEtatVoyage.selectedItem as Etat
+
+            val voyage = Voyage(
+                idVoyage = System.nanoTime(),
+                referenceVoyage = edtRefVoyage.text.toString().trim(),
+                idBus = bus.idBus,
+                idProvenance = provenance.idLieu,
+                idDestination = destination.idLieu,
+                idTransit = transit.idTransit,
+                idEtat = etat.idEtat,
+                prixVoyage = edtPrixVoyage.text.toString().trim().toDouble(),
+                dateDepart = Date(),
+                dateDestination = Date(),
+                heureDepart = Date(),
+                heureDestinatin = Date()
+            )
+
+            // Saving
+            enregViewModel.saveVoyage(voyage) {
+
+                cleanText(
+                    edtRefVoyage,
+                    edtHeureDepartVoyage,
+                    edtDateDepartVoyage,
+                    edtHeureArriveVoyage,
+                    edtDateDestiVoyage,
+                    edtPrixVoyage
+                )
+
+                toggleSection(view.btnToggleVoyage, view.lytExpandVoyage)
+                context?.toast("Success")
+            }
+        }
     }
 
     private fun initBusComponent(view: View) {
@@ -104,9 +210,7 @@ class EnregFragment : Fragment() {
 
             // Saving
             enregViewModel.saveBus(bus) {
-                view.edtNomBus.text.clear()
-                view.edtRangerBus.text.clear()
-                view.edtSiegeBus.text.clear()
+                cleanText(edtNomBus, edtRangerBus, edtSiegeBus)
 
                 toggleSection(view.btnToggleBus, view.lytExpandBus)
                 context?.toast("Success")
@@ -145,10 +249,7 @@ class EnregFragment : Fragment() {
             )
 
             enregViewModel.saveUser(user) {
-                view.edtNomUser.text.clear()
-                view.edtPseudoUser.text.clear()
-                view.edtPasswordUser.text.clear()
-                view.edtPasswordConfirmUser.text.clear()
+                cleanText(edtNomUser, edtPseudoUser, edtPasswordUser, edtPasswordConfirmUser)
 
                 toggleSection(view.btnToggleUser, view.lytExpandUser)
                 context?.toast("Success")
