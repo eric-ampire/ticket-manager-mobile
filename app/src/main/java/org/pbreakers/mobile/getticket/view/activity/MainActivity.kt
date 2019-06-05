@@ -76,10 +76,10 @@ class MainActivity : AppCompatActivity(), EnregFragment.OnFragmentInteractionLis
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.aboutFragment -> navController.navigate(R.id.action_homeFragment_to_aboutFragment)
-            R.id.settingFragment -> navController.navigate(R.id.action_homeFragment_to_settingFragment)
-        }
+//        when (item.itemId) {
+//            R.id.aboutFragment -> navController.navigate(R.id.action_homeFragment_to_aboutFragment)
+//            R.id.settingFragment -> navController.navigate(R.id.action_homeFragment_to_settingFragment)
+//        }
         return true
     }
 }
