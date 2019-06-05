@@ -10,4 +10,6 @@ import kotlinx.android.parcel.Parcelize
 data class Agence(
     @PrimaryKey val idAgence: Long,
     val nomAgence: String
-) : Parcelable
+) : Parcelable {
+    override fun toString(): String = nomAgence
+}
