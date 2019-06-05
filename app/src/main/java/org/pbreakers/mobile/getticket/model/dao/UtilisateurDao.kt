@@ -8,7 +8,7 @@ import org.pbreakers.mobile.getticket.model.entity.Utilisateur
 @Dao
 interface UtilisateurDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun add(vararg data: Utilisateur): Completable
+    fun add(vararg data: Utilisateur)
 
     @Query("SELECT * FROM Utilisateur WHERE idUtilisateur=:id")
     fun findById(id: Int): LiveData<Utilisateur>

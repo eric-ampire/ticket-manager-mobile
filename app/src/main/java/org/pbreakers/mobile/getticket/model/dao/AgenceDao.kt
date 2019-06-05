@@ -11,13 +11,13 @@ import org.pbreakers.mobile.getticket.model.entity.Agence
 @Dao
 interface AgenceDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun add(vararg data: Agence): Completable
+    fun add(vararg data: Agence)
 
     @Query("SELECT * FROM Agence WHERE idAgence=:id")
-    fun findById(id: Int): Maybe<Agence>
+    fun findById(id: Int): LiveData<Agence>
 
     @Query("SELECT * FROM Agence")
-    fun findAll(): Maybe<List<Agence>>
+    fun findAll(): LiveData<List<Agence>>
 
     @Update
     fun update(vararg data: Agence): Single<Int>

@@ -16,7 +16,7 @@ interface BusDao {
     fun findAll(): Maybe<List<Bus>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun add(vararg data: Bus) : Completable
+    fun add(vararg data: Bus)
 
     @Update
     fun update(vararg data: Bus) : Single<Int>
