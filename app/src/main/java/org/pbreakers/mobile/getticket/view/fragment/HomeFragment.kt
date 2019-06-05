@@ -3,10 +3,7 @@ package org.pbreakers.mobile.getticket.view.fragment
 
 import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
@@ -43,6 +40,16 @@ class HomeFragment : Fragment(), OnItemClickListener<Voyage> {
         homeViewModel.init()
 
         return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        hasOptionsMenu()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.search_menu, menu)
     }
 
     override fun onClick(view: View, item: Voyage, position: Int) {

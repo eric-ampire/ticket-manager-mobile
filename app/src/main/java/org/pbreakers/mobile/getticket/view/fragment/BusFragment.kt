@@ -2,9 +2,7 @@ package org.pbreakers.mobile.getticket.view.fragment
 
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
@@ -41,6 +39,16 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
         }
 
         return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        hasOptionsMenu()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.search_menu, menu)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,9 +88,9 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
     }
 
     private fun addNewBus(view: View) {
-
-        view.fabAddBus.setOnClickListener {
-            findNavController(it).navigate(R.id.action_busFragment_to_busDetailFragment)
-        }
+//
+//        view.fabAddBus.setOnClickListener {
+//            findNavController(it).navigate(R.id.action_busFragment_to_busDetailFragment)
+//        }
     }
 }
