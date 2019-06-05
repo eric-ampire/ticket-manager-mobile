@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="org.pbreakers.mobile.getticket.view.fragment.HomeFragment"
-        android:label="Acceuil"
+        android:label="Voyage"
         tools:layout="@layout/fragment_home" >
         <action
             android:id="@+id/action_homeFragment_self"

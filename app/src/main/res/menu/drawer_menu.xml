@@ -6,7 +6,7 @@
         <item
             android:id="@+id/homeFragment"
             android:icon="@drawable/ic_home"
-            android:title="Acceuil" />
+            android:title="Voyage" />
     </group>
     <group
         android:id="@+id/grp_2"
