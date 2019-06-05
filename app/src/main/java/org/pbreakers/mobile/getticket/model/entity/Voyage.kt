@@ -32,4 +32,6 @@ data class Voyage(
     val idTransit: Long,
     val prixVoyage: Double,
     val idEtat: Long
-) : Parcelable
+) : Parcelable {
+    override fun toString(): String = referenceVoyage
+}
