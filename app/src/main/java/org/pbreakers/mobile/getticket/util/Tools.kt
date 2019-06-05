@@ -167,7 +167,7 @@ object Tools {
     }
 
     fun nestedScrollTo(nested: NestedScrollView, targetView: View) {
-        nested.post(Runnable { nested.scrollTo(500, targetView.bottom) })
+        nested.post { nested.scrollTo(500, targetView.bottom) }
     }
 
     fun dip2px(context: Context, dpValue: Float): Int {
