@@ -18,4 +18,9 @@ class BusRepository @Inject constructor(private val dao: BusDao) {
     private fun refresh() {
         // Todo: You have to implement this method
     }
+
+    fun add(bus: Bus, function: () -> Unit) {
+        dao.add(bus)
+        function()
+    }
 }
