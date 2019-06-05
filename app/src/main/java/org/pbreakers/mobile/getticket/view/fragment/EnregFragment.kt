@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -20,16 +19,13 @@ import kotlinx.android.synthetic.main.fragment_enreg.view.*
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.toast
 import org.pbreakers.mobile.getticket.R
-import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.databinding.FragmentEnregBinding
-import org.pbreakers.mobile.getticket.model.dao.RoleDao
-import org.pbreakers.mobile.getticket.model.dao.UtilisateurDao
 import org.pbreakers.mobile.getticket.model.entity.*
 import org.pbreakers.mobile.getticket.util.Tools
 import org.pbreakers.mobile.getticket.util.ViewAnimation
+import org.pbreakers.mobile.getticket.util.isInvalidInput
 import org.pbreakers.mobile.getticket.viewmodel.EnregViewModel
 import java.util.*
-import javax.inject.Inject
 import java.util.Observer as Observer1
 
 
@@ -41,10 +37,7 @@ class EnregFragment : Fragment() {
         ViewModelProviders.of(this).get<EnregViewModel>()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         binding = inflate<FragmentEnregBinding>(inflater, R.layout.fragment_enreg, container, false).apply {
             roles = listOf()
@@ -53,6 +46,10 @@ class EnregFragment : Fragment() {
 
         enregViewModel.findRole().observe(viewLifecycleOwner, Observer {
             binding.roles = it
+        })
+
+        enregViewModel.findAgency().observe(viewLifecycleOwner, Observer {
+            binding.agences = it
         })
 
         return binding.root
@@ -65,23 +62,55 @@ class EnregFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Agency
-        initAgencyComponent(view)
+        initAgencyComponent(view)       // Agency
+        initEtatComponent(view)         // Etat
+        initLieuComponent(view)         // Lieu
+        initRoleComponent(view)         // Role
+        initTransitComponent(view)      // Transit
+        initUserComponent(view)         // User
+        initBusComponent(view)          // Bus
+    }
 
-        // Etat
-        initEtatComponent(view)
+    private fun initBusComponent(view: View) {
+        view.btnToggleBus.setOnClickListener {
+            toggleSection(it, view.lytExpandBus)
+        }
 
-        // Lieu
-        initLieuComponent(view)
+        view.btnHideBus.setOnClickListener {
+            toggleSection(view.btnToggleBus, view.lytExpandBus)
+        }
 
-        // Role
-        initRoleComponent(view)
+        view.btnEnregBus.setOnClickListener {
 
-        // Transit
-        initTransitComponent(view)
+            when {
+                edtNomBus.isInvalidInput(getString(R.string.input_empty)) -> return@setOnClickListener
+                edtRangerBus.isInvalidInput(getString(R.string.input_empty)) -> return@setOnClickListener
+                edtSiegeBus.isInvalidInput(getString(R.string.input_empty)) -> return@setOnClickListener
+                binding.spinnerAgencyBus.selectedItem == null -> {
+                    context?.toast("Ajouter une agence")
+                    return@setOnClickListener
+                }
+            }
 
-        // User
-        initUserComponent(view)
+            val agency = binding.spinnerAgencyBus.selectedItem as Agence
+            val bus = Bus(
+                System.nanoTime(),
+                edtNomBus.text.toString().trim(),
+                edtRangerBus.text.toString().trim().toInt(),
+                edtSiegeBus.text.toString().trim().toInt(),
+                agency.idAgence
+            )
+
+            // Saving
+            enregViewModel.saveBus(bus) {
+                view.edtNomBus.text.clear()
+                view.edtRangerBus.text.clear()
+                view.edtSiegeBus.text.clear()
+
+                toggleSection(view.btnToggleBus, view.lytExpandBus)
+                context?.toast("Success")
+            }
+        }
     }
 
     private fun initUserComponent(view: View) {
@@ -89,58 +118,43 @@ class EnregFragment : Fragment() {
         view.btnHideUser.setOnClickListener { toggleSection(view.btnToggleUser, view.lytExpandUser) }
         view.btnEnregUser.setOnClickListener {
 
-            if (formValidation(view)) {
-
-                val role = binding.edtRoleUser.selectedItem as Role
-
-                val user = Utilisateur(
-                    System.nanoTime(),
-                    edtNomUser.text.toString().trim(),
-                    edtPseudoUser.text.toString().trim(),
-                    edtPasswordUser.text.toString().trim(),
-                    role.idRole
-                )
-
-                enregViewModel.saveUser(user) {
-                    view.edtNomUser.text.clear()
-                    view.edtPseudoUser.text.clear()
-                    view.edtPasswordUser.text.clear()
-                    view.edtPasswordConfirmUser.text.clear()
-
-                    toggleSection(view.btnToggleUser, view.lytExpandUser)
-                    context?.toast("Success")
+            when {
+                view.edtNomUser.isInvalidInput(getString(R.string.input_empty)) -> return@setOnClickListener
+                view.edtPseudoUser.isInvalidInput(getString(R.string.input_empty)) -> return@setOnClickListener
+                view.edtPasswordUser.isInvalidInput(getString(R.string.input_empty)) -> return@setOnClickListener
+                view.edtPasswordConfirmUser.text.toString() != view.edtPasswordUser.text.toString() -> {
+                    view.edtPasswordUser.error = getString(R.string.password_wrong)
+                    return@setOnClickListener
                 }
 
-                view.snackbar("Success")
+                binding.edtRoleUser.selectedItem == null -> {
+                    context?.toast("Ajouter un role")
+                    return@setOnClickListener
+                }
+            }
+
+            val role = binding.edtRoleUser.selectedItem as Role
+
+            val user = Utilisateur(
+                System.nanoTime(),
+                edtNomUser.text.toString().trim(),
+                edtPseudoUser.text.toString().trim(),
+                edtPasswordUser.text.toString().trim(),
+                role.idRole
+            )
+
+            enregViewModel.saveUser(user) {
+                view.edtNomUser.text.clear()
+                view.edtPseudoUser.text.clear()
+                view.edtPasswordUser.text.clear()
+                view.edtPasswordConfirmUser.text.clear()
+
                 toggleSection(view.btnToggleUser, view.lytExpandUser)
-            }
-        }
-    }
-
-    private fun formValidation(view: View): Boolean {
-        return when {
-
-            view.edtNomUser.text.isBlank() -> {
-                view.edtNomUser.error = getString(R.string.input_empty)
-                false
+                context?.toast("Success")
             }
 
-            view.edtPseudoUser.text.isBlank() -> {
-                view.edtPseudoUser.error = getString(R.string.input_empty)
-                false
-            }
-
-            view.edtPasswordUser.text.isBlank() -> {
-                view.edtPasswordUser.error = getString(R.string.input_empty)
-                false
-            }
-
-            view.edtPasswordConfirmUser.text.toString() != view.edtPasswordUser.text.toString() -> {
-                view.edtPasswordUser.error = getString(R.string.password_wrong)
-                false
-            }
-
-            else -> true
+            view.snackbar("Success")
+            toggleSection(view.btnToggleUser, view.lytExpandUser)
         }
     }
 
