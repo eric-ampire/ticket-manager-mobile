@@ -3,6 +3,10 @@ package org.pbreakers.mobile.getticket
 import org.junit.Test
 
 import org.junit.Assert.*
+import org.pbreakers.mobile.getticket.util.getDateFromString
+import org.pbreakers.mobile.getticket.util.getFormattedDate
+import org.pbreakers.mobile.getticket.util.getTimeFromString
+import java.util.*
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -11,7 +15,16 @@ import org.junit.Assert.*
  */
 class ExampleUnitTest {
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun testDate() {
+        val date: Date? = "23/04/2019".getDateFromString()
+
+        assertEquals(date?.getFormattedDate("dd/mm/yyyy"), "23/04/2019")
+    }
+
+    @Test
+    fun testTime() {
+        val date: Date? = "22:30".getTimeFromString()
+
+        assertEquals(date?.getFormattedDate("HH:mm"), "22:30")
     }
 }
