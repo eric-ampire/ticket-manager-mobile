@@ -8,10 +8,8 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
-import androidx.databinding.DataBindingUtil.bind
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
@@ -22,10 +20,7 @@ import org.jetbrains.anko.toast
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.FragmentEnregBinding
 import org.pbreakers.mobile.getticket.model.entity.*
-import org.pbreakers.mobile.getticket.util.Tools
-import org.pbreakers.mobile.getticket.util.ViewAnimation
-import org.pbreakers.mobile.getticket.util.cleanText
-import org.pbreakers.mobile.getticket.util.isInvalidInput
+import org.pbreakers.mobile.getticket.util.*
 import org.pbreakers.mobile.getticket.viewmodel.EnregViewModel
 import java.util.*
 import java.util.Observer as Observer1
@@ -105,39 +100,8 @@ class EnregFragment : Fragment() {
         view.btnHideVoyage.setOnClickListener { toggleSection(view.btnToggleVoyage, view.lytExpandVoyage) }
 
         view.btnEnregVoyage.setOnClickListener {
-            when {
-                edtRefVoyage.isInvalidInput(getString(R.string.input_empty)) -> return@setOnClickListener
-                binding.spinnerProvVoyage.selectedItem == null -> {
-                    context?.toast("Ajouter un lieu")
-                    return@setOnClickListener
-                }
 
-                binding.spinnerDestiVoyage.selectedItem == null -> {
-                    context?.toast("Ajouter une un lieu")
-                    return@setOnClickListener
-                }
-
-                binding.spinnerTransitVoyage.selectedItem == null -> {
-                    context?.toast("Ajouter transit")
-                    return@setOnClickListener
-                }
-
-                binding.spinnerEtatVoyage.selectedItem == null -> {
-                    context?.toast("Ajouter un etat")
-                    return@setOnClickListener
-                }
-
-                binding.spinnerBusVoyage.selectedItem == null -> {
-                    context?.toast("Ajouter un bus")
-                    return@setOnClickListener
-                }
-
-                edtHeureDepartVoyage.isInvalidInput(getString(R.string.input_empty)) -> return@setOnClickListener
-                edtDateDepartVoyage.isInvalidInput(getString(R.string.input_empty))  -> return@setOnClickListener
-                edtHeureArriveVoyage.isInvalidInput(getString(R.string.input_empty)) -> return@setOnClickListener
-                edtDateDestiVoyage.isInvalidInput(getString(R.string.input_empty))   -> return@setOnClickListener
-                edtPrixVoyage.isInvalidInput(getString(R.string.input_empty))        -> return@setOnClickListener
-            }
+            if (voyageInputInvalid()) return@setOnClickListener
 
             val bus = spinnerBusVoyage.selectedItem as Bus
             val destination = spinnerDestiVoyage.selectedItem as Lieu
@@ -154,27 +118,90 @@ class EnregFragment : Fragment() {
                 idTransit = transit.idTransit,
                 idEtat = etat.idEtat,
                 prixVoyage = edtPrixVoyage.text.toString().trim().toDouble(),
-                dateDepart = Date(),
-                dateDestination = Date(),
-                heureDepart = Date(),
-                heureDestinatin = Date()
+                dateDepart = edtDateDepartVoyage.text.toString().trim().getDateFromString()!!,
+                dateDestination = edtDateDestiVoyage.text.toString().trim().getDateFromString()!!,
+                heureDepart = edtHeureDepartVoyage.text.toString().trim().getTimeFromString()!!,
+                heureDestinatin = edtHeureArriveVoyage.text.toString().trim().getTimeFromString()!!
             )
 
             // Saving
-            enregViewModel.saveVoyage(voyage) {
+            saveVoyage(voyage, view)
+        }
+    }
 
-                cleanText(
-                    edtRefVoyage,
-                    edtHeureDepartVoyage,
-                    edtDateDepartVoyage,
-                    edtHeureArriveVoyage,
-                    edtDateDestiVoyage,
-                    edtPrixVoyage
-                )
+    private fun saveVoyage(voyage: Voyage, view: View) {
+        enregViewModel.saveVoyage(voyage) {
 
-                toggleSection(view.btnToggleVoyage, view.lytExpandVoyage)
-                context?.toast("Success")
+            cleanText(
+                edtRefVoyage,
+                edtHeureDepartVoyage,
+                edtDateDepartVoyage,
+                edtHeureArriveVoyage,
+                edtDateDestiVoyage,
+                edtPrixVoyage
+            )
+
+            toggleSection(view.btnToggleVoyage, view.lytExpandVoyage)
+            context?.toast("Success")
+        }
+    }
+
+    private fun voyageInputInvalid(): Boolean {
+        return when {
+            edtRefVoyage.isInvalidInput(getString(R.string.input_empty)) -> return true
+
+            edtDateDepartVoyage.text.toString().trim().getDateFromString() == null -> {
+                edtDateDepartVoyage.error = "Date Invalide"
+                true
             }
+
+            edtHeureDepartVoyage.text.toString().trim().getTimeFromString() == null -> {
+                edtHeureDepartVoyage.error = "Heure Invalide"
+                true
+            }
+
+            edtDateDestiVoyage.text.toString().trim().getDateFromString() == null -> {
+                edtDateDestiVoyage.error = "Date invalide"
+                true
+            }
+
+            edtHeureArriveVoyage.text.toString().trim().getTimeFromString() == null -> {
+                edtHeureArriveVoyage.error = "Heure Invalide"
+                true
+            }
+
+            binding.spinnerProvVoyage.selectedItem == null -> {
+                context?.toast("Ajouter un lieu")
+                true
+            }
+
+            binding.spinnerDestiVoyage.selectedItem == null -> {
+                context?.toast("Ajouter une un lieu")
+                true
+            }
+
+            binding.spinnerTransitVoyage.selectedItem == null -> {
+                context?.toast("Ajouter transit")
+                true
+            }
+
+            binding.spinnerEtatVoyage.selectedItem == null -> {
+                context?.toast("Ajouter un etat")
+                true
+            }
+
+            binding.spinnerBusVoyage.selectedItem == null -> {
+                context?.toast("Ajouter un bus")
+                true
+            }
+
+            edtHeureDepartVoyage.isInvalidInput(getString(R.string.input_empty)) -> return true
+            edtDateDepartVoyage.isInvalidInput(getString(R.string.input_empty)) -> return true
+            edtHeureArriveVoyage.isInvalidInput(getString(R.string.input_empty)) -> return true
+            edtDateDestiVoyage.isInvalidInput(getString(R.string.input_empty)) -> return true
+            edtPrixVoyage.isInvalidInput(getString(R.string.input_empty)) -> return true
+
+            else -> false
         }
     }
 
