@@ -6,11 +6,12 @@ import androidx.lifecycle.LiveData
 import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.model.repository.BilletRepository
 import org.pbreakers.mobile.getticket.model.repository.BusRepository
+import javax.inject.Inject
 
 class MainViewModel(val app: Application) : AndroidViewModel(app) {
 
-    lateinit var busRepository: BusRepository
-    lateinit var billetRepository: BilletRepository
+    @Inject lateinit var busRepository: BusRepository
+    @Inject lateinit var billetRepository: BilletRepository
 
     init {
         val application = app as App
