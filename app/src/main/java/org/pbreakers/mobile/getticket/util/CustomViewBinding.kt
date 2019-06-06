@@ -5,9 +5,11 @@ import android.graphics.drawable.Drawable
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import java.util.*
 
 
 @BindingAdapter(value = ["setAdapter"])
@@ -33,4 +35,14 @@ fun bindSpinnerAdapter(spinner: Spinner, data: List<*>) {
         setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
         spinner.adapter = this
     }
+}
+
+@BindingAdapter(value = ["bindDate"])
+fun bindDate(textView: TextView, date: Date) {
+    textView.text = date.getFormattedDate("dd/mm/yyyy")
+}
+
+@BindingAdapter(value = ["bindTime"])
+fun bindTime(textView: TextView, date: Date) {
+    textView.text = date.getFormattedDate("HH:mm")
 }
