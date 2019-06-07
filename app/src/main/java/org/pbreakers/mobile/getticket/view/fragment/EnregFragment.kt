@@ -121,7 +121,7 @@ class EnregFragment : Fragment() {
                 dateDepart = edtDateDepartVoyage.text.toString().trim().getDateFromString()!!,
                 dateDestination = edtDateDestiVoyage.text.toString().trim().getDateFromString()!!,
                 heureDepart = edtHeureDepartVoyage.text.toString().trim().getTimeFromString()!!,
-                heureDestinatin = edtHeureArriveVoyage.text.toString().trim().getTimeFromString()!!
+                heureDestination = edtHeureArriveVoyage.text.toString().trim().getTimeFromString()!!
             )
 
             // Saving
