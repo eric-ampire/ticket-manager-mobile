@@ -5,8 +5,12 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.get
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
@@ -15,11 +19,13 @@ import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.util.Session
 import org.pbreakers.mobile.getticket.view.fragment.EnregFragment
+import org.pbreakers.mobile.getticket.viewmodel.MainViewModel
 import javax.inject.Inject
 
-class MainActivity : AppCompatActivity(), EnregFragment.OnFragmentInteractionListener {
-    override fun onFragmentInteraction(uri: Uri) {
+class MainActivity : AppCompatActivity() {
 
+    private val mainViewModel by lazy {
+        ViewModelProviders.of(this).get<MainViewModel>()
     }
 
     @Inject
@@ -68,6 +74,28 @@ class MainActivity : AppCompatActivity(), EnregFragment.OnFragmentInteractionLis
                 tvRole.text = "Admin"
             }
         }
+
+        displayBadge()
+    }
+
+    private fun displayBadge() {
+        val menu = navigationView.menu
+
+        // Get All badge
+        val badgeBillet = menu.findItem(R.id.billetFragment).actionView.findViewById<TextView>(R.id.text)
+        val badgeBus = menu.findItem(R.id.busFragment).actionView.findViewById<TextView>(R.id.text)
+
+        mainViewModel.countBus().observe(this, Observer {
+            badgeBus.text = String.format("%d bus", it)
+        })
+
+        mainViewModel.countBillet().observe(this, Observer {
+            if (it == 0 || it == 1) {
+                badgeBillet.text = String.format("%d billet", it)
+            } else {
+                badgeBillet.text = String.format("%d billets", it)
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
