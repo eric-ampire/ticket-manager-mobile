@@ -1,7 +1,6 @@
 package org.pbreakers.mobile.getticket.view.fragment
 
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
@@ -11,11 +10,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
 import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
-import org.pbreakers.mobile.eduquelib.adapter.OnItemClickListener
+import org.pbreakers.mobile.getticket.adapter.OnItemClickListener
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.adapter.VoyageAdapter
 import org.pbreakers.mobile.getticket.databinding.FragmentHomeBinding
-import org.pbreakers.mobile.getticket.di.component.AppComponent
 import org.pbreakers.mobile.getticket.model.entity.Voyage
 import org.pbreakers.mobile.getticket.viewmodel.HomeViewModel
 

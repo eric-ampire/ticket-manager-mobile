@@ -12,7 +12,7 @@ import androidx.lifecycle.get
 import androidx.navigation.Navigation.findNavController
 import kotlinx.android.synthetic.main.fragment_bus.view.*
 import org.jetbrains.anko.design.snackbar
-import org.pbreakers.mobile.eduquelib.adapter.OnItemClickListener
+import org.pbreakers.mobile.getticket.adapter.OnItemClickListener
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.adapter.BusAdapter
 import org.pbreakers.mobile.getticket.databinding.FragmentBusBinding
