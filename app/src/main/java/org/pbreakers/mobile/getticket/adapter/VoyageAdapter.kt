@@ -5,11 +5,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
-import com.xwray.groupie.ViewHolder
-import org.pbreakers.mobile.eduquelib.adapter.OnItemClickListener
 import org.pbreakers.mobile.getticket.R
-import org.pbreakers.mobile.getticket.databinding.ItemBusBinding
 import org.pbreakers.mobile.getticket.databinding.ItemVoyageBinding
 import org.pbreakers.mobile.getticket.model.entity.Voyage
 

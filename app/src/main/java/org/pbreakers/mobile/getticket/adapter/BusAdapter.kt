@@ -3,12 +3,7 @@ package org.pbreakers.mobile.getticket.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.paging.PagedListAdapter
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.xwray.groupie.ViewHolder
-import kotlinx.android.synthetic.main.item_bus.view.*
-import org.pbreakers.mobile.eduquelib.adapter.OnItemClickListener
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.ItemBusBinding
 import org.pbreakers.mobile.getticket.model.entity.Bus
