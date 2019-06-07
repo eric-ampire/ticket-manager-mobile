@@ -20,4 +20,13 @@ interface BilletDao {
 
     @Delete
     fun remove(vararg data: Billet)
+
+    @Query("SELECT count() FROM Billet")
+    fun count(): LiveData<Int>
+
+    @Query("SELECT * FROM Billet WHERE idUtilisateur=:id")
+    fun findByIdUser(id: Long): LiveData<List<Billet>>
+
+    @Query("SELECT * FROM Billet WHERE idEtat=:id ORDER BY idEtat")
+    fun findByIdEtat(id: Long): LiveData<List<Billet>>
 }
