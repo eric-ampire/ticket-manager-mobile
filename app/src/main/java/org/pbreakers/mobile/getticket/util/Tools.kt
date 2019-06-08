@@ -170,6 +170,21 @@ object Tools {
         nested.post { nested.scrollTo(500, targetView.bottom) }
     }
 
+    fun toggleSection(view: View, layout: View, scrollView: NestedScrollView) {
+        val show = toggleArrow(view)
+
+        if (show) {
+            ViewAnimation.expand(layout, object : ViewAnimation.AnimListener {
+                override fun onFinish() {
+                    nestedScrollTo(scrollView, layout)
+                }
+            })
+
+        } else {
+            ViewAnimation.collapse(layout)
+        }
+    }
+
     fun dip2px(context: Context, dpValue: Float): Int {
         val scale = context.resources.displayMetrics.density
         return (dpValue * scale + 0.5f).toInt()
