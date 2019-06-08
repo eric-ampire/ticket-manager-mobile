@@ -14,14 +14,20 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProviders
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
 import kotlinx.android.synthetic.main.fragment_scanning.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import org.pbreakers.mobile.getticket.R
+import org.pbreakers.mobile.getticket.viewmodel.ScannerViewModel
 
 
 class ScanningFragment : Fragment(), ZXingScannerView.ResultHandler {
+
+    private val scannerViewModel by lazy {
+        ViewModelProviders.of(this).get(ScannerViewModel::class.java)
+    }
 
 
     override fun onCreateView(
