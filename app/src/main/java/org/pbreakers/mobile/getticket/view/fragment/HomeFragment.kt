@@ -66,7 +66,8 @@ class HomeFragment : Fragment(), OnItemClickListener<Voyage> {
     }
 
     private fun showVoyageDetailFragment(item: Voyage, view: View) {
-        val bundle = bundleOf("bus" to item)
+        // Todo: Using constant
+        val bundle = bundleOf("voyage" to item)
         findNavController(view).navigate(R.id.action_homeFragment_to_detailVoyageFragment, bundle)
     }
 
