@@ -26,7 +26,7 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:background="#eaeaea"
                     android:id="@+id/recyclerView"
-                    setAdapter="@{viewModel.busAdapter}"
+                    setAdapter="@{viewModel.adapter}"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -40,7 +40,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:visibility="@{viewModel.isEmptyData.get()}"
+                    android:visibility="@{viewModel.adapter.isEmptyData.get()}"
                     layout="@layout/item_no_data" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
