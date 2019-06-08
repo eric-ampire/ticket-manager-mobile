@@ -5,6 +5,8 @@ import android.view.View
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import io.reactivex.Completable
 import io.reactivex.MaybeObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,10 +22,10 @@ import javax.inject.Inject
 class BusViewModel(val app: Application) : AndroidViewModel(app) {
 
     @Inject lateinit var repository: BusRepository
-    lateinit var busAdapter: BusAdapter
+    lateinit var adapter: BusAdapter
 
     val loadingState = MutableLiveData<LoadingState>()
-    val isEmptyData = ObservableInt(View.VISIBLE)
+
 
 
     init {
@@ -33,38 +35,14 @@ class BusViewModel(val app: Application) : AndroidViewModel(app) {
 
     fun init() {
 
-        repository.findAll()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : MaybeObserver<List<Bus>> {
-                override fun onSuccess(t: List<Bus>) {
-                    busAdapter.submitList(t)
-                    updateVisibility()
-                    loadingState.postValue(LoadingState.LOADED)
-                }
+        val config = PagedList.Config.Builder()
+            .setPageSize(3)
+            .build()
 
-                override fun onComplete() {
-                    updateVisibility()
-                    loadingState.postValue(LoadingState.LOADED)
-                }
+        val data = LivePagedListBuilder(repository.findAll(), config).build()
 
-                override fun onSubscribe(d: Disposable) {
-                    loadingState.postValue(LoadingState.RUNNING)
-                }
-
-                override fun onError(e: Throwable) {
-                    updateVisibility()
-                    loadingState.postValue(LoadingState.error(e.message))
-                }
-            })
-
-    }
-
-    fun updateVisibility() {
-        if (busAdapter.itemCount == 0) {
-            isEmptyData.set(View.VISIBLE)
-        } else {
-            isEmptyData.set(View.GONE)
+        data.observeForever {
+            adapter.submitList(it)
         }
     }
 

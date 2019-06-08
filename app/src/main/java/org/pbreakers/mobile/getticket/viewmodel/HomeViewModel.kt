@@ -6,8 +6,10 @@ import androidx.databinding.ObservableInt
 import androidx.lifecycle.AndroidViewModel
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import io.reactivex.Completable
 import org.pbreakers.mobile.getticket.adapter.VoyageAdapter
 import org.pbreakers.mobile.getticket.app.App
+import org.pbreakers.mobile.getticket.model.entity.Voyage
 import org.pbreakers.mobile.getticket.model.repository.VoyageRepository
 import javax.inject.Inject
 
@@ -33,11 +35,10 @@ class HomeViewModel(val app: Application) : AndroidViewModel(app) {
 
         data.observeForever {
             adapter.submitList(it)
-            if (adapter.itemCount == 0) {
-                isEmptyData.set(View.VISIBLE)
-            } else {
-                isEmptyData.set(View.GONE)
-            }
         }
+    }
+
+    fun deleteVoyage(item: Voyage): Completable {
+        return repository.remove(item)
     }
 }
