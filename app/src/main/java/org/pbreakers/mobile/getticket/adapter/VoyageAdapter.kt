@@ -23,8 +23,13 @@ class VoyageAdapter(val listener: OnItemClickListener<Voyage>) : PagedListAdapte
         val binding = holder.binding as ItemVoyageBinding
 
         holder.binding.voyage = item
+
         binding.root.setOnClickListener {
             listener.onClick(it, item, position)
+        }
+
+        binding.btnMore.setOnClickListener {
+            listener.onClickPopupButton(it, item, position)
         }
     }
 
