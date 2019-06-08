@@ -30,4 +30,7 @@ interface BilletDao {
 
     @Query("SELECT * FROM Billet WHERE idEtat=:id ORDER BY idEtat")
     fun findByIdEtat(id: Long): LiveData<List<Billet>>
+
+    @Query("SELECT * FROM Billet")
+    fun findAllLiveData(): LiveData<List<Billet>>
 }

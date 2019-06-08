@@ -1,6 +1,7 @@
 package org.pbreakers.mobile.getticket.model.dao
 
 import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
 import androidx.room.*
 import io.reactivex.Completable
 import io.reactivex.Maybe
@@ -14,7 +15,7 @@ interface BusDao {
     fun findById(id: Int): Maybe<Bus>
 
     @Query("SELECT * FROM Bus")
-    fun findAll(): Maybe<List<Bus>>
+    fun findAll(): DataSource.Factory<Int, Bus>
 
     @Query("SELECT * FROM Bus")
     fun findAllLiveData(): LiveData<List<Bus>>
