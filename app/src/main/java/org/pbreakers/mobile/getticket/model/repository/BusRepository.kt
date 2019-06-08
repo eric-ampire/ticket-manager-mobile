@@ -14,7 +14,7 @@ class BusRepository @Inject constructor(private val dao: BusDao) {
 
 
     // Todo: You have to remove it
-    fun findAll(): Maybe<List<Bus>> {
+    fun findAll(): DataSource.Factory<Int, Bus> {
         refresh()
         return dao.findAll()
     }
