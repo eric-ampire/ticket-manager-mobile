@@ -42,6 +42,8 @@ interface AppComponent {
     // Constructor injection
     fun utilisateurDao(): UtilisateurDao
 
+    fun inject(modifierVoyageViewModel: ModifierVoyageViewModel)
+    fun inject(detailVoyageViewModel: DetailVoyageViewModel)
 
 
 }
