@@ -11,6 +11,10 @@ import org.pbreakers.mobile.getticket.view.fragment.BusFragment
 import org.pbreakers.mobile.getticket.view.fragment.EnregFragment
 import org.pbreakers.mobile.getticket.viewmodel.*
 import javax.inject.Singleton
+import android.app.Application
+import dagger.BindsInstance
+import org.pbreakers.mobile.getticket.app.App
+
 
 @Singleton
 @Component(modules = [
@@ -32,8 +36,8 @@ interface AppComponent {
     fun inject(enregFragment: EnregFragment)
     fun inject(enregViewModel: EnregViewModel)
     fun inject(signalerAbusViewModel: SignalerAbusViewModel)
-
-
+    fun inject(mainViewModel: MainViewModel)
+    fun inject(billetViewModel: BilletViewModel)
 
     // Constructor injection
     fun utilisateurDao(): UtilisateurDao
