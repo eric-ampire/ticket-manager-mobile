@@ -58,6 +58,9 @@
             app:destination="@id/enregFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:popEnterAnim="@anim/nav_default_enter_anim" />
+        <action
+            android:id="@+id/action_homeFragment_to_modifierVoyageFragment"
+            app:destination="@id/modifierVoyageFragment" />
     </fragment>
     <fragment
         android:id="@+id/busFragment"
@@ -66,9 +69,6 @@
         <action
             android:id="@+id/action_busFragment_to_busDetailFragment"
             app:destination="@id/busDetailFragment" />
-        <action
-            android:id="@+id/action_busFragment_to_modifierVoyageFragment"
-            app:destination="@id/modifierVoyageFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailVoyageFragment"
@@ -116,6 +116,6 @@
     <fragment
         android:id="@+id/modifierVoyageFragment"
         android:name="org.pbreakers.mobile.getticket.view.fragment.ModifierVoyageFragment"
-        android:label="fragment_modifier_voyage"
+        android:label="Modifier Voyage"
         tools:layout="@layout/fragment_modifier_voyage" />
 </navigation>
