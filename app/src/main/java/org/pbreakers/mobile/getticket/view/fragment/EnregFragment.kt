@@ -1,12 +1,10 @@
 package org.pbreakers.mobile.getticket.view.fragment
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.LinearLayout
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
@@ -21,6 +19,7 @@ import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.FragmentEnregBinding
 import org.pbreakers.mobile.getticket.model.entity.*
 import org.pbreakers.mobile.getticket.util.*
+import org.pbreakers.mobile.getticket.util.Tools.toggleSection
 import org.pbreakers.mobile.getticket.viewmodel.EnregViewModel
 import java.util.*
 import java.util.Observer as Observer1
@@ -44,10 +43,6 @@ class EnregFragment : Fragment() {
         return binding.root
     }
 
-    interface OnFragmentInteractionListener {
-        fun onFragmentInteraction(uri: Uri)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -63,8 +58,13 @@ class EnregFragment : Fragment() {
     }
 
     private fun initPointArretComponent(view: View) {
-        view.btnTogglePointArret.setOnClickListener { toggleSection(it, view.lytExpandPointArret) }
-        view.btnHidePointArret.setOnClickListener { toggleSection(view.btnTogglePointArret, view.lytExpandPointArret) }
+        view.btnTogglePointArret.setOnClickListener {
+            toggleSection(it, view.lytExpandPointArret, nestedScrollView)
+        }
+
+        view.btnHidePointArret.setOnClickListener {
+            toggleSection(view.btnTogglePointArret, view.lytExpandPointArret, nestedScrollView)
+        }
 
         view.btnEnregPointArret.setOnClickListener {
             when {
@@ -89,15 +89,21 @@ class EnregFragment : Fragment() {
             )
 
             enregViewModel.savePointArret(pointArret) {
-                toggleSection(view.btnTogglePointArret, view.lytExpandPointArret)
+                toggleSection(view.btnTogglePointArret, view.lytExpandPointArret, nestedScrollView)
                 context?.toast("Success")
             }
         }
     }
 
     private fun initVoyageComponent(view: View) {
-        view.btnToggleVoyage.setOnClickListener { toggleSection(it, view.lytExpandVoyage) }
-        view.btnHideVoyage.setOnClickListener { toggleSection(view.btnToggleVoyage, view.lytExpandVoyage) }
+
+        view.btnToggleVoyage.setOnClickListener {
+            toggleSection(it, view.lytExpandVoyage, nestedScrollView)
+        }
+
+        view.btnHideVoyage.setOnClickListener {
+            toggleSection(view.btnToggleVoyage, view.lytExpandVoyage, nestedScrollView)
+        }
 
         view.btnEnregVoyage.setOnClickListener {
 
@@ -141,7 +147,7 @@ class EnregFragment : Fragment() {
                 edtPrixVoyage
             )
 
-            toggleSection(view.btnToggleVoyage, view.lytExpandVoyage)
+            toggleSection(view.btnToggleVoyage, view.lytExpandVoyage, nestedScrollView)
             context?.toast("Success")
         }
     }
@@ -207,11 +213,11 @@ class EnregFragment : Fragment() {
 
     private fun initBusComponent(view: View) {
         view.btnToggleBus.setOnClickListener {
-            toggleSection(it, view.lytExpandBus)
+            toggleSection(it, view.lytExpandBus, nestedScrollView)
         }
 
         view.btnHideBus.setOnClickListener {
-            toggleSection(view.btnToggleBus, view.lytExpandBus)
+            toggleSection(view.btnToggleBus, view.lytExpandBus, nestedScrollView)
         }
 
         view.btnEnregBus.setOnClickListener {
@@ -239,15 +245,21 @@ class EnregFragment : Fragment() {
             enregViewModel.saveBus(bus) {
                 cleanText(edtNomBus, edtRangerBus, edtSiegeBus)
 
-                toggleSection(view.btnToggleBus, view.lytExpandBus)
+                toggleSection(view.btnToggleBus, view.lytExpandBus, nestedScrollView)
                 context?.toast("Success")
             }
         }
     }
 
     private fun initUserComponent(view: View) {
-        view.btnToggleUser.setOnClickListener { toggleSection(it, view.lytExpandUser) }
-        view.btnHideUser.setOnClickListener { toggleSection(view.btnToggleUser, view.lytExpandUser) }
+        view.btnToggleUser.setOnClickListener {
+            toggleSection(it, view.lytExpandUser, nestedScrollView)
+        }
+
+        view.btnHideUser.setOnClickListener {
+            toggleSection(view.btnToggleUser, view.lytExpandUser, nestedScrollView)
+        }
+
         view.btnEnregUser.setOnClickListener {
 
             when {
@@ -278,12 +290,12 @@ class EnregFragment : Fragment() {
             enregViewModel.saveUser(user) {
                 cleanText(edtNomUser, edtPseudoUser, edtPasswordUser, edtPasswordConfirmUser)
 
-                toggleSection(view.btnToggleUser, view.lytExpandUser)
+                toggleSection(view.btnToggleUser, view.lytExpandUser, nestedScrollView)
                 context?.toast("Success")
             }
 
             view.snackbar("Success")
-            toggleSection(view.btnToggleUser, view.lytExpandUser)
+            toggleSection(view.btnToggleUser, view.lytExpandUser, nestedScrollView)
         }
     }
 
@@ -333,11 +345,11 @@ class EnregFragment : Fragment() {
 
     private fun initAgencyComponent(view: View) {
         view.btnToggleAgency.setOnClickListener {
-            toggleSection(it, view.lytExpandAgency)
+            toggleSection(it, view.lytExpandAgency, nestedScrollView)
         }
 
         view.btnHideAgency.setOnClickListener {
-            toggleSection(view.btnToggleAgency, view.lytExpandAgency)
+            toggleSection(view.btnToggleAgency, view.lytExpandAgency, nestedScrollView)
         }
 
         view.btnEnregAgency.setOnClickListener {
@@ -347,7 +359,7 @@ class EnregFragment : Fragment() {
                 val agency = Agence(System.nanoTime(), edtNomAgency.text.toString().trim())
                 enregViewModel.saveAgence(agency) {
                     view.edtNomAgency.text.clear()
-                    toggleSection(view.btnToggleAgency, view.lytExpandAgency)
+                    toggleSection(view.btnToggleAgency, view.lytExpandAgency, nestedScrollView)
                     context?.toast("Success")
                 }
             }
@@ -356,11 +368,11 @@ class EnregFragment : Fragment() {
 
     private fun initEtatComponent(view: View) {
         view.btnToggleEtat.setOnClickListener {
-            toggleSection(it, view.lytExpandEtat)
+            toggleSection(it, view.lytExpandEtat, nestedScrollView)
         }
 
         view.btnHideEtat.setOnClickListener {
-            toggleSection(view.btnToggleEtat, view.lytExpandEtat)
+            toggleSection(view.btnToggleEtat, view.lytExpandEtat, nestedScrollView)
         }
 
         view.btnEnregEtat.setOnClickListener {
@@ -371,7 +383,7 @@ class EnregFragment : Fragment() {
                 enregViewModel.saveEtat(etat) {
                     view.edtNomEtat.text.clear()
                     context?.toast("Success")
-                    toggleSection(view.btnToggleEtat, view.lytExpandEtat)
+                    toggleSection(view.btnToggleEtat, view.lytExpandEtat, nestedScrollView)
                 }
             }
         }
@@ -379,11 +391,11 @@ class EnregFragment : Fragment() {
 
     private fun initLieuComponent(view: View) {
         view.btnToggleLieu.setOnClickListener {
-            toggleSection(it, view.lytExpandLieu)
+            toggleSection(it, view.lytExpandLieu, nestedScrollView)
         }
 
         view.btnHideLieu.setOnClickListener {
-            toggleSection(view.btnToggleLieu, view.lytExpandLieu)
+            toggleSection(view.btnToggleLieu, view.lytExpandLieu, nestedScrollView)
         }
 
         view.btnEnregLieu.setOnClickListener {
@@ -393,7 +405,7 @@ class EnregFragment : Fragment() {
                 val lieu = Lieu(System.nanoTime(), edtNomLieu.text.toString().trim())
                 enregViewModel.saveLieu(lieu) {
                     view.edtNomLieu.text.clear()
-                    toggleSection(view.btnToggleLieu, view.lytExpandLieu)
+                    toggleSection(view.btnToggleLieu, view.lytExpandLieu, nestedScrollView)
                     context?.toast("Success")
                 }
             }
@@ -402,11 +414,11 @@ class EnregFragment : Fragment() {
 
     private fun initRoleComponent(view: View) {
         view.btnToggleRole.setOnClickListener {
-            toggleSection(it, view.lytExpandRole)
+            toggleSection(it, view.lytExpandRole, nestedScrollView)
         }
 
         view.btnHideRole.setOnClickListener {
-            toggleSection(view.btnToggleRole, view.lytExpandRole)
+            toggleSection(view.btnToggleRole, view.lytExpandRole, nestedScrollView)
         }
 
         view.btnEnregRole.setOnClickListener {
@@ -416,7 +428,7 @@ class EnregFragment : Fragment() {
                 val role = Role(System.nanoTime(), edtNomRole.text.toString().trim())
                 enregViewModel.saveRole(role) {
                     view.edtNomRole.text.clear()
-                    toggleSection(view.btnToggleRole, view.lytExpandRole)
+                    toggleSection(view.btnToggleRole, view.lytExpandRole, nestedScrollView)
                     context?.toast("Success")
                 }
             }
@@ -425,11 +437,11 @@ class EnregFragment : Fragment() {
 
     private fun initTransitComponent(view: View) {
         view.btnToggleTransit.setOnClickListener {
-            toggleSection(it, view.lytExpandTransit)
+            toggleSection(it, view.lytExpandTransit, nestedScrollView)
         }
 
         view.btnHideTransit.setOnClickListener {
-            toggleSection(view.btnToggleTransit, view.lytExpandTransit)
+            toggleSection(view.btnToggleTransit, view.lytExpandTransit, nestedScrollView)
         }
 
         view.btnEnregTransit.setOnClickListener {
@@ -439,37 +451,10 @@ class EnregFragment : Fragment() {
                 val transit = Transit(System.nanoTime(), edtNomTransit.text.toString().trim())
                 enregViewModel.saveTransit(transit) {
                     view.edtNomTransit.text.clear()
-                    toggleSection(view.btnToggleTransit, view.lytExpandTransit)
+                    toggleSection(view.btnToggleTransit, view.lytExpandTransit, nestedScrollView)
                     context?.toast("Success")
                 }
             }
-        }
-    }
-
-    // The [view] represent the toggle and [layout] the layout that will be hided
-    private fun toggleSection(view: View, layout: LinearLayout) {
-
-        val show = toggleArrow(view)
-
-        if (show) {
-            ViewAnimation.expand(layout, object : ViewAnimation.AnimListener {
-                override fun onFinish() {
-                    Tools.nestedScrollTo(nestedScrollView, layout)
-                }
-            })
-
-        } else {
-            ViewAnimation.collapse(layout)
-        }
-    }
-
-    private fun toggleArrow(view: View): Boolean {
-        return if (view.rotation == 0f) {
-            view.animate().setDuration(200).rotation(180f)
-            true
-        } else {
-            view.animate().setDuration(200).rotation(0f)
-            false
         }
     }
 }
