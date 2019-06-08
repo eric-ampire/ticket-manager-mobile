@@ -45,13 +45,13 @@ fun String.getTimeFromString(): Date? {
     }
 }
 
-fun Spinner.itemIsSelected(errorMessage: String): Boolean {
+fun Spinner.itemIsNotSelected(errorMessage: String): Boolean {
 
     return if (selectedItem == null) {
         context.toast(errorMessage)
-        false
-    } else {
         true
+    } else {
+        false
     }
 }
 
