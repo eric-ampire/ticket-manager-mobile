@@ -18,7 +18,7 @@ interface VoyageDao {
     fun findAll(): DataSource.Factory<Int, Voyage>
 
     @Update
-    fun update(vararg data: Voyage)
+    fun update(vararg data: Voyage): Completable
 
     @Delete
     fun remove(vararg data: Voyage): Completable

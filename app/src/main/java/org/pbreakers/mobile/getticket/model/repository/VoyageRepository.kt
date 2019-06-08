@@ -31,4 +31,8 @@ class VoyageRepository @Inject constructor(private val dao: VoyageDao) {
     fun remove(item: Voyage): Completable {
         return dao.remove(item)
     }
+
+    fun update(voyage: Voyage): Completable {
+        return dao.update(voyage)
+    }
 }
