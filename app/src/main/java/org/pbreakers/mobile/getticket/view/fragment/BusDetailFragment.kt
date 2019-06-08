@@ -16,19 +16,15 @@ import org.pbreakers.mobile.getticket.model.entity.Bus
 import org.pbreakers.mobile.getticket.viewmodel.BusDetailViewModel
 
 
-class BusDetailFragment : Fragment(), AdapterView.OnItemSelectedListener {
+class BusDetailFragment : Fragment() {
 
     private val currentBus: Bus? by lazy {
         arguments?.getParcelable<Bus>("bus")
     }
 
     private val detailBusViewModel by lazy {
-        ViewModelProviders.of(this).get<BusDetailViewModel>().apply {
-
-        }
+        ViewModelProviders.of(this).get<BusDetailViewModel>()
     }
-
-    private val agency = ObservableField<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,30 +39,15 @@ class BusDetailFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val binding by lazy {
             inflate<FragmentBusDetailBinding>(inflater, R.layout.fragment_bus_detail, container, false).apply {
                 this.bus = currentBus
-                this.nomAgency = agency
                 this.viewModel = detailBusViewModel
+                lifecycleOwner = viewLifecycleOwner
             }
         }
 
-        val agency = listOf("Mulikap", "Transka", "Mon Agence")
-
-        val adapter = ArrayAdapter<String>(context!!, android.R.layout.simple_spinner_item, agency)
-        adapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line)
-        binding.spinnerAgency.adapter = adapter
-
-        binding.spinnerAgency.onItemSelectedListener = this
         return binding.root
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.detail_bus_menu, menu)
-    }
-
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-    }
-
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        agency.set(position.toString())
     }
 }

@@ -13,6 +13,10 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
 import androidx.navigation.Navigation.findNavController
 import com.kinda.alert.KAlertDialog
+import io.reactivex.CompletableObserver
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_bus.view.*
 import org.jetbrains.anko.design.snackbar
 import org.pbreakers.mobile.getticket.R
@@ -28,7 +32,7 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
 
     private val busViewModel by lazy {
         ViewModelProviders.of(this).get<BusViewModel>().apply {
-            busAdapter = BusAdapter(this@BusFragment)
+            adapter = BusAdapter(this@BusFragment)
             loadingState.observe(this@BusFragment, this@BusFragment)
         }
     }
@@ -40,8 +44,6 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
                 viewModel = busViewModel
             }
         }
-
-        registerForContextMenu(binding.recyclerView)
 
         return binding.root
     }
@@ -58,7 +60,6 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        addNewBus(view)
 
         busViewModel.init()
 
@@ -108,7 +109,7 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
                     val dialog = KAlertDialog(view.context, KAlertDialog.WARNING_TYPE).apply {
                         progressHelper.barColor = Color.parseColor("#A5DC86")
                         titleText = "Suppression"
-                        contentText = "Etes vous sur de vouloir supprimer ?"
+                        contentText = "Etes vous sur de vouloir supprimer ce bus ?"
                         setCanceledOnTouchOutside(true)
                     }
 
@@ -142,10 +143,22 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
 
     private fun deleteBus(dialog: KAlertDialog, item: Bus) {
         busViewModel.removeBus(item)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onComplete() {
+                    dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
+                }
 
-    }
+                override fun onSubscribe(d: Disposable) {
+                    dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
+                }
 
-    private fun addNewBus(view: View) {
+                override fun onError(e: Throwable) {
+                    dialog.contentText = e.message
+                    dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
+                }
+            })
 
     }
 }

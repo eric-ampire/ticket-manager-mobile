@@ -6,19 +6,26 @@ import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
+import org.jetbrains.anko.design.snackbar
 
 import org.pbreakers.mobile.getticket.R
+import org.pbreakers.mobile.getticket.adapter.BilletAdapter
+import org.pbreakers.mobile.getticket.adapter.OnItemClickListener
 import org.pbreakers.mobile.getticket.databinding.FragmentBilletBinding
+import org.pbreakers.mobile.getticket.model.entity.Billet
 import org.pbreakers.mobile.getticket.viewmodel.BilletViewModel
 
 
-class BilletFragment : Fragment() {
+class BilletFragment : Fragment(), OnItemClickListener<Billet> {
 
     private lateinit var binding: FragmentBilletBinding
     private val billetViewModel by lazy {
-        ViewModelProviders.of(this).get<BilletViewModel>()
+        ViewModelProviders.of(this).get<BilletViewModel>().apply {
+            adapter = BilletAdapter(this@BilletFragment)
+        }
     }
 
     override fun onCreateView(
@@ -36,6 +43,14 @@ class BilletFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+    }
+
+    override fun onClick(view: View, item: Billet, position: Int) {
+        view.snackbar("Simple click")
+    }
+
+    override fun onClickPopupButton(view: View, item: Billet, position: Int) {
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

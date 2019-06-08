@@ -66,18 +66,8 @@ class HomeFragment : Fragment(), OnItemClickListener<Voyage> {
     }
 
     private fun showVoyageDetailFragment(item: Voyage, view: View) {
-
-        val navigation = findNavController(view)
-        navigation.addOnDestinationChangedListener { controller, destination, arguments ->
-            if (destination.id == R.id.detailVoyageFragment) {
-                (activity as AppCompatActivity).supportActionBar?.hide()
-            } else {
-                (activity as AppCompatActivity).supportActionBar?.show()
-            }
-        }
-
-        Navigation.findNavController(view).navigate(R.id.action_homeFragment_to_detailVoyageFragment)
-
+        val bundle = bundleOf("bus" to item)
+        findNavController(view).navigate(R.id.action_homeFragment_to_detailVoyageFragment, bundle)
     }
 
     private fun createPopupMenu(view: View, item: Voyage) {
