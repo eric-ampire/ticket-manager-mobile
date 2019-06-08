@@ -1,16 +1,15 @@
 package org.pbreakers.mobile.getticket.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.DiffUtil
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.ItemBusBinding
 import org.pbreakers.mobile.getticket.model.entity.Bus
 
-class BusAdapter(private val listener: OnItemClickListener<Bus>) : RecyclerView.Adapter<CustomViewHolder>()  {
+class BusAdapter(private val listener: OnItemClickListener<Bus>) : PagedListAdapter<Bus, CustomViewHolder>(COMPARATOR)  {
 
     private val data = arrayListOf<Bus>()
 
@@ -22,7 +21,7 @@ class BusAdapter(private val listener: OnItemClickListener<Bus>) : RecyclerView.
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        val currentBus = data[position]
+        val currentBus = getItem(position) ?: return
         val binding = holder.binding as ItemBusBinding
 
         binding.bus = currentBus
@@ -35,12 +34,10 @@ class BusAdapter(private val listener: OnItemClickListener<Bus>) : RecyclerView.
         }
     }
 
-    override fun getItemCount(): Int = data.size
-
-    fun submitList(t: List<Bus>) {
-        this.data.clear()
-        this.data.addAll(t)
-
-        notifyDataSetChanged()
+    companion object {
+        val COMPARATOR = object : DiffUtil.ItemCallback<Bus>() {
+            override fun areItemsTheSame(oldItem: Bus, newItem: Bus): Boolean = newItem.idBus == oldItem.idBus
+            override fun areContentsTheSame(oldItem: Bus, newItem: Bus): Boolean = newItem == oldItem
+        }
     }
 }
