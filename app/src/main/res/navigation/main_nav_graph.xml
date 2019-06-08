@@ -117,5 +117,9 @@
         android:id="@+id/modifierVoyageFragment"
         android:name="org.pbreakers.mobile.getticket.view.fragment.ModifierVoyageFragment"
         android:label="Modifier Voyage"
-        tools:layout="@layout/fragment_modifier_voyage" />
+        tools:layout="@layout/fragment_modifier_voyage" >
+        <action
+            android:id="@+id/action_modifierVoyageFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 </navigation>
