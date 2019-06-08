@@ -1,6 +1,8 @@
 package org.pbreakers.mobile.getticket.util
 
 import android.widget.EditText
+import android.widget.Spinner
+import org.jetbrains.anko.toast
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -40,6 +42,16 @@ fun String.getTimeFromString(): Date? {
         SimpleDateFormat("HH:mm", Locale.FRANCE).parse(this)
     } else {
         null
+    }
+}
+
+fun Spinner.itemIsSelected(errorMessage: String): Boolean {
+
+    return if (selectedItem == null) {
+        context.toast(errorMessage)
+        false
+    } else {
+        true
     }
 }
 
