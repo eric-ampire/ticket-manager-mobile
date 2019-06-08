@@ -59,6 +59,14 @@
 
                 </LinearLayout>
 
+                <ImageButton
+                    android:id="@+id/btnMore"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@android:color/transparent"
+                    android:tint="@color/colorPrimaryLight"
+                    app:srcCompat="@drawable/ic_more_vert" />
+
                 <View
                     android:layout_width="@dimen/spacing_smlarge"
                     android:layout_height="wrap_content" />
@@ -96,7 +104,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="17.40"
+                            bindTime="@{voyage.heureDepart}"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             android:textColor="@color/grey_90"
                             android:textStyle="bold" />
@@ -104,7 +112,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="28 Sep"
+                            bindDate="@{voyage.dateDepart}"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:textColor="@color/grey_40" />
 
@@ -123,7 +131,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="17.40"
+                            bindTime="@{voyage.heureDestination}"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             android:textColor="@color/grey_90"
                             android:textStyle="bold" />
@@ -131,7 +139,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="28 Sep"
+                            bindDate="@{voyage.dateDestination}"
                             android:textAppearance="@style/TextAppearance.AppCompat.Small"
                             android:textColor="@color/grey_40" />
 
