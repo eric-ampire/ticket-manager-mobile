@@ -28,7 +28,7 @@ data class Voyage(
     val dateDepart: Date,
     val heureDepart: Date,
     val dateDestination: Date,
-    val heureDestinatin: Date,
+    val heureDestination: Date,
     val idTransit: Long,
     val prixVoyage: Double,
     val idEtat: Long
