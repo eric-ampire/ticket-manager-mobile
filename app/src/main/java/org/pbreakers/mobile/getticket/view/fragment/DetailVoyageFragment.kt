@@ -1,21 +1,24 @@
 package org.pbreakers.mobile.getticket.view.fragment
 
 
-import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.DialogFragment
-
+import android.widget.Button
+import android.widget.ImageButton
+import android.widget.TextView
+import androidx.core.widget.NestedScrollView
+import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.fragment_voyage_detail.*
 import org.pbreakers.mobile.getticket.R
+import org.pbreakers.mobile.getticket.util.Tools
+import org.pbreakers.mobile.getticket.util.Tools.toggleArrow
+import org.pbreakers.mobile.getticket.util.Tools.toggleSection
+import org.pbreakers.mobile.getticket.util.ViewAnimation
 
 
-class DetailVoyageFragment : DialogFragment() {
+class DetailVoyageFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -25,15 +28,28 @@ class DetailVoyageFragment : DialogFragment() {
         return inflater.inflate(R.layout.fragment_voyage_detail, container, false)
     }
 
-    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = super.onCreateDialog(savedInstanceState)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        return dialog
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initComponent()
     }
 
-    override fun onDismiss(dialog: DialogInterface) {
+    private fun initComponent() {
+        // info item_section
+        btnToggleInfo.setOnClickListener {
+            toggleSection(btnToggleInfo, lytExpandInfo, nestedScrollView)
+        }
+        btnHideInfo.setOnClickListener {
+            toggleSection(btnToggleInfo, lytExpandInfo, nestedScrollView)
+        }
 
-        super.onDismiss(dialog)
-        (activity as AppCompatActivity).supportActionBar?.show()
+        // passenger item_section
+        btnTogglePassenger.setOnClickListener {
+            toggleSection(btnTogglePassenger, lytExpandPassenger, nestedScrollView)
+        }
+
+        // copy to clipboard
+        btnReserve.setOnClickListener {
+            // reservation
+        }
     }
 }
