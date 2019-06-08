@@ -5,6 +5,7 @@ import android.view.View
 import androidx.databinding.ObservableInt
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
+import io.reactivex.Completable
 import io.reactivex.MaybeObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -65,5 +66,9 @@ class BusViewModel(val app: Application) : AndroidViewModel(app) {
         } else {
             isEmptyData.set(View.GONE)
         }
+    }
+
+    fun removeBus(item: Bus): Completable {
+        return repository.remove(item)
     }
 }
