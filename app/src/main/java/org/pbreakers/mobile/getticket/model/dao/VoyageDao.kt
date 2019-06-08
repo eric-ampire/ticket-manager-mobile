@@ -3,6 +3,7 @@ package org.pbreakers.mobile.getticket.model.dao
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import androidx.room.*
+import io.reactivex.Completable
 import org.pbreakers.mobile.getticket.model.entity.Voyage
 
 @Dao
@@ -20,7 +21,7 @@ interface VoyageDao {
     fun update(vararg data: Voyage)
 
     @Delete
-    fun remove(vararg data: Voyage)
+    fun remove(vararg data: Voyage): Completable
 
     @Query("SELECT * FROM Voyage")
     fun findAllLiveData(): LiveData<List<Voyage>>
