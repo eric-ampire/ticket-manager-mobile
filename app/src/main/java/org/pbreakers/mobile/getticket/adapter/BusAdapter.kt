@@ -1,7 +1,9 @@
 package org.pbreakers.mobile.getticket.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import org.pbreakers.mobile.getticket.R
@@ -26,6 +28,10 @@ class BusAdapter(private val listener: OnItemClickListener<Bus>) : RecyclerView.
         binding.bus = currentBus
         binding.itemBusLayout.setOnClickListener {
             listener.onClick(it, currentBus, position)
+        }
+
+        binding.imageButton.setOnClickListener {
+            listener.onClickPopupButton(it, currentBus, position)
         }
     }
 
