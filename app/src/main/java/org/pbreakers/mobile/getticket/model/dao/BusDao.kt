@@ -26,5 +26,8 @@ interface BusDao {
     fun update(vararg data: Bus) : Single<Int>
 
     @Delete
-    fun remove(vararg data: Bus) : Single<Int>
+    fun remove(vararg data: Bus) : Completable
+
+    @Query("SELECT count() FROM Bus")
+    fun count(): LiveData<Int>
 }

@@ -1,8 +1,10 @@
 package org.pbreakers.mobile.getticket.view.fragment
 
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
+import android.widget.PopupMenu
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
@@ -10,11 +12,12 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
 import androidx.navigation.Navigation.findNavController
+import com.kinda.alert.KAlertDialog
 import kotlinx.android.synthetic.main.fragment_bus.view.*
 import org.jetbrains.anko.design.snackbar
-import org.pbreakers.mobile.getticket.adapter.OnItemClickListener
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.adapter.BusAdapter
+import org.pbreakers.mobile.getticket.adapter.OnItemClickListener
 import org.pbreakers.mobile.getticket.databinding.FragmentBusBinding
 import org.pbreakers.mobile.getticket.model.entity.Bus
 import org.pbreakers.mobile.getticket.util.LoadingState
@@ -37,6 +40,8 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
                 viewModel = busViewModel
             }
         }
+
+        registerForContextMenu(binding.recyclerView)
 
         return binding.root
     }
@@ -81,16 +86,66 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
         }
     }
 
+    override fun onClickPopupButton(view: View, item: Bus, position: Int) {
+        createPopupMenu(view, item)
+    }
+
     override fun onClick(view: View, item: Bus, position: Int) {
 
         val bundle = bundleOf("bus" to item)
         findNavController(view).navigate(R.id.action_busFragment_to_busDetailFragment, bundle)
     }
 
+    private fun createPopupMenu(view: View, item: Bus) {
+        val popupMenu = PopupMenu(view.context, view).apply {
+            inflate(R.menu.edit_delete_context_menu)
+        }
+
+        popupMenu.setOnMenuItemClickListener {
+
+            when (it.itemId) {
+                R.id.menu_item_delete -> {
+                    val dialog = KAlertDialog(view.context, KAlertDialog.WARNING_TYPE).apply {
+                        progressHelper.barColor = Color.parseColor("#A5DC86")
+                        titleText = "Suppression"
+                        contentText = "Etes vous sur de vouloir supprimer ?"
+                        setCanceledOnTouchOutside(true)
+                    }
+
+                    dialog.setConfirmClickListener {
+                        // Delete item from repository
+                        if (dialog.alerType == KAlertDialog.SUCCESS_TYPE || dialog.alerType == KAlertDialog.ERROR_TYPE) {
+                            dialog.dismissWithAnimation()
+                        } else {
+                            deleteBus(dialog, item)
+                        }
+
+                        dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
+                    }
+
+                    dialog.show()
+                    true
+                }
+
+                R.id.menu_item_edit -> {
+                    val bundle = bundleOf("bus" to item)
+                    findNavController(view).navigate(R.id.action_busFragment_to_busDetailFragment, bundle)
+                    true
+                }
+
+                else -> false
+            }
+        }
+
+        popupMenu.show()
+    }
+
+    private fun deleteBus(dialog: KAlertDialog, item: Bus) {
+        busViewModel.removeBus(item)
+
+    }
+
     private fun addNewBus(view: View) {
-//
-//        view.fabAddBus.setOnClickListener {
-//            findNavController(it).navigate(R.id.action_busFragment_to_busDetailFragment)
-//        }
+
     }
 }
