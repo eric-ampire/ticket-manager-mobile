@@ -3,10 +3,7 @@ package org.pbreakers.mobile.getticket.view.fragment
 
 import android.os.Bundle
 import android.view.*
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
 import androidx.databinding.DataBindingUtil.inflate
-import androidx.databinding.ObservableField
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
@@ -23,7 +20,10 @@ class BusDetailFragment : Fragment() {
     }
 
     private val detailBusViewModel by lazy {
-        ViewModelProviders.of(this).get<BusDetailViewModel>()
+        ViewModelProviders.of(this).get<BusDetailViewModel>().apply {
+            bus = currentBus!!
+            init()
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
