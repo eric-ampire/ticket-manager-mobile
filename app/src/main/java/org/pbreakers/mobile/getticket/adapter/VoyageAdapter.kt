@@ -10,10 +10,11 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.ItemVoyageBinding
-import org.pbreakers.mobile.getticket.model.entity.Bus
 import org.pbreakers.mobile.getticket.model.entity.Voyage
+import org.pbreakers.mobile.getticket.viewmodel.HomeViewModel
 
-class VoyageAdapter(val listener: OnItemClickListener<Voyage>) : PagedListAdapter<Voyage, CustomViewHolder>(COMPARATOR) {
+class VoyageAdapter(val listener: OnItemClickListener<Voyage>, val homeViewModel: HomeViewModel)
+    : PagedListAdapter<Voyage, CustomViewHolder>(COMPARATOR) {
 
     val isEmptyData = ObservableInt(View.VISIBLE)
 
@@ -35,6 +36,14 @@ class VoyageAdapter(val listener: OnItemClickListener<Voyage>) : PagedListAdapte
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         val item = getItem(position) ?: return
         val binding = holder.binding as ItemVoyageBinding
+
+        homeViewModel.findLieuById(item.idDestination).observeForever {
+            holder.binding.desti = it
+        }
+
+        homeViewModel.findLieuById(item.idProvenance).observeForever {
+            holder.binding.prove = it
+        }
 
         holder.binding.voyage = item
 

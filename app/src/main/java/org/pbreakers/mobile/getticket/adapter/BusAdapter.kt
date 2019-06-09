@@ -11,8 +11,10 @@ import androidx.recyclerview.widget.DiffUtil
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.ItemBusBinding
 import org.pbreakers.mobile.getticket.model.entity.Bus
+import org.pbreakers.mobile.getticket.viewmodel.BusViewModel
 
-class BusAdapter(private val listener: OnItemClickListener<Bus>) : PagedListAdapter<Bus, CustomViewHolder>(COMPARATOR)  {
+class BusAdapter(private val listener: OnItemClickListener<Bus>, private val busViewModel: BusViewModel)
+    : PagedListAdapter<Bus, CustomViewHolder>(COMPARATOR)  {
 
     val isEmptyData = ObservableInt(View.VISIBLE)
 
@@ -36,6 +38,11 @@ class BusAdapter(private val listener: OnItemClickListener<Bus>) : PagedListAdap
         val binding = holder.binding as ItemBusBinding
 
         binding.bus = currentBus
+
+        busViewModel.findAgenceById(currentBus.idAgence).observeForever {
+            binding.agence = it
+        }
+
         binding.itemBusLayout.setOnClickListener {
             listener.onClick(it, currentBus, position)
         }
