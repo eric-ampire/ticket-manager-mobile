@@ -19,4 +19,9 @@ class LieuRepository @Inject constructor(val dao: LieuDao) {
         dao.add(lieu)
         function()
     }
+
+    fun findById(id: Long): LiveData<Lieu> {
+        refresh()
+        return dao.findById(id)
+    }
 }

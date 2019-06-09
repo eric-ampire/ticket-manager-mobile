@@ -12,7 +12,7 @@ class AgenceRepository @Inject constructor(private val dao: AgenceDao) {
         return dao.findAll()
     }
 
-    fun findById(id: Int): LiveData<Agence> {
+    fun findById(id: Long): LiveData<Agence> {
         refresh()
         return dao.findById(id)
     }

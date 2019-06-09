@@ -35,4 +35,8 @@ class VoyageRepository @Inject constructor(private val dao: VoyageDao) {
     fun update(voyage: Voyage): Completable {
         return dao.update(voyage)
     }
+
+    fun findById(idVoyage: Long): LiveData<Voyage> {
+        return dao.findById(idVoyage)
+    }
 }

@@ -12,11 +12,17 @@ class UtilisateurRepository @Inject constructor(private val dao: UtilisateurDao)
     }
 
     fun add(utilisateur: Utilisateur, function: () -> Unit) {
+        // Todo: All user must be save in the remote db
         dao.add(utilisateur)
         function()
     }
 
     fun add(utilisateur: Utilisateur) {
         dao.add(utilisateur)
+    }
+
+    fun findById(idUtilisateur: Long): LiveData<Utilisateur> {
+        // Todo: Find user from remote db
+        return dao.findById(idUtilisateur)
     }
 }

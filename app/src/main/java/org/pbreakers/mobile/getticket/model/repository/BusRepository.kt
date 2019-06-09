@@ -43,4 +43,9 @@ class BusRepository @Inject constructor(private val dao: BusDao) {
         // Remove on local database on succes
         return dao.remove(item)
     }
+
+    fun findById(id: Long): LiveData<Bus> {
+        refresh()
+        return dao.findById(id)
+    }
 }
