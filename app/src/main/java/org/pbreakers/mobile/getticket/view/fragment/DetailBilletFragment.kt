@@ -36,6 +36,7 @@ class DetailBilletFragment : Fragment() {
         val binding by lazy {
             inflate<FragmentDetailBilletBinding>(inflater, R.layout.fragment_detail_billet, container, false).apply {
                 viewModel = detailBilletViewModel
+                lifecycleOwner = viewLifecycleOwner
             }
         }
 
