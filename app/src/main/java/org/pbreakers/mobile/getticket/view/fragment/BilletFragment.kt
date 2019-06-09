@@ -3,12 +3,15 @@ package org.pbreakers.mobile.getticket.view.fragment
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
+import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import org.jetbrains.anko.design.snackbar
 
 import org.pbreakers.mobile.getticket.R
@@ -46,7 +49,8 @@ class BilletFragment : Fragment(), OnItemClickListener<Billet> {
     }
 
     override fun onClick(view: View, item: Billet, position: Int) {
-        view.snackbar("Simple click")
+        val bundle = bundleOf("billet" to item)
+        findNavController(view).navigate(R.id.action_billetFragment_to_detailBilletFragment, bundle)
     }
 
     override fun onClickPopupButton(view: View, item: Billet, position: Int) {
