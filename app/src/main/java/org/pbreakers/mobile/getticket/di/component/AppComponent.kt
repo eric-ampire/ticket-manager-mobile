@@ -14,6 +14,7 @@ import javax.inject.Singleton
 import android.app.Application
 import dagger.BindsInstance
 import org.pbreakers.mobile.getticket.app.App
+import org.pbreakers.mobile.getticket.view.fragment.DetailVoyageFragment
 
 
 @Singleton
@@ -44,6 +45,8 @@ interface AppComponent {
 
     fun inject(modifierVoyageViewModel: ModifierVoyageViewModel)
     fun inject(detailVoyageViewModel: DetailVoyageViewModel)
+    fun inject(detailVoyageFragment: DetailVoyageFragment)
+    fun inject(detailBilletViewModel: DetailBilletViewModel)
 
 
 }
