@@ -4,19 +4,26 @@ import android.app.Application
 import android.widget.ArrayAdapter
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import io.reactivex.MaybeObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.model.entity.Agence
+import org.pbreakers.mobile.getticket.model.entity.Bus
 import org.pbreakers.mobile.getticket.model.repository.AgenceRepository
 import javax.inject.Inject
 
 class BusDetailViewModel(val app: Application) : AndroidViewModel(app) {
 
-    val agency = ObservableField<String>()
-    lateinit var agencyAdapter: ArrayAdapter<Agence>
+    lateinit var bus: Bus
+
+    private val _agences  = MutableLiveData<Agence>()
+    val agences: LiveData<Agence>
+        get() = _agences
+
 
     @Inject lateinit var repository: AgenceRepository
 
@@ -26,5 +33,12 @@ class BusDetailViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     fun init() {
+        findAgenceById(bus.idAgence)
+    }
+
+    private fun findAgenceById(id: Long) {
+        repository.findById(id).observeForever {
+            _agences.postValue(it)
+        }
     }
 }
