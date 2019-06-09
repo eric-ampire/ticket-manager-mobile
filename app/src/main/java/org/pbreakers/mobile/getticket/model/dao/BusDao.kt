@@ -11,8 +11,8 @@ import org.pbreakers.mobile.getticket.model.entity.Bus
 @Dao
 interface BusDao {
 
-    @Query("SELECT * FROM Bus WHERE idAgence=:id")
-    fun findById(id: Int): Maybe<Bus>
+    @Query("SELECT * FROM Bus WHERE idBus=:id")
+    fun findById(id: Long): LiveData<Bus>
 
     @Query("SELECT * FROM Bus")
     fun findAll(): DataSource.Factory<Int, Bus>
