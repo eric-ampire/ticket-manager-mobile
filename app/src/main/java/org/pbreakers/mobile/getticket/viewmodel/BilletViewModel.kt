@@ -10,13 +10,16 @@ import androidx.paging.PagedList
 import org.pbreakers.mobile.getticket.adapter.BilletAdapter
 import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.model.entity.Billet
+import org.pbreakers.mobile.getticket.model.entity.Etat
 import org.pbreakers.mobile.getticket.model.repository.BilletRepository
+import org.pbreakers.mobile.getticket.model.repository.EtatRepository
 import javax.inject.Inject
 
 class BilletViewModel(val app: Application) : AndroidViewModel(app) {
 
     lateinit var adapter: BilletAdapter
     @Inject lateinit var repository: BilletRepository
+    @Inject lateinit var etatEepository: EtatRepository
 
     val isEmptyData = ObservableInt(View.VISIBLE)
 
@@ -37,6 +40,10 @@ class BilletViewModel(val app: Application) : AndroidViewModel(app) {
 
     fun findBilletByIdUser(id: Long) {
         repository.findByIdUser(id)
+    }
+
+    fun findEtatById(id: Long): LiveData<Etat> {
+        return etatEepository.findById(id)
     }
 
     fun findAll(): LiveData<List<Billet>> {
