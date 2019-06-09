@@ -42,7 +42,16 @@ fun bindDate(textView: TextView, date: Date?) {
     if (date == null) {
         textView.text = "- - -"
     } else {
-        textView.text = date.getFormattedDate("dd/mm/yyyy")
+        textView.text = date.getFormattedDate("dd/MM/yyyy")
+    }
+}
+
+@BindingAdapter(value = ["bindDateAndTime"])
+fun bindDateAndTime(textView: TextView, date: Date?) {
+    if (date == null) {
+        textView.text = "- - -"
+    } else {
+        textView.text = date.getFormattedDate("dd/MM/yyyy à HH:mm")
     }
 }
 
