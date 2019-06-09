@@ -68,15 +68,8 @@ class EnregFragment : Fragment() {
 
         view.btnEnregPointArret.setOnClickListener {
             when {
-                binding.spinnerLieuPointArret.selectedItem == null -> {
-                    context?.toast("Ajouter une un lieu")
-                    return@setOnClickListener
-                }
-
-                binding.spinnerVoyagePointArret.selectedItem == null -> {
-                    context?.toast("Ajouter un voyage")
-                    return@setOnClickListener
-                }
+                binding.spinnerLieuPointArret.itemIsNotSelected("Ajouter une un lieu") -> return@setOnClickListener
+                binding.spinnerVoyagePointArret.itemIsNotSelected("Ajouter un voyage") -> return@setOnClickListener
             }
 
             val lieu = spinnerLieuPointArret.selectedItem as Lieu
@@ -287,6 +280,7 @@ class EnregFragment : Fragment() {
                 role.idRole
             )
 
+            // Todo: Show progress bar
             enregViewModel.saveUser(user) {
                 cleanText(edtNomUser, edtPseudoUser, edtPasswordUser, edtPasswordConfirmUser)
 
@@ -297,21 +291,6 @@ class EnregFragment : Fragment() {
             view.snackbar("Success")
             toggleSection(view.btnToggleUser, view.lytExpandUser, nestedScrollView)
         }
-    }
-
-    private fun showRoleDialog(view: View, data: List<Role>) {
-
-        val array = data.asSequence().map { it.nomRole }.toList().toTypedArray()
-
-        val builder = AlertDialog.Builder(context!!)
-        builder.setTitle("Role")
-        builder.setSingleChoiceItems(array, -1) { dialogInterface, i ->
-
-            (view as EditText).setText(array[i])
-            dialogInterface.dismiss()
-        }
-
-        builder.show()
     }
 
     private fun dialogDatePickerLight(view: EditText) {
