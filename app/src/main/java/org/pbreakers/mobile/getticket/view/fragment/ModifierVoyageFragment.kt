@@ -59,9 +59,6 @@ class ModifierVoyageFragment : Fragment() {
 
         if (voyageInputInvalid() || currentVoyage == null) return
 
-        context?.toast("ICI")
-
-
         val bus = spinnerBusVoyage.selectedItem as Bus
         val destination = spinnerDestiVoyage.selectedItem as Lieu
         val provenance = spinnerProvVoyage.selectedItem as Lieu
