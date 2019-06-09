@@ -38,11 +38,19 @@ fun bindSpinnerAdapter(spinner: Spinner, data: List<*>) {
 }
 
 @BindingAdapter(value = ["bindDate"])
-fun bindDate(textView: TextView, date: Date) {
-    textView.text = date.getFormattedDate("dd/mm/yyyy")
+fun bindDate(textView: TextView, date: Date?) {
+    if (date == null) {
+        textView.text = "- - -"
+    } else {
+        textView.text = date.getFormattedDate("dd/mm/yyyy")
+    }
 }
 
 @BindingAdapter(value = ["bindTime"])
-fun bindTime(textView: TextView, date: Date) {
-    textView.text = date.getFormattedDate("HH:mm")
+fun bindTime(textView: TextView, date: Date?) {
+    if (date == null) {
+        textView.text = "- - -"
+    } else {
+        textView.text = date.getFormattedDate("HH:mm")
+    }
 }
