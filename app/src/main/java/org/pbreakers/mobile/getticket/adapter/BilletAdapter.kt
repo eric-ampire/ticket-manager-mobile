@@ -12,9 +12,10 @@ import androidx.recyclerview.widget.DiffUtil
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.ItemTicketBinding
 import org.pbreakers.mobile.getticket.model.entity.Billet
+import org.pbreakers.mobile.getticket.viewmodel.BilletViewModel
 
 
-class BilletAdapter(private val listener: OnItemClickListener<Billet>)
+class BilletAdapter(private val listener: OnItemClickListener<Billet>, private val viewModel: BilletViewModel)
     : PagedListAdapter<Billet, CustomViewHolder>(COMPARATOR) {
 
     val isEmptyData = ObservableInt(View.VISIBLE)
@@ -39,6 +40,10 @@ class BilletAdapter(private val listener: OnItemClickListener<Billet>)
         val binding = holder.binding as ItemTicketBinding
 
         binding.ticket = currentBillet
+
+        viewModel.findEtatById(currentBillet.idEtat).observeForever {
+            binding.etat = it
+        }
 
         binding.lytCardView.setOnClickListener {
             listener.onClick(it, currentBillet, position)
