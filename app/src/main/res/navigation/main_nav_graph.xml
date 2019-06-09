@@ -82,7 +82,14 @@
         android:id="@+id/billetFragment"
         android:name="org.pbreakers.mobile.getticket.view.fragment.BilletFragment"
         android:label="Mes billets"
-        tools:layout="@layout/fragment_billet" />
+        tools:layout="@layout/fragment_billet" >
+        <action
+            android:id="@+id/action_billetFragment_to_detailBilletFragment2"
+            app:destination="@id/detailBilletFragment" />
+        <action
+            android:id="@+id/action_billetFragment_to_modifierBilletFragment"
+            app:destination="@id/modifierBilletFragment" />
+    </fragment>
     <fragment
         android:id="@+id/scanningFragment"
         android:name="org.pbreakers.mobile.getticket.view.fragment.ScanningFragment"
@@ -122,4 +129,13 @@
             android:id="@+id/action_modifierVoyageFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/detailBilletFragment"
+        android:name="org.pbreakers.mobile.getticket.view.fragment.DetailBilletFragment"
+        android:label="DetailBilletFragment" />
+    <fragment
+        android:id="@+id/modifierBilletFragment"
+        android:name="org.pbreakers.mobile.getticket.view.fragment.ModifierBilletFragment"
+        android:label="Modifier Billet"
+        tools:layout="@layout/fragment_modifier_billet" />
 </navigation>
