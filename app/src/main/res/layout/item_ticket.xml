@@ -7,6 +7,10 @@
         <variable
             name="ticket"
             type="org.pbreakers.mobile.getticket.model.entity.Billet" />
+
+        <variable
+            name="etat"
+            type="org.pbreakers.mobile.getticket.model.entity.Etat" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -33,10 +37,23 @@
                 android:drawableTint="@color/blue_500"
                 android:drawableStart="@drawable/ic_today_black"
                 android:drawablePadding="16dp"
-                bindDate="@{ticket.dateBillet}"
+                bindDateAndTime="@{ticket.dateBillet}"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
                 tools:text="Lundi 12/12/2018"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp"
+                android:textStyle="bold"
+                android:textColor="@android:color/white"
+                android:paddingTop="8dp"
+                tools:text="En cours"
+                android:background="@drawable/bg_round_blue"
+                android:text="@{etat.nomEtat}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
