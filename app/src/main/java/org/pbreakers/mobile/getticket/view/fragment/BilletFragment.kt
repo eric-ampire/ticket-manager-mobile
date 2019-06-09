@@ -27,7 +27,7 @@ class BilletFragment : Fragment(), OnItemClickListener<Billet> {
     private lateinit var binding: FragmentBilletBinding
     private val billetViewModel by lazy {
         ViewModelProviders.of(this).get<BilletViewModel>().apply {
-            adapter = BilletAdapter(this@BilletFragment)
+            adapter = BilletAdapter(this@BilletFragment, this)
         }
     }
 
