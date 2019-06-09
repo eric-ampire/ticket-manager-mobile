@@ -3,14 +3,13 @@ package org.pbreakers.mobile.getticket.viewmodel
 import android.app.Application
 import androidx.databinding.ObservableField
 import androidx.lifecycle.AndroidViewModel
+import io.reactivex.Completable
+import io.reactivex.Maybe
 import org.pbreakers.mobile.getticket.app.App
-import org.pbreakers.mobile.getticket.model.entity.Agence
-import org.pbreakers.mobile.getticket.model.entity.Bus
+import org.pbreakers.mobile.getticket.model.entity.Billet
+import org.pbreakers.mobile.getticket.model.entity.Etat
 import org.pbreakers.mobile.getticket.model.entity.Voyage
-import org.pbreakers.mobile.getticket.model.repository.AgenceRepository
-import org.pbreakers.mobile.getticket.model.repository.BusRepository
-import org.pbreakers.mobile.getticket.model.repository.EtatRepository
-import org.pbreakers.mobile.getticket.model.repository.LieuRepository
+import org.pbreakers.mobile.getticket.model.repository.*
 import javax.inject.Inject
 
 class DetailVoyageViewModel(val app: Application) : AndroidViewModel(app) {
@@ -19,14 +18,15 @@ class DetailVoyageViewModel(val app: Application) : AndroidViewModel(app) {
     @Inject lateinit var etatRepository: EtatRepository
     @Inject lateinit var lieuRepository: LieuRepository
     @Inject lateinit var busRepository: BusRepository
+    @Inject lateinit var billetRepository: BilletRepository
 
     lateinit var voyage: Voyage
 
     val prov   = ObservableField<String>()
     val desti  = ObservableField<String>()
     val etat   = ObservableField<String>()
-    val bus    = ObservableField<Bus>()
-    val agence = ObservableField<Agence>()
+    val bus    = ObservableField<String>()
+    val agence = ObservableField<String>()
 
     init {
         val application = app as App
@@ -55,8 +55,8 @@ class DetailVoyageViewModel(val app: Application) : AndroidViewModel(app) {
     private fun findBusById(id: Long) {
         busRepository.findById(id).observeForever { aBus ->
             agencyRepository.findById(aBus.idAgence).observeForever { agency ->
-                bus.set(aBus)
-                agence.set(agency)
+                bus.set(aBus.nomBus)
+                agence.set(agency.nomAgence)
             }
         }
     }
@@ -65,5 +65,13 @@ class DetailVoyageViewModel(val app: Application) : AndroidViewModel(app) {
         etatRepository.findById(id).observeForever {
             etat.set(it.nomEtat)
         }
+    }
+
+    fun findEtatByName(name: String): Maybe<Etat> {
+        return etatRepository.findByName(name)
+    }
+
+    fun saveBillet(ticket: Billet): Completable{
+        return billetRepository.add(ticket)
     }
 }
