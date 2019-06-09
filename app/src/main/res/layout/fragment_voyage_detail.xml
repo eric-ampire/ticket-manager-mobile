@@ -340,7 +340,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/spacing_medium"
                     android:layout_marginTop="@dimen/spacing_medium"
-                    android:visibility="visible"
+                    android:visibility="gone"
                     app:cardCornerRadius="0dp"
                     app:cardElevation="2dp">
 
