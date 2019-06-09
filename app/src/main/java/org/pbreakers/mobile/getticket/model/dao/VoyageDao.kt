@@ -12,7 +12,7 @@ interface VoyageDao {
     fun add(vararg data: Voyage)
 
     @Query("SELECT * FROM Voyage WHERE idVoyage=:id")
-    fun findById(id: Int): LiveData<Voyage>
+    fun findById(id: Long): LiveData<Voyage>
 
     @Query("SELECT * FROM Voyage")
     fun findAll(): DataSource.Factory<Int, Voyage>

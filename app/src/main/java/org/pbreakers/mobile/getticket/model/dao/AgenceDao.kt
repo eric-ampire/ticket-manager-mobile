@@ -14,7 +14,7 @@ interface AgenceDao {
     fun add(vararg data: Agence)
 
     @Query("SELECT * FROM Agence WHERE idAgence=:id")
-    fun findById(id: Int): LiveData<Agence>
+    fun findById(id: Long): LiveData<Agence>
 
     @Query("SELECT * FROM Agence")
     fun findAll(): LiveData<List<Agence>>

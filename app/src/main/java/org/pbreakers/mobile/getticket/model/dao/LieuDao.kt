@@ -10,7 +10,7 @@ interface LieuDao {
     fun add(vararg data: Lieu)
 
     @Query("SELECT * FROM Lieu WHERE idLieu=:id")
-    fun findById(id: Int): LiveData<Lieu>
+    fun findById(id: Long): LiveData<Lieu>
 
     @Query("SELECT * FROM Lieu")
     fun findAll(): LiveData<List<Lieu>>

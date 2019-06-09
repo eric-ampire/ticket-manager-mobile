@@ -11,7 +11,7 @@ interface UtilisateurDao {
     fun add(vararg data: Utilisateur)
 
     @Query("SELECT * FROM Utilisateur WHERE idUtilisateur=:id")
-    fun findById(id: Int): LiveData<Utilisateur>
+    fun findById(id: Long): LiveData<Utilisateur>
 
     @Query("SELECT * FROM Utilisateur")
     fun findAll(): LiveData<List<Utilisateur>>
