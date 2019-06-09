@@ -5,16 +5,13 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.PopupMenu
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
-import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
 import com.kinda.alert.KAlertDialog
-import io.reactivex.Completable
 import io.reactivex.CompletableObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -23,7 +20,6 @@ import org.pbreakers.mobile.getticket.adapter.OnItemClickListener
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.adapter.VoyageAdapter
 import org.pbreakers.mobile.getticket.databinding.FragmentHomeBinding
-import org.pbreakers.mobile.getticket.model.entity.Bus
 import org.pbreakers.mobile.getticket.model.entity.Voyage
 import org.pbreakers.mobile.getticket.viewmodel.HomeViewModel
 
@@ -33,7 +29,7 @@ class HomeFragment : Fragment(), OnItemClickListener<Voyage> {
 
     private val homeViewModel by lazy {
         ViewModelProviders.of(this).get<HomeViewModel>().apply {
-            this.adapter = VoyageAdapter(this@HomeFragment)
+            this.adapter = VoyageAdapter(this@HomeFragment, this)
         }
     }
 
@@ -44,6 +40,7 @@ class HomeFragment : Fragment(), OnItemClickListener<Voyage> {
         // Inflate the layout for this fragment
         val binding = inflate<FragmentHomeBinding>(inflater, R.layout.fragment_home, container, false).apply {
             this.viewModel = homeViewModel
+            lifecycleOwner = viewLifecycleOwner
         }
 
         homeViewModel.init()

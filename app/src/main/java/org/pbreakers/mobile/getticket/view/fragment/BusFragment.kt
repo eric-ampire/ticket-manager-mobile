@@ -32,7 +32,7 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
 
     private val busViewModel by lazy {
         ViewModelProviders.of(this).get<BusViewModel>().apply {
-            adapter = BusAdapter(this@BusFragment)
+            adapter = BusAdapter(this@BusFragment, this)
             loadingState.observe(this@BusFragment, this@BusFragment)
         }
     }
