@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.DataBindingUtil.inflate
 import androidx.databinding.ObservableInt
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
@@ -28,7 +29,7 @@ class BilletAdapter(private val listener: OnItemClickListener<Billet>)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = DataBindingUtil.inflate<ItemTicketBinding>(inflater, R.layout.item_bus, parent, false)
+        val binding = inflate<ItemTicketBinding>(inflater, R.layout.item_ticket, parent, false)
 
         return CustomViewHolder(binding)
     }
@@ -37,8 +38,14 @@ class BilletAdapter(private val listener: OnItemClickListener<Billet>)
         val currentBillet = getItem(position) ?: return
         val binding = holder.binding as ItemTicketBinding
 
+        binding.ticket = currentBillet
+
         binding.lytCardView.setOnClickListener {
             listener.onClick(it, currentBillet, position)
+        }
+
+        binding.btnMore.setOnClickListener {
+            listener.onClickPopupButton(it, currentBillet, position)
         }
     }
 
