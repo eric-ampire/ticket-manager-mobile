@@ -9,8 +9,8 @@
             type="org.pbreakers.mobile.getticket.model.entity.Bus" />
 
         <variable
-            name="random"
-            type="java.util.Random" />
+            name="agence"
+            type="org.pbreakers.mobile.getticket.model.entity.Agence" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -68,16 +68,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:text="@{String.valueOf(bus.idAgence)}"
+                android:text="@{agence.nomAgence}"
                 android:textColor="@color/blue_500"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/imageButton"
-                app:layout_constraintStart_toEndOf="@+id/textView2"
-                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView"
+                app:layout_constraintTop_toTopOf="@+id/textView"
                 tools:text="Mulikap" />
 
             <View
