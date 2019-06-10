@@ -24,7 +24,7 @@ interface BusDao {
     fun add(vararg data: Bus)
 
     @Update
-    fun update(vararg data: Bus) : Single<Int>
+    fun update(vararg data: Bus) : Completable
 
     @Delete
     fun remove(vararg data: Bus) : Completable
