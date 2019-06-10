@@ -112,7 +112,7 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
 
                 R.id.menu_item_edit -> {
                     val bundle = bundleOf("bus" to item)
-                    findNavController(view).navigate(R.id.action_busFragment_to_busDetailFragment, bundle)
+                    findNavController(view).navigate(R.id.action_busFragment_to_modifierBusFragment, bundle)
                     true
                 }
 

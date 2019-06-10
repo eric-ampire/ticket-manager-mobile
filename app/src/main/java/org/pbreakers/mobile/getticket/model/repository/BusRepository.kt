@@ -48,4 +48,9 @@ class BusRepository @Inject constructor(private val dao: BusDao) {
         refresh()
         return dao.findById(id)
     }
+
+    fun update(bus: Bus): Completable {
+        // Todo: Update online
+        return dao.update(bus)
+    }
 }
