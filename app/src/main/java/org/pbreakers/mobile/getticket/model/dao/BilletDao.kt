@@ -18,7 +18,7 @@ interface BilletDao {
     fun findAll(): DataSource.Factory<Int, Billet>
 
     @Update
-    fun update(vararg data: Billet)
+    fun update(vararg data: Billet): Completable
 
     @Delete
     fun remove(vararg data: Billet): Completable

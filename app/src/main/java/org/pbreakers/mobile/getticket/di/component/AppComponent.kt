@@ -48,6 +48,7 @@ interface AppComponent {
     fun inject(detailVoyageFragment: DetailVoyageFragment)
     fun inject(detailBilletViewModel: DetailBilletViewModel)
     fun inject(modifierBusViewModel: ModifierBusViewModel)
+    fun inject(modifierBilletViewModel: ModifierBilletViewModel)
 
 
 }

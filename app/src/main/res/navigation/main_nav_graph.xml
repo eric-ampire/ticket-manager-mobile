@@ -144,7 +144,11 @@
         android:id="@+id/modifierBilletFragment"
         android:name="org.pbreakers.mobile.getticket.view.fragment.ModifierBilletFragment"
         android:label="Modifier Billet"
-        tools:layout="@layout/fragment_modifier_billet" />
+        tools:layout="@layout/fragment_modifier_billet" >
+        <action
+            android:id="@+id/action_modifierBilletFragment_to_billetFragment"
+            app:destination="@id/billetFragment" />
+    </fragment>
     <fragment
         android:id="@+id/modifierBusFragment"
         android:name="org.pbreakers.mobile.getticket.view.fragment.ModifierBusFragment"

@@ -42,4 +42,9 @@ class BilletRepository @Inject constructor(private val dao: BilletDao) {
         // Todo: Delete first in remote
         return dao.remove(billet)
     }
+
+    fun update(billet: Billet): Completable {
+        // Todo: Update remote before
+        return dao.update(billet)
+    }
 }

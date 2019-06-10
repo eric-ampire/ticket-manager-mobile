@@ -25,4 +25,9 @@ class UtilisateurRepository @Inject constructor(private val dao: UtilisateurDao)
         // Todo: Find user from remote db
         return dao.findById(idUtilisateur)
     }
+
+    fun findAll(): LiveData<List<Utilisateur>> {
+        // Todo: Find in remote db
+        return dao.findAll()
+    }
 }

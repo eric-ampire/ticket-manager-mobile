@@ -18,4 +18,8 @@ data class Utilisateur(
     val pseudoUtilisateur: String,
     val passwordUtilisateur: String,
     val idRole: Long
-) : Parcelable
+) : Parcelable {
+    override fun toString(): String {
+        return nomUtilisateur
+    }
+}

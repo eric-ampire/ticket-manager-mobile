@@ -8,6 +8,7 @@ import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.model.entity.Billet
 import org.pbreakers.mobile.getticket.model.entity.Etat
 import org.pbreakers.mobile.getticket.model.entity.Utilisateur
+import org.pbreakers.mobile.getticket.model.entity.Voyage
 import org.pbreakers.mobile.getticket.model.repository.*
 import javax.inject.Inject
 
@@ -18,6 +19,7 @@ class ModifierBilletViewModel(val app: Application) : AndroidViewModel(app) {
     @Inject lateinit var userRepository: UtilisateurRepository
     @Inject lateinit var billetRepository: BilletRepository
     @Inject lateinit var etatRepository: EtatRepository
+    @Inject lateinit var voyageRepository: VoyageRepository
 
     val users = MutableLiveData<List<Utilisateur>>().apply {
         value = arrayListOf()
@@ -27,12 +29,17 @@ class ModifierBilletViewModel(val app: Application) : AndroidViewModel(app) {
         value = arrayListOf()
     }
 
+    val voyages = MutableLiveData<List<Voyage>>().apply {
+        value = arrayListOf()
+    }
+
     init {
         val application = app as App
         application.appComponent.inject(this)
 
         findAllEtat()
         findAllUsers()
+        findAllVoyage()
     }
 
     private fun findAllUsers() {
@@ -44,6 +51,12 @@ class ModifierBilletViewModel(val app: Application) : AndroidViewModel(app) {
     private fun findAllEtat() {
         etatRepository.findAll().observeForever {
             etats.postValue(it)
+        }
+    }
+
+    private fun findAllVoyage() {
+        voyageRepository.findAllLiveData().observeForever {
+            voyages.postValue(it)
         }
     }
 
