@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
 import com.kinda.alert.KAlertDialog
 import io.reactivex.CompletableObserver
 import io.reactivex.MaybeObserver
@@ -86,25 +88,33 @@ class DetailVoyageFragment : Fragment() {
     private fun createReservation(btn: View) {
         if (currentVoyage == null) return
 
-        val dialog = KAlertDialog(context, KAlertDialog.PROGRESS_TYPE).apply {
-            titleText = "Loading"
-            contentText = "Chargement en cour !"
+        val dialog = KAlertDialog(context, KAlertDialog.WARNING_TYPE).apply {
+            titleText = "Confirmation"
+            contentText = "Etès vous sur de vouloir continuer !"
+            showCancelButton(true)
         }
 
         dialog.setConfirmClickListener {
             when (it.alerType) {
                 KAlertDialog.ERROR_TYPE   -> dialog.dismiss()
                 KAlertDialog.SUCCESS_TYPE -> dialog.dismiss()
-                KAlertDialog.WARNING_TYPE -> dialog.dismiss()
+
+                else -> {
+                    findEtatInfo(dialog, btn)
+                }
             }
         }
 
-        detailVoyageViewModel.findEtatByName("En cours")
+        dialog.show()
+    }
+
+    private fun findEtatInfo(dialog: KAlertDialog, btn: View) {
+        detailVoyageViewModel.findEtatByName("En attente")
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : MaybeObserver<Etat> {
                 override fun onSuccess(t: Etat) {
-                    getUserInfo(dialog, t)
+                    getUserInfo(dialog, t, btn)
                 }
 
                 override fun onComplete() {
@@ -113,7 +123,9 @@ class DetailVoyageFragment : Fragment() {
                 }
 
                 override fun onSubscribe(d: Disposable) {
-                    dialog.show()
+                    dialog.titleText = "Loading"
+                    dialog.contentText = "Operation en cour de traitement..."
+                    dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
                 }
 
                 override fun onError(e: Throwable) {
@@ -124,7 +136,7 @@ class DetailVoyageFragment : Fragment() {
 
     }
 
-    private fun getUserInfo(dialog: KAlertDialog, etat: Etat) {
+    private fun getUserInfo(dialog: KAlertDialog, etat: Etat, btn: View) {
 
         // Find current user
         session.getCurrentUser { user ->
@@ -143,12 +155,12 @@ class DetailVoyageFragment : Fragment() {
                     dateBillet = Date()
                 )
 
-                saveTicket(dialog, ticket)
+                saveTicket(dialog, ticket, btn)
             }
         }
     }
 
-    private fun saveTicket(dialog: KAlertDialog, ticket: Billet) {
+    private fun saveTicket(dialog: KAlertDialog, ticket: Billet, btn: View) {
         detailVoyageViewModel.saveBillet(ticket)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -156,6 +168,8 @@ class DetailVoyageFragment : Fragment() {
                 override fun onComplete() {
                     dialog.contentText = "Votre reservation s'est passer avec success !"
                     dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
+
+                    findNavController(btn).navigate(R.id.action_detailVoyageFragment_to_homeFragment)
                 }
 
                 override fun onSubscribe(d: Disposable) {
