@@ -25,6 +25,7 @@ import org.pbreakers.mobile.getticket.model.entity.Voyage
 import org.pbreakers.mobile.getticket.util.getDateFromString
 import org.pbreakers.mobile.getticket.util.itemIsNotSelected
 import org.pbreakers.mobile.getticket.viewmodel.ModifierBilletViewModel
+import java.util.*
 
 
 class ModifierBilletFragment : Fragment() {
@@ -53,10 +54,6 @@ class ModifierBilletFragment : Fragment() {
                 spinnerUser.itemIsNotSelected("Selectionner le beneficiaire") -> return@setOnClickListener
                 spinnerEtat.itemIsNotSelected("Selectionnez un etat")         -> return@setOnClickListener
                 spinnerVoyage.itemIsNotSelected("Selectionnez voyage")         -> return@setOnClickListener
-                edtDateBillet.text.toString().trim().getDateFromString() == null          -> {
-                    edtDateBillet.error = getString(R.string.input_empty)
-                    return@setOnClickListener
-                }
             }
 
             showConfirmationDialog(it)
@@ -90,7 +87,7 @@ class ModifierBilletFragment : Fragment() {
             idBillet = currentBillet!!.idBillet,
             idUtilisateur = user.idUtilisateur,
             idEtat = etat.idEtat,
-            dateBillet = edtDateBillet.text.toString().trim().getDateFromString()!!,
+            dateBillet = Date(),
             idVoyage = voyage.idVoyage
         )
 

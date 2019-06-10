@@ -154,35 +154,6 @@
 
                             </LinearLayout>
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/spacing_large"
-                                android:orientation="vertical"
-                                android:weightSum="4">
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginBottom="4dp"
-                                    android:text="Date" />
-
-                                <EditText
-                                    android:id="@+id/edtDateBillet"
-                                    android:inputType="date"
-                                    android:maxLength="10"
-                                    bindDate="@{viewModel.billet.dateBillet}"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="50dp"
-                                    android:layout_weight="2"
-                                    android:background="@color/grey_5"
-                                    android:gravity="left|center"
-                                    android:paddingLeft="8dp"
-                                    android:prompt="@string/provenance_prompte"
-                                    android:textColor="@color/grey_60" />
-
-                            </LinearLayout>
-
                         </LinearLayout>
 
                     </androidx.cardview.widget.CardView>
