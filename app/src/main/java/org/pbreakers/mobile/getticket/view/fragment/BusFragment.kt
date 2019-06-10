@@ -106,25 +106,7 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
 
             when (it.itemId) {
                 R.id.menu_item_delete -> {
-                    val dialog = KAlertDialog(view.context, KAlertDialog.WARNING_TYPE).apply {
-                        progressHelper.barColor = Color.parseColor("#A5DC86")
-                        titleText = "Suppression"
-                        contentText = "Etes vous sur de vouloir supprimer ce bus ?"
-                        setCanceledOnTouchOutside(true)
-                    }
-
-                    dialog.setConfirmClickListener {
-                        // Delete item from repository
-                        if (dialog.alerType == KAlertDialog.SUCCESS_TYPE || dialog.alerType == KAlertDialog.ERROR_TYPE) {
-                            dialog.dismissWithAnimation()
-                        } else {
-                            deleteBus(dialog, item)
-                        }
-
-                        dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
-                    }
-
-                    dialog.show()
+                    showDeleteConfirmation(view, item)
                     true
                 }
 
@@ -139,6 +121,26 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
         }
 
         popupMenu.show()
+    }
+
+    private fun showDeleteConfirmation(view: View, item: Bus) {
+        val dialog = KAlertDialog(view.context, KAlertDialog.WARNING_TYPE).apply {
+            progressHelper.barColor = Color.parseColor("#A5DC86")
+            titleText = "Suppression"
+            contentText = "Etes vous sur de vouloir supprimer ce bus ?"
+            setCanceledOnTouchOutside(true)
+        }
+
+        dialog.setConfirmClickListener {
+            // Delete item from repository
+            if (dialog.alerType == KAlertDialog.SUCCESS_TYPE || dialog.alerType == KAlertDialog.ERROR_TYPE) {
+                dialog.dismissWithAnimation()
+            } else {
+                deleteBus(dialog, item)
+            }
+        }
+
+        dialog.show()
     }
 
     private fun deleteBus(dialog: KAlertDialog, item: Bus) {
