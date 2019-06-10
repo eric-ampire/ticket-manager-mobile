@@ -21,7 +21,7 @@ interface BilletDao {
     fun update(vararg data: Billet)
 
     @Delete
-    fun remove(vararg data: Billet)
+    fun remove(vararg data: Billet): Completable
 
     @Query("SELECT count() FROM Billet")
     fun count(): LiveData<Int>

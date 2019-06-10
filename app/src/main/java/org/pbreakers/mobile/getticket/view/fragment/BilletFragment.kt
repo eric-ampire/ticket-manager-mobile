@@ -3,16 +3,18 @@ package org.pbreakers.mobile.getticket.view.fragment
 
 import android.os.Bundle
 import android.view.*
+import android.widget.PopupMenu
 import androidx.core.os.bundleOf
-import androidx.databinding.DataBindingUtil
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
-import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
-import org.jetbrains.anko.design.snackbar
+import com.kinda.alert.KAlertDialog
+import io.reactivex.CompletableObserver
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.adapter.BilletAdapter
@@ -54,6 +56,66 @@ class BilletFragment : Fragment(), OnItemClickListener<Billet> {
     }
 
     override fun onClickPopupButton(view: View, item: Billet, position: Int) {
+        val popupMenu = PopupMenu(context, view).apply {
+            inflate(R.menu.edit_delete_context_menu)
+            show()
+        }
+
+        popupMenu.setOnMenuItemClickListener {
+            return@setOnMenuItemClickListener when(it.itemId) {
+                R.id.menu_item_edit -> {
+                    val bundle = bundleOf("billet" to item)
+                    findNavController(view).navigate(R.id.action_billetFragment_to_modifierBilletFragment, bundle)
+                    true
+                }
+
+                R.id.menu_item_delete -> {
+                    showDeleteTicketConfirmation(view, item)
+                    true
+                }
+
+                else -> false
+            }
+        }
+    }
+
+    private fun showDeleteTicketConfirmation(view: View, billet: Billet) {
+        val dialog = KAlertDialog(context, KAlertDialog.WARNING_TYPE).apply {
+            contentText = "Etes vous sur de vouloir supprimer"
+            titleText = "Suppression"
+            show()
+        }
+
+        dialog.setConfirmClickListener {
+            if (it.alerType == KAlertDialog.SUCCESS_TYPE || it.alerType == KAlertDialog.ERROR_TYPE) {
+                it.dismissWithAnimation()
+            } else {
+                deleteBillet(view, billet, dialog)
+            }
+        }
+    }
+
+    private fun deleteBillet(view: View, billet: Billet, dialog: KAlertDialog) {
+
+        billetViewModel.deleteBillet(billet)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CompletableObserver {
+                override fun onComplete() {
+                    dialog.contentText = ""
+                    dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
+                }
+
+                override fun onSubscribe(d: Disposable) {
+                    dialog.contentText = "Suppression en cour"
+                    dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
+                }
+
+                override fun onError(e: Throwable) {
+                    dialog.contentText = e.message
+                    dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
+                }
+            })
 
     }
 

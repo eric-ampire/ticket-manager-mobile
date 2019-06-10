@@ -37,4 +37,9 @@ class BilletRepository @Inject constructor(private val dao: BilletDao) {
         // Todo: The ticket must be store online before local
         return dao.add(ticket)
     }
+
+    fun remove(billet: Billet): Completable {
+        // Todo: Delete first in remote
+        return dao.remove(billet)
+    }
 }

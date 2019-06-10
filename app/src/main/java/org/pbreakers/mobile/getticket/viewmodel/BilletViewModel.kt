@@ -7,6 +7,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import io.reactivex.Completable
 import org.pbreakers.mobile.getticket.adapter.BilletAdapter
 import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.model.entity.Billet
@@ -48,5 +49,9 @@ class BilletViewModel(val app: Application) : AndroidViewModel(app) {
 
     fun findAll(): LiveData<List<Billet>> {
         return repository.findAllLiveData()
+    }
+
+    fun deleteBillet(billet: Billet): Completable {
+        return repository.remove(billet)
     }
 }
