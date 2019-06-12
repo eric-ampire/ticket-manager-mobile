@@ -1,6 +1,5 @@
 package org.pbreakers.mobile.getticket.view.activity
 
-import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -18,7 +17,6 @@ import kotlinx.android.synthetic.main.header_drawer.*
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.util.Session
-import org.pbreakers.mobile.getticket.view.fragment.EnregFragment
 import org.pbreakers.mobile.getticket.viewmodel.MainViewModel
 import javax.inject.Inject
 
@@ -68,12 +66,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadUserInfo() {
         // Get current user
-        session.getCurrentUser {
-            if (it != null) {
-                tvUsername.text = String.format("%s", it.nomUtilisateur)
-                tvRole.text = "Admin"
-            }
-        }
+        val username = session.getCurrentUser()!!
+
+        tvUsername.text = String.format("%s", username.nomUtilisateur)
+        tvRole.text = "Admin"
 
         displayBadge()
     }

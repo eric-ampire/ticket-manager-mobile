@@ -97,7 +97,10 @@ class DetailVoyageFragment : Fragment() {
         dialog.setConfirmClickListener {
             when (it.alerType) {
                 KAlertDialog.ERROR_TYPE   -> dialog.dismiss()
-                KAlertDialog.SUCCESS_TYPE -> dialog.dismiss()
+                KAlertDialog.SUCCESS_TYPE -> {
+                    dialog.dismiss()
+                    findNavController(btn).navigate(R.id.action_detailVoyageFragment_to_homeFragment)
+                }
 
                 else -> {
                     findEtatInfo(dialog, btn)
@@ -139,25 +142,17 @@ class DetailVoyageFragment : Fragment() {
     private fun getUserInfo(dialog: KAlertDialog, etat: Etat, btn: View) {
 
         // Find current user
-        session.getCurrentUser { user ->
+        val idUser = session.getCurrentUser()!!.idUtilisateur
 
-            if (user == null) {
-                dialog.contentText = "Impossible de trouver un utilisateur !"
-                dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
+        val ticket = Billet(
+            idBillet = System.nanoTime(),
+            idVoyage = currentVoyage!!.idVoyage,
+            idEtat = etat.idEtat,
+            idUtilisateur = idUser,
+            dateBillet = Date()
+        )
 
-            } else {
-
-                val ticket = Billet(
-                    idBillet = System.nanoTime(),
-                    idVoyage = currentVoyage!!.idVoyage,
-                    idEtat = etat.idEtat,
-                    idUtilisateur = user.idUtilisateur,
-                    dateBillet = Date()
-                )
-
-                saveTicket(dialog, ticket, btn)
-            }
-        }
+        saveTicket(dialog, ticket, btn)
     }
 
     private fun saveTicket(dialog: KAlertDialog, ticket: Billet, btn: View) {
@@ -168,8 +163,6 @@ class DetailVoyageFragment : Fragment() {
                 override fun onComplete() {
                     dialog.contentText = "Votre reservation s'est passer avec success !"
                     dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
-
-                    findNavController(btn).navigate(R.id.action_detailVoyageFragment_to_homeFragment)
                 }
 
                 override fun onSubscribe(d: Disposable) {
