@@ -1,30 +1,19 @@
 package org.pbreakers.mobile.getticket.adapter
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.databinding.ObservableInt
-import androidx.paging.PagedList
-import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
 import org.pbreakers.mobile.getticket.R
+import org.pbreakers.mobile.getticket.adapter.common.BaseAdapter
+import org.pbreakers.mobile.getticket.adapter.common.CustomViewHolder
+import org.pbreakers.mobile.getticket.adapter.common.OnItemClickListener
 import org.pbreakers.mobile.getticket.databinding.ItemVoyageBinding
 import org.pbreakers.mobile.getticket.model.entity.Voyage
 import org.pbreakers.mobile.getticket.viewmodel.HomeViewModel
 
 class VoyageAdapter(val listener: OnItemClickListener<Voyage>, val homeViewModel: HomeViewModel)
-    : PagedListAdapter<Voyage, CustomViewHolder>(COMPARATOR) {
-
-    val isEmptyData = ObservableInt(View.VISIBLE)
-
-    override fun onCurrentListChanged(currentList: PagedList<Voyage>?) {
-        if (itemCount == 0) {
-            isEmptyData.set(View.VISIBLE)
-        } else {
-            isEmptyData.set(View.GONE)
-        }
-    }
+    : BaseAdapter<Voyage>(COMPARATOR) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val inflater = LayoutInflater.from(parent.context)

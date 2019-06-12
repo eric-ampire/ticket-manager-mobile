@@ -5,7 +5,6 @@ import androidx.databinding.ObservableInt
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import org.pbreakers.mobile.getticket.adapter.CustomViewHolder
 
 abstract class BaseAdapter<T>(diff: DiffUtil.ItemCallback<T>) : PagedListAdapter<T, CustomViewHolder>(diff) {
     val emptyViewVisibility = ObservableInt(View.VISIBLE)
