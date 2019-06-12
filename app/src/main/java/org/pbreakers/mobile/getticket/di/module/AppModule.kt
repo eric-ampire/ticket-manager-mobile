@@ -3,6 +3,7 @@ package org.pbreakers.mobile.getticket.di.module
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import com.google.gson.Gson
 import dagger.Module
 import dagger.Provides
 import org.pbreakers.mobile.getticket.app.App
@@ -26,7 +27,7 @@ class AppModule(private val application: Application) {
 
     @Provides
     @Singleton
-    fun provideSession(application: Application): Session {
-        return Session(application as App)
+    fun provideSession(preferences: SharedPreferences, gson: Gson): Session {
+        return Session(preferences, gson)
     }
 }
