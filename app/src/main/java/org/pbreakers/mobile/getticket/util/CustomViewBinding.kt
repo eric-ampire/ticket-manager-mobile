@@ -1,6 +1,5 @@
 package org.pbreakers.mobile.getticket.util
 
-import android.R
 import android.graphics.drawable.Drawable
 import android.widget.ArrayAdapter
 import android.widget.ImageView
@@ -9,6 +8,7 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
+import org.pbreakers.mobile.getticket.R
 import java.util.*
 
 
@@ -31,8 +31,8 @@ fun bindImageUrl(imageView: ImageView, url: String?, placeholder: Drawable) {
 @BindingAdapter(value = ["setAdapter"])
 fun bindSpinnerAdapter(spinner: Spinner, data: List<*>) {
 
-    ArrayAdapter(spinner.context, R.layout.simple_spinner_item, data).run {
-        setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
+    ArrayAdapter(spinner.context, android.R.layout.simple_spinner_item, data).run {
+        setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = this
     }
 }
@@ -40,7 +40,7 @@ fun bindSpinnerAdapter(spinner: Spinner, data: List<*>) {
 @BindingAdapter(value = ["bindDate"])
 fun bindDate(textView: TextView, date: Date?) {
     if (date == null) {
-        textView.text = "- - -"
+        textView.text = Date().getFormattedDate("dd/MM/yyyy")
     } else {
         textView.text = date.getFormattedDate("dd/MM/yyyy")
     }
@@ -58,7 +58,7 @@ fun bindDateAndTime(textView: TextView, date: Date?) {
 @BindingAdapter(value = ["bindTime"])
 fun bindTime(textView: TextView, date: Date?) {
     if (date == null) {
-        textView.text = "- - -"
+        textView.text = Date().getFormattedDate("HH:mm")
     } else {
         textView.text = date.getFormattedDate("HH:mm")
     }
