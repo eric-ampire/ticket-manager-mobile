@@ -40,7 +40,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:visibility="@{viewModel.adapter.isEmptyData.get()}"
+                    android:visibility="@{viewModel.adapter.emptyViewVisibility.get()}"
                     layout="@layout/item_no_data" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
