@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import org.pbreakers.mobile.getticket.model.api.AgenceApi
 import org.pbreakers.mobile.getticket.model.dao.AgenceDao
 import org.pbreakers.mobile.getticket.model.entity.Agence
-import javax.inject.Inject
 
 class AgenceRepository(private val dao: AgenceDao, private val api: AgenceApi) {
 

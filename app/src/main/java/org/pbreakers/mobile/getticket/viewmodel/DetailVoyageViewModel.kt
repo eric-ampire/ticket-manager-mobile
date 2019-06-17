@@ -1,19 +1,15 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
-import android.app.Application
 import androidx.databinding.ObservableField
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import io.reactivex.Completable
 import io.reactivex.Maybe
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.model.entity.Billet
 import org.pbreakers.mobile.getticket.model.entity.Etat
 import org.pbreakers.mobile.getticket.model.entity.Voyage
 import org.pbreakers.mobile.getticket.model.repository.*
-import javax.inject.Inject
 
 class DetailVoyageViewModel : ViewModel(), KoinComponent {
 

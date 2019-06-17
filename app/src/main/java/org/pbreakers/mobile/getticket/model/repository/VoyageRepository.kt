@@ -6,7 +6,6 @@ import io.reactivex.Completable
 import org.pbreakers.mobile.getticket.model.api.VoyageApi
 import org.pbreakers.mobile.getticket.model.dao.VoyageDao
 import org.pbreakers.mobile.getticket.model.entity.Voyage
-import javax.inject.Inject
 
 class VoyageRepository(private val dao: VoyageDao, private val api: VoyageApi) {
 

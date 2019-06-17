@@ -1,19 +1,18 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Completable
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.model.entity.Billet
 import org.pbreakers.mobile.getticket.model.entity.Etat
 import org.pbreakers.mobile.getticket.model.entity.Utilisateur
 import org.pbreakers.mobile.getticket.model.entity.Voyage
-import org.pbreakers.mobile.getticket.model.repository.*
-import javax.inject.Inject
+import org.pbreakers.mobile.getticket.model.repository.BilletRepository
+import org.pbreakers.mobile.getticket.model.repository.EtatRepository
+import org.pbreakers.mobile.getticket.model.repository.UtilisateurRepository
+import org.pbreakers.mobile.getticket.model.repository.VoyageRepository
 
 class ModifierBilletViewModel : ViewModel(), KoinComponent {
 

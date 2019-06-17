@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import org.pbreakers.mobile.getticket.model.api.TransitApi
 import org.pbreakers.mobile.getticket.model.dao.TransitDao
 import org.pbreakers.mobile.getticket.model.entity.Transit
-import javax.inject.Inject
 
 class TransitRepository(private val dao: TransitDao, private val api: TransitApi)  {
     fun findAll(): LiveData<List<Transit>> {

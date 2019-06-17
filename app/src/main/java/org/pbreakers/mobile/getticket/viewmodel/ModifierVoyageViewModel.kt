@@ -1,16 +1,12 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Completable
 import org.koin.core.KoinComponent
 import org.koin.core.inject
-import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.model.entity.*
 import org.pbreakers.mobile.getticket.model.repository.*
-import javax.inject.Inject
 
 class ModifierVoyageViewModel : ViewModel(), KoinComponent {
 

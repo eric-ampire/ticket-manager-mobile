@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import org.pbreakers.mobile.getticket.model.api.LieuApi
 import org.pbreakers.mobile.getticket.model.dao.LieuDao
 import org.pbreakers.mobile.getticket.model.entity.Lieu
-import javax.inject.Inject
 
 class LieuRepository(private val dao: LieuDao, private val api: LieuApi) {
     fun findAll(): LiveData<List<Lieu>> {

@@ -2,11 +2,9 @@ package org.pbreakers.mobile.getticket.model.repository
 
 import androidx.lifecycle.LiveData
 import io.reactivex.Maybe
-import io.reactivex.Single
 import org.pbreakers.mobile.getticket.model.api.EtatApi
 import org.pbreakers.mobile.getticket.model.dao.EtatDao
 import org.pbreakers.mobile.getticket.model.entity.Etat
-import javax.inject.Inject
 
 class EtatRepository(private val dao: EtatDao, private val api: EtatApi) {
 

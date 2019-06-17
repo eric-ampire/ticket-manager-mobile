@@ -14,21 +14,20 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.header_drawer.*
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import org.pbreakers.mobile.getticket.R
-import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.model.entity.Role
 import org.pbreakers.mobile.getticket.util.Session
 import org.pbreakers.mobile.getticket.viewmodel.MainViewModel
-import javax.inject.Inject
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), KoinComponent {
 
     private val mainViewModel by lazy {
         ViewModelProviders.of(this).get<MainViewModel>()
     }
 
-    @Inject
-    lateinit var session: Session
+    private val session: Session by inject()
 
     private val navController by lazy {
         Navigation.findNavController(this, R.id.navHostFragment)
@@ -39,8 +38,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setupDrawerLayout()
-        val app = application as App
-        app.appComponent.inject(this)
     }
 
     private fun setupDrawerLayout() {

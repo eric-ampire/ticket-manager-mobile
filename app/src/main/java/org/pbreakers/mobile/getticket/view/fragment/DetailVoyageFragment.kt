@@ -19,7 +19,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.pbreakers.mobile.getticket.R
-import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.databinding.FragmentVoyageDetailBinding
 import org.pbreakers.mobile.getticket.model.entity.Billet
 import org.pbreakers.mobile.getticket.model.entity.Etat
@@ -28,7 +27,6 @@ import org.pbreakers.mobile.getticket.util.Session
 import org.pbreakers.mobile.getticket.util.Tools.toggleSection
 import org.pbreakers.mobile.getticket.viewmodel.DetailVoyageViewModel
 import java.util.*
-import javax.inject.Inject
 
 
 class DetailVoyageFragment : Fragment(), KoinComponent {

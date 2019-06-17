@@ -7,7 +7,6 @@ import io.reactivex.Single
 import org.pbreakers.mobile.getticket.model.api.BilletApi
 import org.pbreakers.mobile.getticket.model.dao.BilletDao
 import org.pbreakers.mobile.getticket.model.entity.Billet
-import javax.inject.Inject
 
 class BilletRepository(private val dao: BilletDao, private val api: BilletApi) {
 
