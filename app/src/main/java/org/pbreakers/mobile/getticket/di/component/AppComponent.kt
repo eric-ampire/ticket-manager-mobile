@@ -22,7 +22,8 @@ import org.pbreakers.mobile.getticket.view.fragment.DetailVoyageFragment
     AppModule::class,
     NetModule::class,
     RetrofitServiceModule::class,
-    DatabaseModule::class
+    DatabaseModule::class,
+    ApiModule::class
 ])
 interface AppComponent {
     // Field injection
@@ -49,6 +50,7 @@ interface AppComponent {
     fun inject(detailBilletViewModel: DetailBilletViewModel)
     fun inject(modifierBusViewModel: ModifierBusViewModel)
     fun inject(modifierBilletViewModel: ModifierBilletViewModel)
+    abstract fun inject(scannerViewModel: ScannerViewModel)
 
 
 }

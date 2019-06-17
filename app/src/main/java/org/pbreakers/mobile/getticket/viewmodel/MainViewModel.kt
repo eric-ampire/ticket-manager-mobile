@@ -3,6 +3,7 @@ package org.pbreakers.mobile.getticket.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.model.repository.BilletRepository
 import org.pbreakers.mobile.getticket.model.repository.BusRepository
@@ -18,11 +19,27 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
         application.appComponent.inject(this)
     }
 
-    fun countBillet(): LiveData<Int> {
-        return billetRepository.count()
+    private val countBus: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>().also {
+
+        }
     }
 
-    fun countBus(): LiveData<Int> {
-        return busRepository.count()
+    private val countBillet: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>().also {
+            getBilletCount()
+        }
     }
+
+    private fun getBusCount() {
+
+    }
+
+    private fun getBilletCount() {
+    }
+
+
+
+    fun countBillet(): LiveData<Int> = countBus
+    fun countBus(): LiveData<Int> = countBillet
 }

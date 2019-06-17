@@ -37,8 +37,8 @@ class SplashActivity : AppCompatActivity() {
     }
 
     fun fda() {
-        roleDao.add(Role(1, "Admin"))
-        val user = Utilisateur(1, "Eric Ampire", "ericampire", "ericampire", 1)
+        roleDao.add(Role(Role.HOTESSE, "Admin"))
+        val user = Utilisateur(1, "Eric Ampire", "ericampire", "ericampire", Role.HOTESSE)
 
         userDao.add(user)
         session.createSession(user)

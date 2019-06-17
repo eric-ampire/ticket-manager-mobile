@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.header_drawer.*
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.app.App
+import org.pbreakers.mobile.getticket.model.entity.Role
 import org.pbreakers.mobile.getticket.util.Session
 import org.pbreakers.mobile.getticket.viewmodel.MainViewModel
 import javax.inject.Inject
@@ -69,13 +70,26 @@ class MainActivity : AppCompatActivity() {
         val username = session.getCurrentUser()!!
 
         tvUsername.text = String.format("%s", username.nomUtilisateur)
-        tvRole.text = "Admin"
+        tvRole.text = "Hotesse"
 
         displayBadge()
     }
 
     private fun displayBadge() {
         val menu = navigationView.menu
+        val username = session.getCurrentUser()
+
+        when(username!!.idRole) {
+
+            Role.CLIENT, Role.AGENT_LOCAL -> {
+                menu.findItem(R.id.scanningFragment).isVisible = false
+                menu.findItem(R.id.enregFragment).isVisible = false
+            }
+
+            Role.HOTESSE -> {
+                menu.findItem(R.id.enregFragment).isVisible = false
+            }
+        }
 
         // Get All badge
         val badgeBillet = menu.findItem(R.id.billetFragment).actionView.findViewById<TextView>(R.id.text)

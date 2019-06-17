@@ -1,6 +1,8 @@
 package org.pbreakers.mobile.getticket.model.repository
 
 import androidx.lifecycle.LiveData
+import io.reactivex.Maybe
+import io.reactivex.Single
 import org.pbreakers.mobile.getticket.model.dao.UtilisateurDao
 import org.pbreakers.mobile.getticket.model.entity.Utilisateur
 import javax.inject.Inject
@@ -29,5 +31,9 @@ class UtilisateurRepository @Inject constructor(private val dao: UtilisateurDao)
     fun findAll(): LiveData<List<Utilisateur>> {
         // Todo: Find in remote db
         return dao.findAll()
+    }
+
+    fun login(username: String, password: String): Maybe<Utilisateur> {
+        return dao.fite()
     }
 }

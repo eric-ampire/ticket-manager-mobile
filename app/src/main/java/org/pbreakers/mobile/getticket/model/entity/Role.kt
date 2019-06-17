@@ -12,4 +12,11 @@ data class Role(
     val nomRole: String
 ) : Parcelable {
     override fun toString() = nomRole
+
+    companion object {
+        const val CLIENT: Long = 2
+        const val ADMIN: Long = 1
+        const val HOTESSE: Long = 3
+        const val AGENT_LOCAL: Long = 4
+    }
 }

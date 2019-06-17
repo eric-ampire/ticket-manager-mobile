@@ -21,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_bus.view.*
 import org.jetbrains.anko.design.snackbar
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.adapter.BusAdapter
-import org.pbreakers.mobile.getticket.adapter.OnItemClickListener
+import org.pbreakers.mobile.getticket.adapter.common.OnItemClickListener
 import org.pbreakers.mobile.getticket.databinding.FragmentBusBinding
 import org.pbreakers.mobile.getticket.model.entity.Bus
 import org.pbreakers.mobile.getticket.util.LoadingState

@@ -18,7 +18,7 @@ import io.reactivex.schedulers.Schedulers
 
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.adapter.BilletAdapter
-import org.pbreakers.mobile.getticket.adapter.OnItemClickListener
+import org.pbreakers.mobile.getticket.adapter.common.OnItemClickListener
 import org.pbreakers.mobile.getticket.databinding.FragmentBilletBinding
 import org.pbreakers.mobile.getticket.model.entity.Billet
 import org.pbreakers.mobile.getticket.viewmodel.BilletViewModel

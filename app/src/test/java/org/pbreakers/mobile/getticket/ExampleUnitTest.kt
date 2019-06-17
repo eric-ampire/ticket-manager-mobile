@@ -18,7 +18,7 @@ class ExampleUnitTest {
     fun testDate() {
         val date: Date? = "23/04/2019".getDateFromString()
 
-        assertEquals(date?.getFormattedDate("dd/mm/yyyy"), "23/04/2019")
+        assertEquals(date?.getFormattedDate("EEE dd/MM/yyyy"), "23/04/2019")
     }
 
     @Test

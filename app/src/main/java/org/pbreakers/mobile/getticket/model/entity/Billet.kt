@@ -22,5 +22,5 @@ data class Billet(
     val dateBillet: Date,
     val idVoyage: Long,
     val idUtilisateur: Long,
-    val idEtat: Long
+    var idEtat: Long
 ) : Parcelable
