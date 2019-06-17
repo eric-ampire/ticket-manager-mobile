@@ -10,15 +10,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
 import com.kinda.alert.KAlertDialog
-import io.reactivex.Completable
 import io.reactivex.CompletableObserver
 import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -26,17 +23,15 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_scanning.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.model.entity.Billet
-import org.pbreakers.mobile.getticket.model.entity.Utilisateur
 import org.pbreakers.mobile.getticket.viewmodel.ScannerViewModel
 
 
 class ScanningFragment : Fragment(), ZXingScannerView.ResultHandler {
 
-    private val scannerViewModel by lazy {
-        ViewModelProviders.of(this).get(ScannerViewModel::class.java)
-    }
+    private val scannerViewModel by viewModel<ScannerViewModel>()
 
 
     override fun onCreateView(

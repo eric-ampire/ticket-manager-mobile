@@ -19,6 +19,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.design.snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.FragmentLoginBinding
 import org.pbreakers.mobile.getticket.model.entity.Utilisateur
@@ -28,9 +29,7 @@ import org.pbreakers.mobile.getticket.viewmodel.AuthViewModel
 
 class LoginFragment : Fragment() {
 
-    private val authViewModel by lazy {
-        ViewModelProviders.of(this).get(AuthViewModel::class.java)
-    }
+    private val authViewModel by viewModel<AuthViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

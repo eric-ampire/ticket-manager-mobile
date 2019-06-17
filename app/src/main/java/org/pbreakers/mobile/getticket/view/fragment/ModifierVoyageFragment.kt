@@ -16,6 +16,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_modifier_voyage.*
 import org.jetbrains.anko.toast
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.FragmentModifierVoyageBinding
 import org.pbreakers.mobile.getticket.model.entity.*
@@ -30,9 +31,7 @@ class ModifierVoyageFragment : Fragment() {
         arguments?.getParcelable<Voyage>("voyage")
     }
 
-    private val modifierVoyageViewModel by lazy {
-        ViewModelProviders.of(this).get<ModifierVoyageViewModel>()
-    }
+    private val modifierVoyageViewModel by viewModel<ModifierVoyageViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

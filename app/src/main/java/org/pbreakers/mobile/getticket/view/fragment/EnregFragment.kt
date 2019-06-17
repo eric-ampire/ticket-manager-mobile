@@ -15,6 +15,7 @@ import kotlinx.android.synthetic.main.fragment_enreg.*
 import kotlinx.android.synthetic.main.fragment_enreg.view.*
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.toast
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.FragmentEnregBinding
 import org.pbreakers.mobile.getticket.model.entity.*
@@ -29,9 +30,7 @@ class EnregFragment : Fragment() {
 
     lateinit var binding: FragmentEnregBinding
 
-    private val enregViewModel by lazy {
-        ViewModelProviders.of(this).get<EnregViewModel>()
-    }
+    private val enregViewModel: EnregViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
