@@ -1,31 +1,28 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
-import android.app.Application
 import androidx.databinding.ObservableField
-import androidx.lifecycle.AndroidViewModel
-import org.pbreakers.mobile.getticket.app.App
+import androidx.lifecycle.ViewModel
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import org.pbreakers.mobile.getticket.model.entity.Billet
 import org.pbreakers.mobile.getticket.model.entity.Utilisateur
 import org.pbreakers.mobile.getticket.model.entity.Voyage
-import org.pbreakers.mobile.getticket.model.repository.*
-import javax.inject.Inject
+import org.pbreakers.mobile.getticket.model.repository.EtatRepository
+import org.pbreakers.mobile.getticket.model.repository.UtilisateurRepository
+import org.pbreakers.mobile.getticket.model.repository.VoyageRepository
 
-class DetailBilletViewModel(val app: Application) : AndroidViewModel(app) {
+class DetailBilletViewModel : ViewModel(), KoinComponent {
 
     lateinit var billet: Billet
 
-    @Inject lateinit var etatRepository: EtatRepository
-    @Inject lateinit var voyageRepository: VoyageRepository
-    @Inject lateinit var userRepository: UtilisateurRepository
+    private val etatRepository: EtatRepository        by inject()
+    private val voyageRepository: VoyageRepository    by inject()
+    private val userRepository: UtilisateurRepository by inject()
+
 
     val etat = ObservableField<String>()
     val user = ObservableField<Utilisateur>()
     val voyage = ObservableField<Voyage>()
-
-    init {
-        val application = app as App
-        application.appComponent.inject(this)
-    }
 
     fun init() {
         findUserById(billet.idUtilisateur)
