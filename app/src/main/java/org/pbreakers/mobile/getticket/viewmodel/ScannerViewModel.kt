@@ -23,6 +23,7 @@ class ScannerViewModel(val app: Application) : AndroidViewModel(app) {
     }
 
     fun updateBillet(billet: Billet): Completable {
+        // Todo: Implementation
         TODO()
     }
 }
