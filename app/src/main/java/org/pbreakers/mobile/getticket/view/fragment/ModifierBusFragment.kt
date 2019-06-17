@@ -16,6 +16,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_modifier_bus.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.FragmentModifierBusBinding
@@ -33,12 +34,7 @@ class ModifierBusFragment : Fragment() {
         arguments?.getParcelable<Bus>("bus")
     }
 
-    private val modifierBusViewModel by lazy {
-        ViewModelProviders.of(this).get(ModifierBusViewModel::class.java).apply {
-            bus = currentBus!!
-            init()
-        }
-    }
+    private val modifierBusViewModel by viewModel<ModifierBusViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +48,11 @@ class ModifierBusFragment : Fragment() {
             fabSaveBusModification.setOnClickListener {
                 processModification(it)
             }
+        }
+
+        modifierBusViewModel.run {
+            bus = currentBus!!
+            init()
         }
 
         return binding.root

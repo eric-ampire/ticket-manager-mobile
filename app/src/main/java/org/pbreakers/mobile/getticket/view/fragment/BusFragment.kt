@@ -19,6 +19,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_bus.view.*
 import org.jetbrains.anko.design.snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.adapter.BusAdapter
 import org.pbreakers.mobile.getticket.adapter.common.OnItemClickListener
@@ -30,12 +31,7 @@ import org.pbreakers.mobile.getticket.viewmodel.BusViewModel
 
 class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState> {
 
-    private val busViewModel by lazy {
-        ViewModelProviders.of(this).get<BusViewModel>().apply {
-            adapter = BusAdapter(this@BusFragment, this)
-            loadingState.observe(this@BusFragment, this@BusFragment)
-        }
-    }
+    private val busViewModel: BusViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -43,6 +39,11 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
             inflate<FragmentBusBinding>(inflater, R.layout.fragment_bus, container, false).apply {
                 viewModel = busViewModel
             }
+        }
+
+        busViewModel.run {
+            adapter = BusAdapter(this@BusFragment, this)
+            loadingState.observe(this@BusFragment, this@BusFragment)
         }
 
         return binding.root

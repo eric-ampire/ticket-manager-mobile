@@ -1,24 +1,23 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
-import android.app.Application
 import androidx.databinding.ObservableField
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import io.reactivex.Completable
 import io.reactivex.Maybe
-import org.pbreakers.mobile.getticket.app.App
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import org.pbreakers.mobile.getticket.model.entity.Billet
 import org.pbreakers.mobile.getticket.model.entity.Etat
 import org.pbreakers.mobile.getticket.model.entity.Voyage
 import org.pbreakers.mobile.getticket.model.repository.*
-import javax.inject.Inject
 
-class DetailVoyageViewModel(val app: Application) : AndroidViewModel(app) {
+class DetailVoyageViewModel : ViewModel(), KoinComponent {
 
-    @Inject lateinit var agencyRepository: AgenceRepository
-    @Inject lateinit var etatRepository: EtatRepository
-    @Inject lateinit var lieuRepository: LieuRepository
-    @Inject lateinit var busRepository: BusRepository
-    @Inject lateinit var billetRepository: BilletRepository
+    private val agencyRepository: AgenceRepository by inject()
+    private val etatRepository: EtatRepository     by inject()
+    private val lieuRepository: LieuRepository     by inject()
+    private val busRepository: BusRepository       by inject()
+    private val billetRepository: BilletRepository by inject()
 
     lateinit var voyage: Voyage
 
@@ -27,11 +26,6 @@ class DetailVoyageViewModel(val app: Application) : AndroidViewModel(app) {
     val etat   = ObservableField<String>()
     val bus    = ObservableField<String>()
     val agence = ObservableField<String>()
-
-    init {
-        val application = app as App
-        application.appComponent.inject(this)
-    }
 
     fun init() {
         findDestinationById(voyage.idDestination)

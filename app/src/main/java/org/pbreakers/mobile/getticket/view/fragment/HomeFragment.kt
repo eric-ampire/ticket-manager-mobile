@@ -16,6 +16,7 @@ import io.reactivex.CompletableObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.pbreakers.mobile.getticket.adapter.common.OnItemClickListener
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.adapter.VoyageAdapter
@@ -27,11 +28,7 @@ import org.pbreakers.mobile.getticket.viewmodel.HomeViewModel
 class HomeFragment : Fragment(), OnItemClickListener<Voyage> {
 
 
-    private val homeViewModel by lazy {
-        ViewModelProviders.of(this).get<HomeViewModel>().apply {
-            this.adapter = VoyageAdapter(this@HomeFragment, this)
-        }
-    }
+    private val homeViewModel: HomeViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +40,10 @@ class HomeFragment : Fragment(), OnItemClickListener<Voyage> {
             lifecycleOwner = viewLifecycleOwner
         }
 
-        homeViewModel.init()
+        homeViewModel.run {
+            this.adapter = VoyageAdapter(this@HomeFragment, this)
+            init()
+        }
 
         return binding.root
     }

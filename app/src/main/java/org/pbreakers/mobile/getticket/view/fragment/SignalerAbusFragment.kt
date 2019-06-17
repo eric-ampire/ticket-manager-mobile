@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
 import kotlinx.android.synthetic.main.fragment_signaler_abus.view.*
 import org.jetbrains.anko.design.snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.FragmentSignalerAbusBinding
@@ -21,9 +22,7 @@ import org.pbreakers.mobile.getticket.viewmodel.SignalerAbusViewModel
 
 class SignalerAbusFragment : Fragment() {
 
-    private val signalerAbusViewModel by lazy {
-        ViewModelProviders.of(this).get<SignalerAbusViewModel>()
-    }
+    private val signalerAbusViewModel by viewModel<SignalerAbusViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

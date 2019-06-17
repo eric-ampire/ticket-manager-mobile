@@ -1,18 +1,16 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import io.reactivex.Completable
-import org.pbreakers.mobile.getticket.app.App
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import org.pbreakers.mobile.getticket.model.entity.Agence
 import org.pbreakers.mobile.getticket.model.entity.Bus
 import org.pbreakers.mobile.getticket.model.repository.AgenceRepository
 import org.pbreakers.mobile.getticket.model.repository.BusRepository
-import javax.inject.Inject
 
-class ModifierBusViewModel(val app: Application) : AndroidViewModel(app) {
+class ModifierBusViewModel : ViewModel(), KoinComponent {
 
     lateinit var bus: Bus
 
@@ -20,12 +18,10 @@ class ModifierBusViewModel(val app: Application) : AndroidViewModel(app) {
         value = arrayListOf()
     }
 
-    @Inject lateinit var agenceRepository: AgenceRepository
-    @Inject lateinit var busRepository: BusRepository
+    private val agenceRepository: AgenceRepository by inject()
+    private val busRepository: BusRepository       by inject()
 
     init {
-        val application = app as App
-        application.appComponent.inject(this)
         findAllAgence()
     }
 

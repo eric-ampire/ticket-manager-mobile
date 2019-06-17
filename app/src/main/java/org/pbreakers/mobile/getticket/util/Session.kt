@@ -5,10 +5,8 @@ import androidx.core.content.edit
 import com.google.gson.Gson
 import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.model.entity.Utilisateur
-import javax.inject.Inject
 
-
-class Session @Inject constructor(private val preference: SharedPreferences, private val gson: Gson) {
+class Session (private val preference: SharedPreferences, private val gson: Gson) {
 
     fun createSession(user: Utilisateur) {
         val json = gson.toJson(user)

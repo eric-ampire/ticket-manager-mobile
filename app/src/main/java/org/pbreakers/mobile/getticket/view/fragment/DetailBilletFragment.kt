@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.lifecycle.ViewModelProviders
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.FragmentDetailBilletBinding
@@ -21,12 +22,7 @@ class DetailBilletFragment : Fragment() {
         arguments?.getParcelable<Billet>("billet")
     }
 
-    private val detailBilletViewModel by lazy {
-        ViewModelProviders.of(this).get(DetailBilletViewModel::class.java).apply {
-            billet = currentBillet!!
-            init()
-        }
-    }
+    private val detailBilletViewModel: DetailBilletViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,6 +34,11 @@ class DetailBilletFragment : Fragment() {
                 viewModel = detailBilletViewModel
                 lifecycleOwner = viewLifecycleOwner
             }
+        }
+
+        detailBilletViewModel.run {
+            billet = currentBillet!!
+            init()
         }
 
         return binding.root

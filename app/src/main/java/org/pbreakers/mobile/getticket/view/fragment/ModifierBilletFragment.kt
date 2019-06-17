@@ -15,6 +15,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_modifier_billet.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.FragmentModifierBilletBinding
@@ -34,11 +35,7 @@ class ModifierBilletFragment : Fragment() {
         arguments?.getParcelable<Billet>("billet")
     }
 
-    private val modifierBilletViewModel by lazy {
-        ViewModelProviders.of(this).get(ModifierBilletViewModel::class.java).apply {
-            billet = currentBillet!!
-        }
-    }
+    private val modifierBilletViewModel by viewModel<ModifierBilletViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +44,10 @@ class ModifierBilletFragment : Fragment() {
         val binding = inflate<FragmentModifierBilletBinding>(inflater, R.layout.fragment_modifier_billet, container, false).apply {
             viewModel = modifierBilletViewModel
             lifecycleOwner = viewLifecycleOwner
+        }
+
+        modifierBilletViewModel.run {
+            billet = currentBillet!!
         }
 
         binding.fabSaveBilletModification.setOnClickListener {

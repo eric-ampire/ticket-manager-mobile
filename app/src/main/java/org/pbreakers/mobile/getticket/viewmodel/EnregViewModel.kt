@@ -1,26 +1,24 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.pbreakers.mobile.getticket.app.App
+import androidx.lifecycle.ViewModel
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import org.pbreakers.mobile.getticket.model.entity.*
 import org.pbreakers.mobile.getticket.model.repository.*
-import java.util.*
-import javax.inject.Inject
 
-class EnregViewModel(val app: Application) : AndroidViewModel(app) {
+class EnregViewModel : ViewModel(), KoinComponent {
 
-    @Inject lateinit var roleRepository: RoleRepository
-    @Inject lateinit var agencyRepository: AgenceRepository
-    @Inject lateinit var etatRepository: EtatRepository
-    @Inject lateinit var transitRepository: TransitRepository
-    @Inject lateinit var lieuRepository: LieuRepository
-    @Inject lateinit var userRepository: UtilisateurRepository
-    @Inject lateinit var busRepository: BusRepository
-    @Inject lateinit var voyageRepository: VoyageRepository
-    @Inject lateinit var pointArretRepository: PointArretRepository
+    private val roleRepository: RoleRepository             by inject()
+    private val agencyRepository: AgenceRepository         by inject()
+    private val etatRepository: EtatRepository             by inject()
+    private val transitRepository: TransitRepository       by inject()
+    private val lieuRepository: LieuRepository             by inject()
+    private val userRepository: UtilisateurRepository      by inject()
+    private val busRepository: BusRepository               by inject()
+    private val voyageRepository: VoyageRepository         by inject()
+    private val pointArretRepository: PointArretRepository by inject()
 
     val role     = MutableLiveData<List<Role>>().apply { value = arrayListOf() }
     val agences  = MutableLiveData<List<Agence>>().apply { value = arrayListOf() }
@@ -31,8 +29,6 @@ class EnregViewModel(val app: Application) : AndroidViewModel(app) {
     val voyages  = MutableLiveData<List<Voyage>>().apply { value = arrayListOf() }
 
     init {
-        val application = app as App
-        application.appComponent.inject(this)
 
         roleRepository.findAll().observeForever   { role.value = it }
         agencyRepository.findAll().observeForever { agences.value = it }

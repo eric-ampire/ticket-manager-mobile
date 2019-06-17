@@ -15,6 +15,7 @@ import io.reactivex.CompletableObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.adapter.BilletAdapter
@@ -27,11 +28,7 @@ import org.pbreakers.mobile.getticket.viewmodel.BilletViewModel
 class BilletFragment : Fragment(), OnItemClickListener<Billet> {
 
     private lateinit var binding: FragmentBilletBinding
-    private val billetViewModel by lazy {
-        ViewModelProviders.of(this).get<BilletViewModel>().apply {
-            adapter = BilletAdapter(this@BilletFragment, this)
-        }
-    }
+    private val billetViewModel by viewModel<BilletViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +38,8 @@ class BilletFragment : Fragment(), OnItemClickListener<Billet> {
             viewModel = billetViewModel
             lifecycleOwner = viewLifecycleOwner
         }
+
+        billetViewModel.adapter = BilletAdapter(this@BilletFragment, billetViewModel)
 
         return binding.root
     }

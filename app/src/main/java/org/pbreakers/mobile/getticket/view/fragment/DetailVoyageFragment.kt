@@ -7,8 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
 import com.kinda.alert.KAlertDialog
 import io.reactivex.CompletableObserver
@@ -17,8 +15,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_voyage_detail.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import org.pbreakers.mobile.getticket.R
-import org.pbreakers.mobile.getticket.app.App
 import org.pbreakers.mobile.getticket.databinding.FragmentVoyageDetailBinding
 import org.pbreakers.mobile.getticket.model.entity.Billet
 import org.pbreakers.mobile.getticket.model.entity.Etat
@@ -27,29 +27,21 @@ import org.pbreakers.mobile.getticket.util.Session
 import org.pbreakers.mobile.getticket.util.Tools.toggleSection
 import org.pbreakers.mobile.getticket.viewmodel.DetailVoyageViewModel
 import java.util.*
-import javax.inject.Inject
 
 
-class DetailVoyageFragment : Fragment() {
+class DetailVoyageFragment : Fragment(), KoinComponent {
 
-    @Inject lateinit var session: Session
+    private val session: Session by inject()
 
     // Todo: You have to use the constant
     private val currentVoyage by lazy {
         arguments?.getParcelable<Voyage>("voyage")
     }
 
-    private val detailVoyageViewModel by lazy {
-        ViewModelProviders.of(this).get(DetailVoyageViewModel::class.java).apply {
-            voyage = currentVoyage!!
-            init()
-        }
-    }
+    private val detailVoyageViewModel: DetailVoyageViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val app = activity?.application as App
-        app.appComponent.inject(this)
     }
 
     override fun onCreateView(
@@ -62,6 +54,11 @@ class DetailVoyageFragment : Fragment() {
 
             voyage = currentVoyage
             viewModel = detailVoyageViewModel
+        }
+
+        detailVoyageViewModel.run {
+            voyage = currentVoyage!!
+            init()
         }
 
         return binding.root
