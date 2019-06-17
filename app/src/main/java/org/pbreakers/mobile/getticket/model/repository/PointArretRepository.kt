@@ -1,11 +1,12 @@
 package org.pbreakers.mobile.getticket.model.repository
 
 import androidx.lifecycle.LiveData
+import org.pbreakers.mobile.getticket.model.api.PointArretApi
 import org.pbreakers.mobile.getticket.model.dao.PointArretDao
 import org.pbreakers.mobile.getticket.model.entity.PointArret
 import javax.inject.Inject
 
-class PointArretRepository @Inject constructor(val dao: PointArretDao) {
+class PointArretRepository(private val dao: PointArretDao, private val api: PointArretApi) {
     fun findAll(): LiveData<List<PointArret>> {
         refresh()
         return dao.findAll()

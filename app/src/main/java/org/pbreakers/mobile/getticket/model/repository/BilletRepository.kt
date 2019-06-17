@@ -4,11 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import io.reactivex.Completable
 import io.reactivex.Single
+import org.pbreakers.mobile.getticket.model.api.BilletApi
 import org.pbreakers.mobile.getticket.model.dao.BilletDao
 import org.pbreakers.mobile.getticket.model.entity.Billet
 import javax.inject.Inject
 
-class BilletRepository @Inject constructor(private val dao: BilletDao) {
+class BilletRepository(private val dao: BilletDao, private val api: BilletApi) {
 
     fun count(): LiveData<Int> {
         refresh()

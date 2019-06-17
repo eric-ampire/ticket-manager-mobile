@@ -3,11 +3,12 @@ package org.pbreakers.mobile.getticket.model.repository
 import androidx.lifecycle.LiveData
 import io.reactivex.Maybe
 import io.reactivex.Single
+import org.pbreakers.mobile.getticket.model.api.UserApi
 import org.pbreakers.mobile.getticket.model.dao.UtilisateurDao
 import org.pbreakers.mobile.getticket.model.entity.Utilisateur
 import javax.inject.Inject
 
-class UtilisateurRepository @Inject constructor(private val dao: UtilisateurDao) {
+class UtilisateurRepository(private val dao: UtilisateurDao, private val api: UserApi) {
 
     fun findByPseudoAndPassword(pseudo: String, password: String): LiveData<Utilisateur> {
         return dao.findByPseudoAndPassword(pseudo, password)

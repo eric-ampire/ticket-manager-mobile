@@ -1,13 +1,14 @@
 package org.pbreakers.mobile.getticket.model.repository
 
 import androidx.lifecycle.LiveData
+import org.pbreakers.mobile.getticket.model.api.RoleApi
 import org.pbreakers.mobile.getticket.model.dao.EtatDao
 import org.pbreakers.mobile.getticket.model.dao.RoleDao
 import org.pbreakers.mobile.getticket.model.entity.Etat
 import org.pbreakers.mobile.getticket.model.entity.Role
 import javax.inject.Inject
 
-class RoleRepository @Inject constructor(private val dao: RoleDao) {
+class RoleRepository(private val dao: RoleDao, private val api: RoleApi) {
 
     fun findAll(): LiveData<List<Role>> {
         refresh()
