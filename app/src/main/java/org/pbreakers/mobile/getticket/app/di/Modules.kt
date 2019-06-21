@@ -1,4 +1,4 @@
-package org.pbreakers.mobile.getticket.di
+package org.pbreakers.mobile.getticket.app.di
 
 import android.app.Application
 import android.content.SharedPreferences
