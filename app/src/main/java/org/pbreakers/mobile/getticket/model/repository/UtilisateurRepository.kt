@@ -8,10 +8,6 @@ import org.pbreakers.mobile.getticket.model.entity.Utilisateur
 
 class UtilisateurRepository(private val dao: UtilisateurDao, private val api: UserApi) {
 
-    fun findByPseudoAndPassword(pseudo: String, password: String): LiveData<Utilisateur> {
-        return dao.findByPseudoAndPassword(pseudo, password)
-    }
-
     fun add(utilisateur: Utilisateur, function: () -> Unit) {
         // Todo: All user must be save in the remote db
         dao.add(utilisateur)
@@ -33,6 +29,6 @@ class UtilisateurRepository(private val dao: UtilisateurDao, private val api: Us
     }
 
     fun login(username: String, password: String): Maybe<Utilisateur> {
-        return dao.fite()
+        return api.login(username, password)
     }
 }
