@@ -52,7 +52,6 @@ class ModifierBusFragment : Fragment() {
 
         modifierBusViewModel.run {
             bus = currentBus!!
-            init()
         }
 
         return binding.root
@@ -93,24 +92,17 @@ class ModifierBusFragment : Fragment() {
             idAgence = agency.idAgence
         )
 
+        dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
         modifierBusViewModel.modifierBus(newBus)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : CompletableObserver {
-                override fun onComplete() {
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
                     dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
                     Navigation.findNavController(view).navigate(R.id.action_modifierBusFragment_to_busFragment)
-                }
-
-                override fun onSubscribe(d: Disposable) {
-                    dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
-                }
-
-                override fun onError(e: Throwable) {
+                } else {
                     dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
-                    dialog.contentText = e.message
+                    dialog.contentText = it.exception?.message ?: "Unkwnon error !"
                 }
-            })
+            }
 
     }
 }
