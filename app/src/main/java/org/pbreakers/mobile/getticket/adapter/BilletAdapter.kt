@@ -18,7 +18,7 @@ import org.pbreakers.mobile.getticket.model.entity.Etat
 import org.pbreakers.mobile.getticket.viewmodel.BilletViewModel
 
 
-class BilletAdapter(private val listener: OnItemClickListener<Billet>) : BaseAdapter<Billet>() {
+class BilletAdapter(private val listener: OnItemClickListener<Billet>) : BaseAdapter<Billet>(DIFF) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -28,7 +28,7 @@ class BilletAdapter(private val listener: OnItemClickListener<Billet>) : BaseAda
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        val currentBillet = data[position]
+        val currentBillet = getItem(position) ?: return
         val binding = holder.binding as ItemTicketBinding
 
         binding.ticket = currentBillet
@@ -50,10 +50,13 @@ class BilletAdapter(private val listener: OnItemClickListener<Billet>) : BaseAda
         }
     }
 
-    fun submitList(billets: List<Billet>) {
-        this.data.clear()
-        this.data.addAll(billets)
-        notifyDataSetChanged()
-        super.updateVisibility()
+    companion object DIFF : DiffUtil.ItemCallback<Billet>() {
+        override fun areItemsTheSame(oldItem: Billet, newItem: Billet): Boolean{
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: Billet, newItem: Billet): Boolean {
+            return oldItem.idBillet == newItem.idBillet
+        }
     }
 }

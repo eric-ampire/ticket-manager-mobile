@@ -4,18 +4,18 @@ import android.view.View
 import androidx.databinding.ObservableInt
 import androidx.paging.PagedList
 import androidx.paging.PagedListAdapter
+import androidx.recyclerview.widget.AdapterListUpdateCallback
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import org.pbreakers.mobile.getticket.model.entity.Bus
 
-abstract class BaseAdapter<T> : RecyclerView.Adapter<CustomViewHolder>() {
+abstract class BaseAdapter<T>(itemDiffCallback: DiffUtil.ItemCallback<T>) : ListAdapter<T, CustomViewHolder>(itemDiffCallback) {
     val emptyViewVisibility = ObservableInt(View.VISIBLE)
 
-    protected val data = arrayListOf<T>()
+    override fun onCurrentListChanged(previousList: MutableList<T>, currentList: MutableList<T>) {
+        super.onCurrentListChanged(previousList, currentList)
 
-    override fun getItemCount(): Int = data.size
-
-    fun updateVisibility() {
         if (itemCount == 0) {
             emptyViewVisibility.set(View.VISIBLE)
         } else {

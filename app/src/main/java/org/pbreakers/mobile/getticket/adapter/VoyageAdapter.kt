@@ -14,11 +14,12 @@ import org.pbreakers.mobile.getticket.adapter.common.BaseAdapter
 import org.pbreakers.mobile.getticket.adapter.common.CustomViewHolder
 import org.pbreakers.mobile.getticket.adapter.common.OnItemClickListener
 import org.pbreakers.mobile.getticket.databinding.ItemVoyageBinding
+import org.pbreakers.mobile.getticket.model.entity.Bus
 import org.pbreakers.mobile.getticket.model.entity.Lieu
 import org.pbreakers.mobile.getticket.model.entity.Voyage
 import org.pbreakers.mobile.getticket.viewmodel.HomeViewModel
 
-class VoyageAdapter(val listener: OnItemClickListener<Voyage>) : BaseAdapter<Voyage>() {
+class VoyageAdapter(val listener: OnItemClickListener<Voyage>) : BaseAdapter<Voyage>(DIFF) {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
@@ -29,16 +30,8 @@ class VoyageAdapter(val listener: OnItemClickListener<Voyage>) : BaseAdapter<Voy
     }
 
 
-
-    fun submitData(newData: List<Voyage>) {
-        this.data.clear()
-        this.data.addAll(newData)
-        updateVisibility()
-        notifyDataSetChanged()
-    }
-
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        val item = data[position]
+        val item = getItem(position) ?: return
         val binding = holder.binding as ItemVoyageBinding
 
         val db = FirebaseFirestore.getInstance()
@@ -53,14 +46,6 @@ class VoyageAdapter(val listener: OnItemClickListener<Voyage>) : BaseAdapter<Voy
             holder.binding.prove = it.toObject(Lieu::class.java)
         }
 
-//        homeViewModel.findLieuById(item.idDestination).observeForever {
-//
-//        }
-//
-//        homeViewModel.findLieuById(item.idProvenance).observeForever {
-//            holder.binding.prove = it
-//        }
-
         holder.binding.voyage = item
 
         binding.root.setOnClickListener {
@@ -72,10 +57,13 @@ class VoyageAdapter(val listener: OnItemClickListener<Voyage>) : BaseAdapter<Voy
         }
     }
 
-    companion object {
-        val COMPARATOR = object : DiffUtil.ItemCallback<Voyage>() {
-            override fun areItemsTheSame(oldItem: Voyage, newItem: Voyage): Boolean = newItem.idVoyage == oldItem.idVoyage
-            override fun areContentsTheSame(oldItem: Voyage, newItem: Voyage): Boolean = newItem == oldItem
+    companion object DIFF : DiffUtil.ItemCallback<Voyage>() {
+        override fun areItemsTheSame(oldItem: Voyage, newItem: Voyage): Boolean{
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: Voyage, newItem: Voyage): Boolean {
+            return oldItem.idVoyage == newItem.idVoyage
         }
     }
 }

@@ -14,17 +14,11 @@ import org.pbreakers.mobile.getticket.adapter.common.CustomViewHolder
 import org.pbreakers.mobile.getticket.adapter.common.OnItemClickListener
 import org.pbreakers.mobile.getticket.databinding.ItemBusBinding
 import org.pbreakers.mobile.getticket.model.entity.Agence
+import org.pbreakers.mobile.getticket.model.entity.Billet
 import org.pbreakers.mobile.getticket.model.entity.Bus
 import org.pbreakers.mobile.getticket.viewmodel.BusViewModel
 
-class BusAdapter(private val listener: OnItemClickListener<Bus>) : BaseAdapter<Bus>()  {
-
-    fun submitList(currentBus: List<Bus>) {
-        this.data.clear()
-        this.data.addAll(currentBus)
-        super.updateVisibility()
-        notifyDataSetChanged()
-    }
+class BusAdapter(private val listener: OnItemClickListener<Bus>) : BaseAdapter<Bus>(DIFF)  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -34,7 +28,7 @@ class BusAdapter(private val listener: OnItemClickListener<Bus>) : BaseAdapter<B
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
-        val currentBus = data[position]
+        val currentBus = getItem(position) ?: return
         val binding = holder.binding as ItemBusBinding
 
         binding.bus = currentBus
@@ -56,6 +50,16 @@ class BusAdapter(private val listener: OnItemClickListener<Bus>) : BaseAdapter<B
 
         binding.imageButton.setOnClickListener {
             listener.onClickPopupButton(it, currentBus, position)
+        }
+    }
+
+    companion object DIFF : DiffUtil.ItemCallback<Bus>() {
+        override fun areItemsTheSame(oldItem: Bus, newItem: Bus): Boolean{
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: Bus, newItem: Bus): Boolean {
+            return oldItem.idBus == newItem.idBus
         }
     }
 }
