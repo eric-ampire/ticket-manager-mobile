@@ -31,18 +31,12 @@ import org.pbreakers.mobile.getticket.util.Session
 import org.pbreakers.mobile.getticket.util.Tools.toggleSection
 import org.pbreakers.mobile.getticket.viewmodel.DetailVoyageViewModel
 import java.util.*
+import kotlin.properties.Delegates
 
 
 class DetailVoyageFragment : Fragment(), KoinComponent {
 
-
-    val dialog by lazy {
-        KAlertDialog(context, KAlertDialog.WARNING_TYPE).apply {
-            titleText = "Confirmation"
-            contentText = "Etès vous sur de vouloir continuer !"
-            show()
-        }
-    }
+    var dialog: KAlertDialog by Delegates.notNull()
 
     // Todo: You have to use the constant
     private val currentVoyage by lazy {
@@ -50,10 +44,6 @@ class DetailVoyageFragment : Fragment(), KoinComponent {
     }
 
     private val detailVoyageViewModel: DetailVoyageViewModel by viewModel()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -96,20 +86,29 @@ class DetailVoyageFragment : Fragment(), KoinComponent {
     private fun createReservation(btn: View) {
         if (currentVoyage == null) return
 
-        dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
-
-        dialog.setConfirmClickListener {
-            if (it.alerType == KAlertDialog.ERROR_TYPE || it.alerType == KAlertDialog.WARNING_TYPE) {
-                dialog.dismissWithAnimation()
-
-            } else if (it.alerType == KAlertDialog.SUCCESS_TYPE) {
-
-                dialog.dismissWithAnimation()
-                findNavController(btn).navigate(R.id.action_detailVoyageFragment_to_homeFragment)
-            }
+        dialog = KAlertDialog(context, KAlertDialog.WARNING_TYPE).apply {
+            titleText = "Confirmation"
+            contentText = "Etès vous sur de vouloir continuer !"
+            show()
         }
 
-        findEtatInfo(btn)
+        dialog.setConfirmClickListener {
+            when {
+                it.alerType == KAlertDialog.ERROR_TYPE -> {
+                    dialog.dismissWithAnimation()
+                }
+
+                it.alerType == KAlertDialog.SUCCESS_TYPE -> {
+
+                    dialog.dismissWithAnimation()
+                    findNavController(btn).navigate(R.id.action_detailVoyageFragment_to_homeFragment)
+                }
+                it.alerType == KAlertDialog.WARNING_TYPE -> {
+                    dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
+                    findEtatInfo(btn)
+                }
+            }
+        }
     }
 
     private fun findEtatInfo(btn: View) {
