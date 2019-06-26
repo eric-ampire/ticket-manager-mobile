@@ -1,19 +1,24 @@
 package org.pbreakers.mobile.getticket.adapter
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.databinding.ObservableInt
+import androidx.paging.PagedList
 import androidx.recyclerview.widget.DiffUtil
+import com.google.firebase.firestore.FirebaseFirestore
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.adapter.common.BaseAdapter
 import org.pbreakers.mobile.getticket.adapter.common.CustomViewHolder
 import org.pbreakers.mobile.getticket.adapter.common.OnItemClickListener
 import org.pbreakers.mobile.getticket.databinding.ItemBusBinding
+import org.pbreakers.mobile.getticket.model.entity.Agence
+import org.pbreakers.mobile.getticket.model.entity.Billet
 import org.pbreakers.mobile.getticket.model.entity.Bus
 import org.pbreakers.mobile.getticket.viewmodel.BusViewModel
 
-class BusAdapter(private val listener: OnItemClickListener<Bus>, private val busViewModel: BusViewModel)
-    : BaseAdapter<Bus>(COMPARATOR)  {
+class BusAdapter(private val listener: OnItemClickListener<Bus>) : BaseAdapter<Bus>(DIFF)  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -28,8 +33,15 @@ class BusAdapter(private val listener: OnItemClickListener<Bus>, private val bus
 
         binding.bus = currentBus
 
-        busViewModel.findAgenceById(currentBus.idAgence).observeForever {
-            binding.agence = it
+        val db = FirebaseFirestore.getInstance()
+        val agenceRef = db.collection("agences").document(currentBus.idAgence)
+
+        agenceRef.get().addOnCompleteListener {
+            if (it.isSuccessful) {
+                binding.agence = it.result?.toObject(Agence::class.java) ?: return@addOnCompleteListener
+            } else {
+                return@addOnCompleteListener
+            }
         }
 
         binding.itemBusLayout.setOnClickListener {
@@ -41,10 +53,13 @@ class BusAdapter(private val listener: OnItemClickListener<Bus>, private val bus
         }
     }
 
-    companion object {
-        val COMPARATOR = object : DiffUtil.ItemCallback<Bus>() {
-            override fun areItemsTheSame(oldItem: Bus, newItem: Bus): Boolean = newItem.idBus == oldItem.idBus
-            override fun areContentsTheSame(oldItem: Bus, newItem: Bus): Boolean = newItem == oldItem
+    companion object DIFF : DiffUtil.ItemCallback<Bus>() {
+        override fun areItemsTheSame(oldItem: Bus, newItem: Bus): Boolean{
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: Bus, newItem: Bus): Boolean {
+            return oldItem.idBus == newItem.idBus
         }
     }
 }

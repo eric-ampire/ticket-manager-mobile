@@ -29,7 +29,9 @@ fun bindImageUrl(imageView: ImageView, url: String?, placeholder: Drawable) {
 }
 
 @BindingAdapter(value = ["setAdapter"])
-fun bindSpinnerAdapter(spinner: Spinner, data: List<*>) {
+fun bindSpinnerAdapter(spinner: Spinner, data: List<*>?) {
+
+    if (data == null) return
 
     ArrayAdapter(spinner.context, android.R.layout.simple_spinner_item, data).run {
         setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

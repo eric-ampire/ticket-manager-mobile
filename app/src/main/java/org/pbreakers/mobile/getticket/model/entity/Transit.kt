@@ -8,8 +8,8 @@ import kotlinx.android.parcel.Parcelize
 @Entity
 @Parcelize
 data class Transit(
-    @PrimaryKey val idTransit: Long,
-    val nomTransit: String
+    val idTransit: String = "",
+    val nomTransit: String = ""
 ) : Parcelable {
     override fun toString(): String = nomTransit
 }

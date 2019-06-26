@@ -7,17 +7,14 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
-@Entity(
-    indices = [Index("idRole")],
-    foreignKeys = [ForeignKey(entity = Role::class, parentColumns = ["idRole"], childColumns = ["idRole"])]
-)
+
 @Parcelize
 data class Utilisateur(
-    @PrimaryKey val idUtilisateur: Long,
-    val nomUtilisateur: String,
-    val pseudoUtilisateur: String,
-    val passwordUtilisateur: String,
-    val idRole: Long
+    val idUtilisateur: String = "",
+    val nomUtilisateur: String = "",
+    val pseudoUtilisateur: String = "",
+    val passwordUtilisateur: String = "",
+    val idRole: String = ""
 ) : Parcelable {
     override fun toString(): String {
         return nomUtilisateur

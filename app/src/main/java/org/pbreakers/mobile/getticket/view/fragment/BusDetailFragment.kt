@@ -41,7 +41,6 @@ class BusDetailFragment : Fragment() {
         }
 
         detailBusViewModel.bus = currentBus!!
-        detailBusViewModel.init()
 
         return binding.root
     }

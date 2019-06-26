@@ -1,10 +1,16 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Completable
 import org.koin.core.KoinComponent
 import org.koin.core.inject
+import org.pbreakers.mobile.getticket.adapter.VoyageAdapter
 import org.pbreakers.mobile.getticket.model.entity.Billet
 import org.pbreakers.mobile.getticket.model.entity.Etat
 import org.pbreakers.mobile.getticket.model.entity.Utilisateur
@@ -16,50 +22,71 @@ import org.pbreakers.mobile.getticket.model.repository.VoyageRepository
 
 class ModifierBilletViewModel : ViewModel(), KoinComponent {
 
+    private val db by lazy {
+        FirebaseFirestore.getInstance()
+    }
+
     lateinit var billet: Billet
 
-    private val userRepository: UtilisateurRepository by inject()
-    private val billetRepository: BilletRepository    by inject()
-    private val etatRepository: EtatRepository        by inject()
-    private val voyageRepository: VoyageRepository    by inject()
 
-    val users = MutableLiveData<List<Utilisateur>>().apply {
-        value = arrayListOf()
+    private val _users: MutableLiveData<List<Utilisateur>> by lazy {
+        MutableLiveData<List<Utilisateur>>().also {
+            findAllUsers()
+        }
     }
 
-    val etats = MutableLiveData<List<Etat>>().apply {
-        value = arrayListOf()
+    private val _etats: MutableLiveData<List<Etat>> by lazy {
+        MutableLiveData<List<Etat>>().also {
+            findAllEtat()
+        }
     }
 
-    val voyages = MutableLiveData<List<Voyage>>().apply {
-        value = arrayListOf()
+    private val _voyages: MutableLiveData<List<Voyage>> by lazy {
+        MutableLiveData<List<Voyage>>().also {
+            findAllVoyage()
+        }
     }
 
-    init {
-        findAllEtat()
-        findAllUsers()
-        findAllVoyage()
-    }
+    val users: LiveData<List<Utilisateur>>
+        get() = _users
+
+    val etats: LiveData<List<Etat>>
+        get() = _etats
+
+    val voyages: LiveData<List<Voyage>>
+        get() = _voyages
+
 
     private fun findAllUsers() {
-        userRepository.findAll().observeForever {
-            users.postValue(it)
+        db.collection("users").addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            if (firebaseFirestoreException != null && querySnapshot == null) return@addSnapshotListener
+
+            val allUsers = querySnapshot!!.toObjects(Utilisateur::class.java)
+            _users.postValue(allUsers)
         }
     }
 
     private fun findAllEtat() {
-        etatRepository.findAll().observeForever {
-            etats.postValue(it)
+        db.collection("etats").addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            if (firebaseFirestoreException != null && querySnapshot == null) return@addSnapshotListener
+
+            val allItems = querySnapshot!!.toObjects(Etat::class.java)
+            _etats.postValue(allItems)
         }
     }
 
     private fun findAllVoyage() {
-        voyageRepository.findAllLiveData().observeForever {
-            voyages.postValue(it)
+        db.collection("voyages").addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            if (firebaseFirestoreException != null && querySnapshot == null) return@addSnapshotListener
+
+            val allItems = querySnapshot!!.toObjects(Voyage::class.java)
+            _voyages.postValue(allItems)
         }
     }
 
-    fun updateBillet(billet: Billet): Completable {
-        return billetRepository.update(billet)
+    fun updateBillet(billet: Billet): Task<Void> {
+        return db.collection("billets")
+            .document(billet.idBillet)
+            .set(billet)
     }
 }

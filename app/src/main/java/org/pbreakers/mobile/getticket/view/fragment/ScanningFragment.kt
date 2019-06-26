@@ -12,7 +12,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
 import com.kinda.alert.KAlertDialog
@@ -23,16 +26,21 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_scanning.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
+import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.model.entity.Billet
+import org.pbreakers.mobile.getticket.model.entity.Etat
 import org.pbreakers.mobile.getticket.viewmodel.ScannerViewModel
+import kotlin.properties.Delegates
 
 
-class ScanningFragment : Fragment(), ZXingScannerView.ResultHandler {
+class ScanningFragment : Fragment(), ZXingScannerView.ResultHandler, KoinComponent {
 
     private val scannerViewModel by viewModel<ScannerViewModel>()
-
+    private var dialog: KAlertDialog by Delegates.notNull()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -97,7 +105,7 @@ class ScanningFragment : Fragment(), ZXingScannerView.ResultHandler {
 
     override fun handleResult(result: Result?) {
         if (result != null) {
-            val dialog = KAlertDialog(context, KAlertDialog.PROGRESS_TYPE).apply {
+            dialog = KAlertDialog(context, KAlertDialog.PROGRESS_TYPE).apply {
                 titleText = "Verification !"
                 contentText = "Verification en cour d'execution..."
                 show()
@@ -110,89 +118,99 @@ class ScanningFragment : Fragment(), ZXingScannerView.ResultHandler {
                 }
             }
 
-            val idBillet = result.text.toLongOrNull()
-            if (idBillet == null) {
-                dialog.titleText = "Erreur"
-                dialog.contentText = "Le QR Code n'est pas valide"
-                dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
-
-            } else {
-                findBilletById(idBillet, dialog)
-            }
+            val idBillet = result.text.toString()
+            findBilletById(idBillet)
         }
     }
 
-    private fun findBilletById(idBillet: Long, dialog: KAlertDialog) {
+    private fun findBilletById(idBillet: String) {
         scannerViewModel.findBilletById(idBillet)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : SingleObserver<Billet> {
-
-                override fun onSuccess(billet: Billet) {
-                    isValidTicket(billet, dialog)
-                }
-
-                override fun onSubscribe(d: Disposable) {
-                }
-
-                override fun onError(e: Throwable) {
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val mBillet = it.result?.toObject(Billet::class.java) ?: return@addOnCompleteListener
+                    isValidTicket(mBillet)
+                } else {
                     dialog.titleText = "Erreur"
-                    dialog.contentText = e.message
+                    dialog.contentText = it.exception?.message ?: "Unknown error !"
                     dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
                 }
-            })
+            }
 
     }
 
-    private fun isValidTicket(billet: Billet, dialog: KAlertDialog) {
-        when(billet.idEtat) {
-            1L -> {
-                dialog.changeAlertType(KAlertDialog.WARNING_TYPE)
-                dialog.contentText = "Ce billet est deja consommer"
-                dialog.titleText = "Erreur"
-            }
+    private fun isValidTicket(billet: Billet) {
+        val db = FirebaseFirestore.getInstance()
+        val etatRef = db.collection("etats").document(billet.idEtat)
 
-            3L -> {
-                dialog.changeAlertType(KAlertDialog.WARNING_TYPE)
-                dialog.contentText = "L'administrateur n'a pas encore valider le billet !"
-                dialog.titleText = "Erreur"
-            }
+        dialog.run {
+            titleText = "Etat"
+            contentText = "Verification etat billet ..."
+        }
 
-            2L -> {
-                showDetailBillet(billet)
+        etatRef.get().addOnCompleteListener {
+            if (it.isSuccessful) {
+                val ticketState = it.result?.toObject(Etat::class.java) ?: return@addOnCompleteListener
+
+                when {
+                    ticketState.nomEtat.contains("consomme", ignoreCase = true) -> {
+                        dialog.changeAlertType(KAlertDialog.WARNING_TYPE)
+                        dialog.contentText = "Ce billet est deja consommer"
+                        dialog.titleText = "Erreur"
+                    }
+
+                    ticketState.nomEtat.contains("attente", ignoreCase = true) -> {
+                        dialog.changeAlertType(KAlertDialog.WARNING_TYPE)
+                        dialog.contentText = "L'administrateur n'a pas encore valider le billet !"
+                        dialog.titleText = "Erreur"
+                    }
+
+                    ticketState.nomEtat.contains("cour", ignoreCase = true) -> {
+                        dialog.dismissWithAnimation()
+                        showDetailBillet(billet)
+                    }
+
+                    else -> {
+                        dialog.run {
+                            dialog.changeAlertType(KAlertDialog.WARNING_TYPE)
+                            titleText = "Etat"
+                            contentText = "Impossible de verifier l'etat du billet ..."
+                        }
+                    }
+                }
+
+            } else {
+                context?.toast(it.exception?.message ?: "Erreur inconnue")
             }
         }
     }
 
     private fun showDetailBillet(billet: Billet) {
-
+        val bundle = bundleOf("billet" to billet)
+        Navigation.findNavController(btnLaunchScanner)
+            .navigate(R.id.action_scanningFragment_to_detailBilletFragment, bundle)
     }
 
     // Todo: ca ne doit pas etre ici
     private fun updateEtatBillet(billet: Billet, dialog: KAlertDialog) {
-        billet.apply { idEtat = 4 }
+//        billet.apply { idEtat = 4 }
+//
+//        scannerViewModel.updateBillet(billet)
+//            .subscribeOn(Schedulers.io())
+//            .observeOn(AndroidSchedulers.mainThread())
+//            .subscribe(object : CompletableObserver {
+//                override fun onComplete() {
+//
+//                }
+//
+//                override fun onSubscribe(d: Disposable) {
+//                }
+//
+//                override fun onError(e: Throwable) {
+//                    dialog.titleText = "Erreur"
+//                    dialog.contentText = e.message
+//                    dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
+//                }
+//            })
 
-        scannerViewModel.updateBillet(billet)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : CompletableObserver {
-                override fun onComplete() {
-
-                }
-
-                override fun onSubscribe(d: Disposable) {
-                }
-
-                override fun onError(e: Throwable) {
-                    dialog.titleText = "Erreur"
-                    dialog.contentText = e.message
-                    dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
-                }
-            })
-
-    }
-
-    private fun checkCameraHardware(context: Context): Boolean {
-        return context.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)
     }
 }

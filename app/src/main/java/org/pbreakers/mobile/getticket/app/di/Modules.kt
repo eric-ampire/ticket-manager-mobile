@@ -7,12 +7,13 @@ import androidx.room.Room
 import com.google.gson.FieldNamingPolicy
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.kinda.alert.KAlertDialog
 import okhttp3.Cache
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidApplication
+import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import org.pbreakers.mobile.getticket.model.AppDatabase
 import org.pbreakers.mobile.getticket.model.api.*
 import org.pbreakers.mobile.getticket.model.dao.*
 import org.pbreakers.mobile.getticket.model.repository.*
@@ -96,15 +97,15 @@ val netModule = module {
 
 val databaseModule = module {
 
-    fun provideDatabase(application: Application): AppDatabase {
-        return Room.databaseBuilder(application, AppDatabase::class.java, "eds.db")
-            .fallbackToDestructiveMigration()
-            .allowMainThreadQueries()
-            .build()
-    }
+//    fun provideDatabase(application: Application): AppDatabase {
+//        return Room.databaseBuilder(application, AppDatabase::class.java, "eds.db")
+//            .fallbackToDestructiveMigration()
+//            .allowMainThreadQueries()
+//            .build()
+//    }
 
 
-    fun provideArticleDao(database: AppDatabase): AgenceDao = database.agenceDao()
+    /*fun provideArticleDao(database: AppDatabase): AgenceDao = database.agenceDao()
     fun provideUtilisateurDao(database: AppDatabase): UtilisateurDao = database.utilisateurDao()
     fun provideEtatDao(database: AppDatabase): EtatDao = database.etatDao()
     fun provideVoyageDao(database: AppDatabase): VoyageDao = database.voyageDao()
@@ -125,7 +126,7 @@ val databaseModule = module {
     single { provideBilletDao(get()) }
     single { providePointArretDao(get()) }
     single { provideBusDao(get()) }
-    single { provideRoleDao(get()) }
+    single { provideRoleDao(get()) }*/
 }
 
 val repositoryModule = module {

@@ -1,42 +1,150 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.Completable
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.FirebaseFirestore
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import org.pbreakers.mobile.getticket.model.entity.*
-import org.pbreakers.mobile.getticket.model.repository.*
 
 class ModifierVoyageViewModel : ViewModel(), KoinComponent {
 
-    private val roleRepository: RoleRepository             by inject()
-    private val agencyRepository: AgenceRepository         by inject()
-    private val etatRepository: EtatRepository             by inject()
-    private val transitRepository: TransitRepository       by inject()
-    private val lieuRepository: LieuRepository             by inject()
-    private val busRepository: BusRepository               by inject()
-    private val voyageRepository: VoyageRepository         by inject()
-
-    val role     = MutableLiveData<List<Role>>().apply { value = arrayListOf() }
-    val agences  = MutableLiveData<List<Agence>>().apply { value = arrayListOf() }
-    val bus      = MutableLiveData<List<Bus>>().apply { value = arrayListOf() }
-    val etats    = MutableLiveData<List<Etat>>().apply { value = arrayListOf() }
-    val transits = MutableLiveData<List<Transit>>().apply { value = arrayListOf() }
-    val lieu     = MutableLiveData<List<Lieu>>().apply { value = arrayListOf() }
-    val voyages  = MutableLiveData<List<Voyage>>().apply { value = arrayListOf() }
-
-    init {
-        roleRepository.findAll().observeForever   { role.value = it }
-        agencyRepository.findAll().observeForever { agences.value = it }
-        busRepository.findAllLiveData().observeForever { bus.value = it }
-        etatRepository.findAll().observeForever { etats.value = it }
-        transitRepository.findAll().observeForever { transits.value = it }
-        lieuRepository.findAll().observeForever { lieu.value = it }
-        voyageRepository.findAllLiveData().observeForever { voyages.value = it }
+    private val db by lazy {
+        FirebaseFirestore.getInstance()
     }
 
-    fun update(voyage: Voyage): Completable {
-        return voyageRepository.update(voyage)
+    private val _role: MutableLiveData<List<Role>> by lazy {
+        MutableLiveData<List<Role>>().also {
+            findRole()
+        }
+    }
+
+    private val _agences: MutableLiveData<List<Agence>> by lazy {
+        MutableLiveData<List<Agence>>().also {
+            findAgence()
+        }
+    }
+
+    private val _bus: MutableLiveData<List<Bus>> by lazy {
+        MutableLiveData<List<Bus>>().also {
+            findBus()
+        }
+    }
+
+    private val _etats: MutableLiveData<List<Etat>> by lazy {
+        MutableLiveData<List<Etat>>().also {
+            findEtat()
+        }
+    }
+
+    private val _transits: MutableLiveData<List<Transit>> by lazy {
+        MutableLiveData<List<Transit>>().also {
+            findTransit()
+        }
+    }
+
+    private val _lieux: MutableLiveData<List<Lieu>> by lazy {
+        MutableLiveData<List<Lieu>>().also {
+            findLieu()
+        }
+    }
+
+    private val _voyages: MutableLiveData<List<Voyage>> by lazy {
+        MutableLiveData<List<Voyage>>().also {
+            findTravel()
+        }
+    }
+
+    val role: LiveData<List<Role>>
+        get() = _role
+
+    val agences: LiveData<List<Agence>>
+        get() = _agences
+
+    val bus: LiveData<List<Bus>>
+        get() = _bus
+
+    val etats: LiveData<List<Etat>>
+        get() = _etats
+
+    val transits: LiveData<List<Transit>>
+        get() = _transits
+
+    val lieu: LiveData<List<Lieu>>
+        get() = _lieux
+
+    val voyages: LiveData<List<Voyage>>
+        get() = _voyages
+
+    private fun findRole() {
+        db.collection("roles").addSnapshotListener { snapshot, exception ->
+            if (exception != null && snapshot == null) return@addSnapshotListener
+
+            val mRoles = snapshot!!.toObjects(Role::class.java)
+            _role.postValue(mRoles)
+        }
+    }
+
+    private fun findAgence() {
+        db.collection("agences").addSnapshotListener { snapshot, exception ->
+            if (exception != null && snapshot == null) return@addSnapshotListener
+
+            val mItems = snapshot!!.toObjects(Agence::class.java)
+            _agences.postValue(mItems)
+        }
+    }
+
+    private fun findBus() {
+        db.collection("bus").addSnapshotListener { snapshot, exception ->
+            if (exception != null && snapshot == null) return@addSnapshotListener
+
+            val mItems = snapshot!!.toObjects(Bus::class.java)
+            _bus.postValue(mItems)
+        }
+    }
+
+    private fun findEtat() {
+        db.collection("etats").addSnapshotListener { snapshot, exception ->
+            if (exception != null && snapshot == null) return@addSnapshotListener
+
+            val mItems = snapshot!!.toObjects(Etat::class.java)
+            _etats.postValue(mItems)
+        }
+    }
+
+    private fun findTransit() {
+        db.collection("transits").addSnapshotListener { snapshot, exception ->
+            if (exception != null && snapshot == null) return@addSnapshotListener
+
+            val mItems = snapshot!!.toObjects(Transit::class.java)
+            _transits.postValue(mItems)
+        }
+    }
+
+    private fun findLieu() {
+        db.collection("lieux").addSnapshotListener { snapshot, exception ->
+            if (exception != null && snapshot == null) return@addSnapshotListener
+
+            val mItems = snapshot!!.toObjects(Lieu::class.java)
+            _lieux.postValue(mItems)
+        }
+    }
+
+
+    private fun findTravel() {
+        db.collection("voyages").addSnapshotListener { snapshot, exception ->
+            if (exception != null && snapshot == null) return@addSnapshotListener
+
+            val mItems = snapshot!!.toObjects(Voyage::class.java)
+            _voyages.postValue(mItems)
+        }
+    }
+
+
+    fun update(voyage: Voyage): Task<Void> {
+        return db.collection("voyages")
+            .document(voyage.idVoyage)
+            .set(voyage)
     }
 }

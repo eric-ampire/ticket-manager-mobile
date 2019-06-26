@@ -5,9 +5,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.kinda.alert.KAlertDialog
 import io.reactivex.CompletableObserver
 import io.reactivex.MaybeObserver
@@ -27,11 +31,12 @@ import org.pbreakers.mobile.getticket.util.Session
 import org.pbreakers.mobile.getticket.util.Tools.toggleSection
 import org.pbreakers.mobile.getticket.viewmodel.DetailVoyageViewModel
 import java.util.*
+import kotlin.properties.Delegates
 
 
 class DetailVoyageFragment : Fragment(), KoinComponent {
 
-    private val session: Session by inject()
+    var dialog: KAlertDialog by Delegates.notNull()
 
     // Todo: You have to use the constant
     private val currentVoyage by lazy {
@@ -39,10 +44,6 @@ class DetailVoyageFragment : Fragment(), KoinComponent {
     }
 
     private val detailVoyageViewModel: DetailVoyageViewModel by viewModel()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -85,91 +86,83 @@ class DetailVoyageFragment : Fragment(), KoinComponent {
     private fun createReservation(btn: View) {
         if (currentVoyage == null) return
 
-        val dialog = KAlertDialog(context, KAlertDialog.WARNING_TYPE).apply {
+        dialog = KAlertDialog(context, KAlertDialog.WARNING_TYPE).apply {
             titleText = "Confirmation"
             contentText = "Etès vous sur de vouloir continuer !"
-            showCancelButton(true)
+            show()
         }
 
         dialog.setConfirmClickListener {
-            when (it.alerType) {
-                KAlertDialog.ERROR_TYPE   -> dialog.dismiss()
-                KAlertDialog.SUCCESS_TYPE -> {
-                    dialog.dismiss()
-                    findNavController(btn).navigate(R.id.action_detailVoyageFragment_to_homeFragment)
+            when {
+                it.alerType == KAlertDialog.ERROR_TYPE -> {
+                    dialog.dismissWithAnimation()
                 }
 
-                else -> {
-                    findEtatInfo(dialog, btn)
+                it.alerType == KAlertDialog.SUCCESS_TYPE -> {
+
+                    dialog.dismissWithAnimation()
+                    findNavController(btn).navigate(R.id.action_detailVoyageFragment_to_homeFragment)
+                }
+                it.alerType == KAlertDialog.WARNING_TYPE -> {
+                    dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
+                    findEtatInfo(btn)
                 }
             }
         }
-
-        dialog.show()
     }
 
-    private fun findEtatInfo(dialog: KAlertDialog, btn: View) {
-        detailVoyageViewModel.findEtatByName("En attente")
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : MaybeObserver<Etat> {
-                override fun onSuccess(t: Etat) {
-                    getUserInfo(dialog, t, btn)
-                }
+    private fun findEtatInfo(btn: View) {
+        val db = FirebaseFirestore.getInstance()
+        val etatRef = db.collection("etats").document(currentVoyage!!.idEtat)
 
-                override fun onComplete() {
-                    dialog.contentText = "Une erreur s'est produit lors de l'opération"
-                    dialog.changeAlertType(KAlertDialog.WARNING_TYPE)
-                }
-
-                override fun onSubscribe(d: Disposable) {
-                    dialog.titleText = "Loading"
-                    dialog.contentText = "Operation en cour de traitement..."
-                    dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
-                }
-
-                override fun onError(e: Throwable) {
-                    dialog.contentText = e.message
-                    dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
-                }
-            })
-
+        // Todo: Tu doit verifier si le voyage et en cour
+        etatRef.get().addOnCompleteListener {
+            if (it.isSuccessful && it.result != null) {
+                val etat = it.result!!.toObject(Etat::class.java) ?: return@addOnCompleteListener
+                getUserInfo(etat, btn)
+            } else {
+                dialog.contentText = it.exception?.message ?: "Erreur inconnue"
+                dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
+            }
+        }
     }
 
-    private fun getUserInfo(dialog: KAlertDialog, etat: Etat, btn: View) {
+    private fun getUserInfo(etat: Etat, btn: View) {
 
         // Find current user
-        val idUser = session.getCurrentUser()!!.idUtilisateur
+        val idUser = FirebaseAuth.getInstance().currentUser!!.uid
+        val db = FirebaseFirestore.getInstance()
+        val billetRef = db.collection("billets").document()
 
         val ticket = Billet(
-            idBillet = System.nanoTime(),
+            idBillet = billetRef.id,
             idVoyage = currentVoyage!!.idVoyage,
             idEtat = etat.idEtat,
             idUtilisateur = idUser,
             dateBillet = Date()
         )
 
-        saveTicket(dialog, ticket, btn)
+        saveTicket(ticket, billetRef)
     }
 
-    private fun saveTicket(dialog: KAlertDialog, ticket: Billet, btn: View) {
-        detailVoyageViewModel.saveBillet(ticket)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : CompletableObserver {
-                override fun onComplete() {
-                    dialog.contentText = "Votre reservation s'est passer avec success !"
-                    dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
-                }
+    private fun saveTicket(ticket: Billet, billetRef: DocumentReference) {
 
-                override fun onSubscribe(d: Disposable) {
-                }
+        dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
 
-                override fun onError(e: Throwable) {
-                    dialog.contentText = e.message
-                    dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
-                }
-            })
+        billetRef.set(ticket).addOnCompleteListener {
+            if (it.isSuccessful) {
+                dialog.contentText = "Votre reservation s'est passer avec success !"
+                dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
+            } else {
+                dialog.contentText = it.exception?.message ?: "Erreur inconnue !"
+                dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
+            }
+        }
 
+        dialog.setConfirmClickListener {
+            if (it.alerType == KAlertDialog.SUCCESS_TYPE) {
+                it.dismissWithAnimation()
+            }
+        }
     }
 }
