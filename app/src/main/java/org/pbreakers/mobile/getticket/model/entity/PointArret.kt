@@ -7,16 +7,16 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
-@Entity(
-    indices = [Index("idLieu", "idVoyage")],
-    foreignKeys = [
-        ForeignKey(entity = Lieu::class, parentColumns = ["idLieu"], childColumns = ["idLieu"]),
-        ForeignKey(entity = Voyage::class, parentColumns = ["idVoyage"], childColumns = ["idVoyage"])
-    ]
-)
+//@Entity(
+//    indices = [Index("idLieu", "idVoyage")],
+//    foreignKeys = [
+//        ForeignKey(entity = Lieu::class, parentColumns = ["idLieu"], childColumns = ["idLieu"]),
+//        ForeignKey(entity = Voyage::class, parentColumns = ["idVoyage"], childColumns = ["idVoyage"])
+//    ]
+//)
 @Parcelize
 data class PointArret(
-    @PrimaryKey val idPointArret: Long,
-    val idLieu: Long,
-    val idVoyage: Long
+    val idPointArret: String = "",
+    val idLieu: String = "",
+    val idVoyage: String = ""
 ) : Parcelable

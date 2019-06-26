@@ -5,11 +5,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
-@Entity
 @Parcelize
 data class Agence(
-    @PrimaryKey val idAgence: Long,
-    val nomAgence: String
+    val idAgence: String = "",
+    val nomAgence: String = ""
 ) : Parcelable {
     override fun toString(): String = nomAgence
 }

@@ -8,8 +8,8 @@ import kotlinx.android.parcel.Parcelize
 @Entity
 @Parcelize
 data class Role(
-    @PrimaryKey val idRole: Long,
-    val nomRole: String
+    val idRole: String = "",
+    val nomRole: String = ""
 ) : Parcelable {
     override fun toString() = nomRole
 
