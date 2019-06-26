@@ -28,18 +28,33 @@
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <fragment
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/main_nav_graph"
-            android:name="androidx.navigation.fragment.NavHostFragment"
+        <RelativeLayout
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:id="@+id/navHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        </fragment>
+            <me.zhanghai.android.materialprogressbar.MaterialProgressBar
+                android:id="@+id/mainProgressBar"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:indeterminate="true"
+                app:mpb_progressStyle="horizontal"
+                app:mpb_useIntrinsicPadding="false"
+                style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal" />
 
 
+            <fragment
+                android:layout_below="@id/mainProgressBar"
+                app:defaultNavHost="true"
+                app:navGraph="@navigation/main_nav_graph"
+                android:name="androidx.navigation.fragment.NavHostFragment"
+                android:id="@+id/navHostFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </fragment>
+
+        </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView
