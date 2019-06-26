@@ -55,10 +55,10 @@ class LoginFragment : Fragment() {
             return
         }
 
-        login(view)
+        login()
     }
 
-    private fun login(view: View) {
+    private fun login() {
         val dialog = KAlertDialog(context, KAlertDialog.PROGRESS_TYPE).apply {
             contentText = "Verification en cour.."
             titleText = "Connexion"
@@ -77,6 +77,8 @@ class LoginFragment : Fragment() {
         dialog.setConfirmClickListener {
             if (it.alerType == KAlertDialog.SUCCESS_TYPE) {
                 startActivity(Intent(context, MainActivity::class.java))
+            } else {
+                dialog.dismissWithAnimation()
             }
         }
     }
