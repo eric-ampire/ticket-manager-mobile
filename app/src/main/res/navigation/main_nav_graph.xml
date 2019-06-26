@@ -101,7 +101,11 @@
         android:id="@+id/scanningFragment"
         android:name="org.pbreakers.mobile.getticket.view.fragment.ScanningFragment"
         android:label="Scanner Billet"
-        tools:layout="@layout/fragment_scanning" />
+        tools:layout="@layout/fragment_scanning" >
+        <action
+            android:id="@+id/action_scanningFragment_to_detailBilletFragment"
+            app:destination="@id/detailBilletFragment" />
+    </fragment>
     <fragment
         android:id="@+id/rechercheFragment"
         android:name="org.pbreakers.mobile.getticket.view.fragment.RechercheFragment"

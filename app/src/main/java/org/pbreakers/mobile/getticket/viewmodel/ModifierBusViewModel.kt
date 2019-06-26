@@ -1,45 +1,48 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Completable
-import org.pbreakers.mobile.getticket.app.App
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import org.pbreakers.mobile.getticket.model.entity.Agence
 import org.pbreakers.mobile.getticket.model.entity.Bus
 import org.pbreakers.mobile.getticket.model.repository.AgenceRepository
 import org.pbreakers.mobile.getticket.model.repository.BusRepository
-import javax.inject.Inject
+import kotlin.properties.Delegates
 
-class ModifierBusViewModel(val app: Application) : AndroidViewModel(app) {
+class ModifierBusViewModel : ViewModel(), KoinComponent {
 
-    lateinit var bus: Bus
+    var bus: Bus by Delegates.notNull()
+    val agences: LiveData<List<Agence>>
+        get() = _agences
 
-    val agences = MutableLiveData<List<Agence>>().apply {
-        value = arrayListOf()
+    private val _agences: MutableLiveData<List<Agence>> by lazy {
+        MutableLiveData<List<Agence>>().also {
+            findAllAgence()
+        }
     }
 
-    @Inject lateinit var agenceRepository: AgenceRepository
-    @Inject lateinit var busRepository: BusRepository
-
-    init {
-        val application = app as App
-        application.appComponent.inject(this)
-        findAllAgence()
+    private val db by lazy {
+        FirebaseFirestore.getInstance()
     }
 
-    fun init() {
-        findAllAgence()
-    }
-
-    fun modifierBus(bus: Bus): Completable {
-        return busRepository.update(bus)
+    fun modifierBus(bus: Bus): Task<Void> {
+        return db.collection("bus")
+            .document(bus.idBus)
+            .set(bus)
     }
 
     private fun findAllAgence() {
-        agenceRepository.findAll().observeForever {
-            agences.postValue(it)
+        val agenceCol = db.collection("agences")
+        agenceCol.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            if (firebaseFirestoreException != null && querySnapshot == null) return@addSnapshotListener
+
+            val mAgences = querySnapshot!!.toObjects(Agence::class.java)
+            _agences.postValue(mAgences)
         }
     }
 }

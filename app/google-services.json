@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "891741422001",
+    "firebase_url": "https://getticket-backend.firebaseio.com",
+    "project_id": "getticket-backend",
+    "storage_bucket": "getticket-backend.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891741422001:android:c6c80c5c142a1c51",
+        "android_client_info": {
+          "package_name": "org.pbreakers.mobile.getticket"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "891741422001-sr49rg0rcva30ehl7ovqc5pb13ta097s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.pbreakers.mobile.getticket",
+            "certificate_hash": "b879650fdfadfb48bfbd31e9e3738f508373f54c"
+          }
+        },
+        {
+          "client_id": "891741422001-7uh8baouo31tc65t1kq3olc6kcqb1qtt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzTTcX8D0ptz-XzMEntvfMHCVLyWPzYKI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "891741422001-7uh8baouo31tc65t1kq3olc6kcqb1qtt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

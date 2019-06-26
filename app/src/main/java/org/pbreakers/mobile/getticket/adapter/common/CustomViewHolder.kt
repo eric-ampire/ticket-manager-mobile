@@ -1,4 +1,4 @@
-package org.pbreakers.mobile.getticket.adapter
+package org.pbreakers.mobile.getticket.adapter.common
 
 import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView

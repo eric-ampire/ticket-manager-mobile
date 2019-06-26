@@ -1,52 +1,47 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
-import android.app.Application
-import android.view.View
-import androidx.databinding.ObservableInt
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
-import io.reactivex.Completable
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
+import org.koin.core.KoinComponent
 import org.pbreakers.mobile.getticket.adapter.VoyageAdapter
-import org.pbreakers.mobile.getticket.app.App
-import org.pbreakers.mobile.getticket.model.entity.Lieu
 import org.pbreakers.mobile.getticket.model.entity.Voyage
-import org.pbreakers.mobile.getticket.model.repository.LieuRepository
-import org.pbreakers.mobile.getticket.model.repository.VoyageRepository
-import javax.inject.Inject
+import org.pbreakers.mobile.getticket.util.LoadingState
 
-class HomeViewModel(val app: Application) : AndroidViewModel(app) {
+
+class HomeViewModel : ViewModel(), KoinComponent {
 
     lateinit var adapter: VoyageAdapter
-    @Inject lateinit var repository: VoyageRepository
-    @Inject lateinit var lieuRepository: LieuRepository
 
-    val isEmptyData = ObservableInt(View.VISIBLE)
-
-    init {
-        val application = app as App
-        application.appComponent.inject(this)
-    }
-
-    fun findLieuById(id: Long): LiveData<Lieu> {
-        return lieuRepository.findById(id)
+    private val db by lazy {
+        FirebaseFirestore.getInstance()
     }
 
     fun init() {
 
-        val config = PagedList.Config.Builder()
-            .setPageSize(3)
-            .build()
+        loadingState.postValue(LoadingState.RUNNING)
+        db.collection("voyages").also {
+            it.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
 
-        val data = LivePagedListBuilder(repository.findAll(), config).build()
+                if (firebaseFirestoreException != null && querySnapshot == null) {
+                    loadingState.postValue(LoadingState.error(firebaseFirestoreException.message))
+                    return@addSnapshotListener
+                }
+                val voyages = querySnapshot?.toObjects(Voyage::class.java)
+                adapter.submitList(voyages!!)
 
-        data.observeForever {
-            adapter.submitList(it)
+                loadingState.postValue(LoadingState.LOADED)
+            }
         }
     }
 
-    fun deleteVoyage(item: Voyage): Completable {
-        return repository.remove(item)
+    private val loadingState = MutableLiveData<LoadingState>()
+
+    fun getLoadingState(): LiveData<LoadingState> = loadingState
+
+    fun deleteVoyage(item: Voyage): DocumentReference {
+        return db.collection("voyages").document(item.idVoyage)
     }
 }

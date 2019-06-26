@@ -2,21 +2,22 @@ package org.pbreakers.mobile.getticket.app
 
 import android.app.Application
 import androidx.multidex.MultiDex
-import org.pbreakers.mobile.getticket.di.component.AppComponent
-import org.pbreakers.mobile.getticket.di.component.DaggerAppComponent
-import org.pbreakers.mobile.getticket.di.module.AppModule
-import org.pbreakers.mobile.getticket.di.module.NetModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
+import org.pbreakers.mobile.getticket.app.di.*
 
 class App : Application() {
-    val appComponent: AppComponent by lazy {
-        DaggerAppComponent.builder()
-            .appModule(AppModule(this))
-            .netModule(NetModule("http://192.168.43.252/"))
-            .build()
-    }
 
     override fun onCreate() {
         super.onCreate()
         MultiDex.install(this)
+
+        startKoin {
+            androidContext(this@App)
+            androidLogger(Level.DEBUG)
+            modules(listOf(appModule, databaseModule, apiModule, netModule, viewModelModule, repositoryModule))
+        }
     }
 }

@@ -7,31 +7,32 @@ import android.widget.PopupMenu
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
 import androidx.navigation.Navigation.findNavController
+import com.google.firebase.firestore.FirebaseFirestore
 import com.kinda.alert.KAlertDialog
 import io.reactivex.CompletableObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.adapter.BilletAdapter
-import org.pbreakers.mobile.getticket.adapter.OnItemClickListener
+import org.pbreakers.mobile.getticket.adapter.common.OnItemClickListener
 import org.pbreakers.mobile.getticket.databinding.FragmentBilletBinding
 import org.pbreakers.mobile.getticket.model.entity.Billet
+import org.pbreakers.mobile.getticket.util.LoadingState
+import org.pbreakers.mobile.getticket.view.activity.MainActivity
 import org.pbreakers.mobile.getticket.viewmodel.BilletViewModel
 
 
 class BilletFragment : Fragment(), OnItemClickListener<Billet> {
 
     private lateinit var binding: FragmentBilletBinding
-    private val billetViewModel by lazy {
-        ViewModelProviders.of(this).get<BilletViewModel>().apply {
-            adapter = BilletAdapter(this@BilletFragment, this)
-        }
-    }
+    private val billetViewModel by viewModel<BilletViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,9 +46,28 @@ class BilletFragment : Fragment(), OnItemClickListener<Billet> {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val mainActivity = activity as MainActivity
+
+        billetViewModel.getLoadingState().observe(this, Observer {
+            when(it.status) {
+                LoadingState.Status.ERROR, LoadingState.Status.LOADED -> {
+                    mainActivity.hideProgressBar()
+                }
+
+                else -> {
+                    mainActivity.showProgressBar()
+                }
+            }
+        })
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
+        billetViewModel.adapter = BilletAdapter(this@BilletFragment)
     }
 
     override fun onClick(view: View, item: Billet, position: Int) {
@@ -90,33 +110,23 @@ class BilletFragment : Fragment(), OnItemClickListener<Billet> {
             if (it.alerType == KAlertDialog.SUCCESS_TYPE || it.alerType == KAlertDialog.ERROR_TYPE) {
                 it.dismissWithAnimation()
             } else {
-                deleteBillet(view, billet, dialog)
+                deleteBillet(billet, dialog)
             }
         }
     }
 
-    private fun deleteBillet(view: View, billet: Billet, dialog: KAlertDialog) {
+    private fun deleteBillet(billet: Billet, dialog: KAlertDialog) {
+        dialog.contentText = "Suppression en cour"
+        dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
 
-        billetViewModel.deleteBillet(billet)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : CompletableObserver {
-                override fun onComplete() {
-                    dialog.contentText = ""
-                    dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
-                }
-
-                override fun onSubscribe(d: Disposable) {
-                    dialog.contentText = "Suppression en cour"
-                    dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
-                }
-
-                override fun onError(e: Throwable) {
-                    dialog.contentText = e.message
-                    dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
-                }
-            })
-
+        billetViewModel.deleteBillet(billet).addOnCompleteListener {
+            if (it.isSuccessful) {
+                dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
+            } else {
+                dialog.contentText = it.exception?.message ?: "Erreur inconnue"
+                dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

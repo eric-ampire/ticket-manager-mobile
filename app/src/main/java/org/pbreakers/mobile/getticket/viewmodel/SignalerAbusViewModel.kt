@@ -1,24 +1,35 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import org.pbreakers.mobile.getticket.app.App
+import androidx.lifecycle.ViewModel
+import com.google.firebase.firestore.FirebaseFirestore
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import org.pbreakers.mobile.getticket.model.entity.Bus
 import org.pbreakers.mobile.getticket.model.repository.BusRepository
-import javax.inject.Inject
 
-class SignalerAbusViewModel(val app: Application) : AndroidViewModel(app) {
+class SignalerAbusViewModel : KoinComponent, ViewModel() {
 
-    @Inject lateinit var busRepository: BusRepository
+    private val db by lazy {
+        FirebaseFirestore.getInstance()
+    }
 
-    val bus = MutableLiveData<List<Bus>>().apply { value = arrayListOf() }
-
+    val bus = MutableLiveData<List<Bus>>().apply {
+        value = arrayListOf()
+    }
 
     init {
-        val application = app as App
-        application.appComponent.inject(this)
+        db.collection("bus").addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            if (firebaseFirestoreException != null && querySnapshot == null) {
+                return@addSnapshotListener
+            }
 
-        busRepository.findAllLiveData().observeForever { bus.value = it }
+            val allBus = querySnapshot?.toObjects(Bus::class.java)
+            bus.postValue(allBus)
+        }
+    }
+
+    private fun findBus() {
+
     }
 }

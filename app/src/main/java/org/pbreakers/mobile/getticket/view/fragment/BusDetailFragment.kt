@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.FragmentBusDetailBinding
 import org.pbreakers.mobile.getticket.model.entity.Bus
@@ -19,12 +20,7 @@ class BusDetailFragment : Fragment() {
         arguments?.getParcelable<Bus>("bus")
     }
 
-    private val detailBusViewModel by lazy {
-        ViewModelProviders.of(this).get<BusDetailViewModel>().apply {
-            bus = currentBus!!
-            init()
-        }
-    }
+    private val detailBusViewModel: BusDetailViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +39,8 @@ class BusDetailFragment : Fragment() {
                 lifecycleOwner = viewLifecycleOwner
             }
         }
+
+        detailBusViewModel.bus = currentBus!!
 
         return binding.root
     }

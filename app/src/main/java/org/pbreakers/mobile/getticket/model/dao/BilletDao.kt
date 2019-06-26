@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import androidx.room.*
 import io.reactivex.Completable
+import io.reactivex.Single
 import org.pbreakers.mobile.getticket.model.entity.Billet
 
 @Dao
@@ -34,4 +35,7 @@ interface BilletDao {
 
     @Query("SELECT * FROM Billet")
     fun findAllLiveData(): LiveData<List<Billet>>
+
+    @Query("SELECT * FROM Billet WHERE idBillet=:id")
+    fun findByIdWithRx(id: Long): Single<Billet>
 }

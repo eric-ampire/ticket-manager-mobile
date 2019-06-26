@@ -3,14 +3,12 @@ package org.pbreakers.mobile.getticket.model.repository
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import io.reactivex.Completable
-import io.reactivex.Maybe
-import io.reactivex.Single
+import org.pbreakers.mobile.getticket.model.api.BusApi
 import org.pbreakers.mobile.getticket.model.dao.BusDao
 import org.pbreakers.mobile.getticket.model.entity.Bus
-import javax.inject.Inject
 
 // Todo: You have to inject bus Api
-class BusRepository @Inject constructor(private val dao: BusDao) {
+class BusRepository(private val dao: BusDao, private val api: BusApi) {
 
 
     // Todo: You have to remove it

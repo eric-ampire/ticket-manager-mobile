@@ -16,6 +16,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_modifier_voyage.*
 import org.jetbrains.anko.toast
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.FragmentModifierVoyageBinding
 import org.pbreakers.mobile.getticket.model.entity.*
@@ -30,9 +31,7 @@ class ModifierVoyageFragment : Fragment() {
         arguments?.getParcelable<Voyage>("voyage")
     }
 
-    private val modifierVoyageViewModel by lazy {
-        ViewModelProviders.of(this).get<ModifierVoyageViewModel>()
-    }
+    private val modifierVoyageViewModel by viewModel<ModifierVoyageViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -107,11 +106,11 @@ class ModifierVoyageFragment : Fragment() {
     }
 
     private fun processUpdate(voyage: Voyage, dialog: KAlertDialog) {
+        dialog.show()
+
         modifierVoyageViewModel.update(voyage)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : CompletableObserver {
-                override fun onComplete() {
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
                     cleanText(
                         edtRefVoyage,
                         edtHeureDepartVoyage,
@@ -123,17 +122,11 @@ class ModifierVoyageFragment : Fragment() {
 
                     dialog.contentText = "La mise a jour a été effectuée avec succes !"
                     dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
-                }
-
-                override fun onSubscribe(d: Disposable) {
-                    dialog.show()
-                }
-
-                override fun onError(e: Throwable) {
-                    dialog.contentText = e.message
+                } else {
+                    dialog.contentText = it.exception?.message ?: "Unknown errors"
                     dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
                 }
-            })
+            }
 
     }
 

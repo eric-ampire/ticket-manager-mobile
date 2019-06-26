@@ -15,6 +15,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_modifier_billet.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.FragmentModifierBilletBinding
@@ -26,6 +27,7 @@ import org.pbreakers.mobile.getticket.util.getDateFromString
 import org.pbreakers.mobile.getticket.util.itemIsNotSelected
 import org.pbreakers.mobile.getticket.viewmodel.ModifierBilletViewModel
 import java.util.*
+import kotlin.properties.Delegates
 
 
 class ModifierBilletFragment : Fragment() {
@@ -34,11 +36,8 @@ class ModifierBilletFragment : Fragment() {
         arguments?.getParcelable<Billet>("billet")
     }
 
-    private val modifierBilletViewModel by lazy {
-        ViewModelProviders.of(this).get(ModifierBilletViewModel::class.java).apply {
-            billet = currentBillet!!
-        }
-    }
+    private var dialog: KAlertDialog by Delegates.notNull()
+    private val modifierBilletViewModel by viewModel<ModifierBilletViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,6 +46,10 @@ class ModifierBilletFragment : Fragment() {
         val binding = inflate<FragmentModifierBilletBinding>(inflater, R.layout.fragment_modifier_billet, container, false).apply {
             viewModel = modifierBilletViewModel
             lifecycleOwner = viewLifecycleOwner
+        }
+
+        modifierBilletViewModel.run {
+            billet = currentBillet!!
         }
 
         binding.fabSaveBilletModification.setOnClickListener {
@@ -63,7 +66,7 @@ class ModifierBilletFragment : Fragment() {
     }
 
     private fun showConfirmationDialog(view: View) {
-        val dialog = KAlertDialog(context, KAlertDialog.WARNING_TYPE).apply {
+        dialog = KAlertDialog(context, KAlertDialog.WARNING_TYPE).apply {
             titleText = "Modification"
             contentText = "Etes vous sur de vouloir continuer ?"
             show()
@@ -73,12 +76,12 @@ class ModifierBilletFragment : Fragment() {
             if (it.alerType == KAlertDialog.ERROR_TYPE || it.alerType == KAlertDialog.SUCCESS_TYPE) {
                 it.dismissWithAnimation()
             } else {
-                updateTicket(it, view)
+                updateTicket(view)
             }
         }
     }
 
-    private fun updateTicket(dialog: KAlertDialog, view: View) {
+    private fun updateTicket(view: View) {
         val user = spinnerUser.selectedItem as Utilisateur
         val etat = spinnerEtat.selectedItem as Etat
         val voyage = spinnerVoyage.selectedItem as Voyage
@@ -91,26 +94,22 @@ class ModifierBilletFragment : Fragment() {
             idVoyage = voyage.idVoyage
         )
 
-        modifierBilletViewModel.updateBillet(billet)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : CompletableObserver {
+        // Loading
+        dialog.contentText = "Modification..."
+        dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
 
-                override fun onComplete() {
+        modifierBilletViewModel.updateBillet(billet)
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
                     dialog.contentText = "Modification success"
                     dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
 
                     Navigation.findNavController(view).navigate(R.id.action_modifierBilletFragment_to_billetFragment)
-                }
-
-                override fun onSubscribe(d: Disposable) {
-                }
-
-                override fun onError(e: Throwable) {
-                    dialog.contentText = e.message
+                } else {
+                    dialog.contentText = it.exception?.message ?: "Erreur inconnue"
                     dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
                 }
-            })
+            }
 
     }
 }

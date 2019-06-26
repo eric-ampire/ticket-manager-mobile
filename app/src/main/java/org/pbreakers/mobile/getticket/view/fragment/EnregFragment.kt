@@ -5,16 +5,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.get
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.kinda.alert.KAlertDialog
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import kotlinx.android.synthetic.main.fragment_enreg.*
 import kotlinx.android.synthetic.main.fragment_enreg.view.*
 import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.toast
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.FragmentEnregBinding
 import org.pbreakers.mobile.getticket.model.entity.*
@@ -22,6 +24,7 @@ import org.pbreakers.mobile.getticket.util.*
 import org.pbreakers.mobile.getticket.util.Tools.toggleSection
 import org.pbreakers.mobile.getticket.viewmodel.EnregViewModel
 import java.util.*
+import kotlin.properties.Delegates
 import java.util.Observer as Observer1
 
 
@@ -29,9 +32,12 @@ class EnregFragment : Fragment() {
 
     lateinit var binding: FragmentEnregBinding
 
-    private val enregViewModel by lazy {
-        ViewModelProviders.of(this).get<EnregViewModel>()
+    private val enregViewModel: EnregViewModel by viewModel()
+    private val db by lazy {
+        FirebaseFirestore.getInstance()
     }
+
+    var dialog: KAlertDialog by Delegates.notNull()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -67,6 +73,7 @@ class EnregFragment : Fragment() {
         }
 
         view.btnEnregPointArret.setOnClickListener {
+
             when {
                 binding.spinnerLieuPointArret.itemIsNotSelected("Ajouter une un lieu") -> return@setOnClickListener
                 binding.spinnerVoyagePointArret.itemIsNotSelected("Ajouter un voyage") -> return@setOnClickListener
@@ -75,15 +82,23 @@ class EnregFragment : Fragment() {
             val lieu = spinnerLieuPointArret.selectedItem as Lieu
             val voyage = spinnerVoyagePointArret.selectedItem as Voyage
 
+            val pointArretRef = db.collection("point-arrets").document()
+
             val pointArret = PointArret(
-                idPointArret = System.nanoTime(),
+                idPointArret = pointArretRef.id,
                 idVoyage = voyage.idVoyage,
                 idLieu = lieu.idLieu
             )
 
-            enregViewModel.savePointArret(pointArret) {
-                toggleSection(view.btnTogglePointArret, view.lytExpandPointArret, nestedScrollView)
-                context?.toast("Success")
+            showProgressDialog()
+            pointArretRef.set(pointArret).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    toggleSection(view.btnTogglePointArret, view.lytExpandPointArret, nestedScrollView)
+                    successDialog()
+                } else {
+                    errorDialog(it.exception?.message)
+                    context?.toast(it.exception?.message ?: "Erreur inconnue !")
+                }
             }
         }
     }
@@ -108,8 +123,11 @@ class EnregFragment : Fragment() {
             val transit = spinnerTransitVoyage.selectedItem as Transit
             val etat = spinnerEtatVoyage.selectedItem as Etat
 
+            val db = FirebaseFirestore.getInstance()
+            val voyageRef = db.collection("voyages").document()
+
             val voyage = Voyage(
-                idVoyage = System.nanoTime(),
+                idVoyage = voyageRef.id,
                 referenceVoyage = edtRefVoyage.text.toString().trim(),
                 idBus = bus.idBus,
                 idProvenance = provenance.idLieu,
@@ -124,24 +142,29 @@ class EnregFragment : Fragment() {
             )
 
             // Saving
-            saveVoyage(voyage, view)
+            saveVoyage(voyage, view, voyageRef)
         }
     }
 
-    private fun saveVoyage(voyage: Voyage, view: View) {
-        enregViewModel.saveVoyage(voyage) {
+    private fun saveVoyage(voyage: Voyage, view: View, voyageRef: DocumentReference) {
+        showProgressDialog()
+        voyageRef.set(voyage).addOnCompleteListener {
+            if (it.isSuccessful) {
+                cleanText(
+                    edtRefVoyage,
+                    edtHeureDepartVoyage,
+                    edtDateDepartVoyage,
+                    edtHeureArriveVoyage,
+                    edtDateDestiVoyage,
+                    edtPrixVoyage
+                )
 
-            cleanText(
-                edtRefVoyage,
-                edtHeureDepartVoyage,
-                edtDateDepartVoyage,
-                edtHeureArriveVoyage,
-                edtDateDestiVoyage,
-                edtPrixVoyage
-            )
-
-            toggleSection(view.btnToggleVoyage, view.lytExpandVoyage, nestedScrollView)
-            context?.toast("Success")
+                toggleSection(view.btnToggleVoyage, view.lytExpandVoyage, nestedScrollView)
+                successDialog()
+            } else {
+                errorDialog(it.exception?.message)
+                context?.toast(it.exception?.message ?: "Erreur inconnue !")
+            }
         }
     }
 
@@ -204,6 +227,29 @@ class EnregFragment : Fragment() {
         }
     }
 
+    private fun showProgressDialog() {
+        dialog = KAlertDialog(context, KAlertDialog.PROGRESS_TYPE).apply {
+            titleText = "Enregistrement"
+            show()
+        }
+
+        dialog.setConfirmClickListener {
+            if (it.alerType == KAlertDialog.SUCCESS_TYPE) {
+                it.dismissWithAnimation()
+            }
+        }
+    }
+
+    private fun successDialog() {
+        dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
+    }
+
+    private fun errorDialog(message: String?) {
+        dialog.titleText = "Erreur"
+        dialog.contentText = message
+        dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
+    }
+
     private fun initBusComponent(view: View) {
         view.btnToggleBus.setOnClickListener {
             toggleSection(it, view.lytExpandBus, nestedScrollView)
@@ -225,21 +271,31 @@ class EnregFragment : Fragment() {
                 }
             }
 
+            val db = FirebaseFirestore.getInstance()
+            val busRef = db.collection("bus").document()
+
             val agency = binding.spinnerAgencyBus.selectedItem as Agence
             val bus = Bus(
-                System.nanoTime(),
+                busRef.id,
                 edtNomBus.text.toString().trim(),
                 edtRangerBus.text.toString().trim().toInt(),
                 edtSiegeBus.text.toString().trim().toInt(),
                 agency.idAgence
             )
 
-            // Saving
-            enregViewModel.saveBus(bus) {
-                cleanText(edtNomBus, edtRangerBus, edtSiegeBus)
+            showProgressDialog()
+            busRef.set(bus).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    cleanText(edtNomBus, edtRangerBus, edtSiegeBus)
 
-                toggleSection(view.btnToggleBus, view.lytExpandBus, nestedScrollView)
-                context?.toast("Success")
+                    toggleSection(view.btnToggleBus, view.lytExpandBus, nestedScrollView)
+                    successDialog()
+                    context?.toast("Success")
+                } else {
+
+                    errorDialog(it.exception?.message)
+                    context?.toast(it.exception?.message ?: "Erreur inconnue !")
+                }
             }
         }
     }
@@ -270,23 +326,33 @@ class EnregFragment : Fragment() {
                 }
             }
 
-            val role = binding.edtRoleUser.selectedItem as Role
+            val userRef = db.collection("users").document()
 
+
+
+            val role = binding.edtRoleUser.selectedItem as Role
             val user = Utilisateur(
-                System.nanoTime(),
+                userRef.id,
                 edtNomUser.text.toString().trim(),
                 edtPseudoUser.text.toString().trim(),
                 edtPasswordUser.text.toString().trim(),
                 role.idRole
             )
 
-            // Todo: Show progress bar
-            enregViewModel.saveUser(user) {
-                cleanText(edtNomUser, edtPseudoUser, edtPasswordUser, edtPasswordConfirmUser)
+//            val authTask = FirebaseAuth.getInstance().signInWithEmailAndPassword(user.pseudoUtilisateur, user.passwordUtilisateur)
+//            authTask.addOnCompleteListener {
+//                if ()
+//            }
+//
+//            userRef.set
 
-                toggleSection(view.btnToggleUser, view.lytExpandUser, nestedScrollView)
-                context?.toast("Success")
-            }
+            // Todo: Show progress bar
+//            enregViewModel.saveUser(user) {
+//                cleanText(edtNomUser, edtPseudoUser, edtPasswordUser, edtPasswordConfirmUser)
+//
+//                toggleSection(view.btnToggleUser, view.lytExpandUser, nestedScrollView)
+//                context?.toast("Success")
+//            }
 
             view.snackbar("Success")
             toggleSection(view.btnToggleUser, view.lytExpandUser, nestedScrollView)
@@ -335,11 +401,22 @@ class EnregFragment : Fragment() {
             if (view.edtNomAgency.text.isBlank()) {
                 view.edtNomAgency.error = getString(R.string.input_empty)
             } else {
-                val agency = Agence(System.nanoTime(), edtNomAgency.text.toString().trim())
-                enregViewModel.saveAgence(agency) {
-                    view.edtNomAgency.text.clear()
-                    toggleSection(view.btnToggleAgency, view.lytExpandAgency, nestedScrollView)
-                    context?.toast("Success")
+                val agencyRef = db.collection("agences").document()
+                val agency = Agence(agencyRef.id, edtNomAgency.text.toString().trim())
+
+                showProgressDialog()
+                agencyRef.set(agency).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        view.edtNomAgency.text.clear()
+                        toggleSection(view.btnToggleAgency, view.lytExpandAgency, nestedScrollView)
+
+                        successDialog()
+                        context?.toast("Success")
+                    } else {
+
+                        errorDialog(it.exception?.message)
+                        context?.toast(it.exception?.message ?: "Erreur inconnue !")
+                    }
                 }
             }
         }
@@ -358,11 +435,23 @@ class EnregFragment : Fragment() {
             if (view.edtNomEtat.text.isBlank()) {
                 view.edtNomEtat.error = getString(R.string.input_empty)
             } else {
-                val etat = Etat(System.nanoTime(), edtNomEtat.text.toString().trim())
-                enregViewModel.saveEtat(etat) {
-                    view.edtNomEtat.text.clear()
-                    context?.toast("Success")
-                    toggleSection(view.btnToggleEtat, view.lytExpandEtat, nestedScrollView)
+
+                val etatRef = db.collection("etats").document()
+                val etat = Etat(etatRef.id, edtNomEtat.text.toString().trim())
+
+                showProgressDialog()
+                etatRef.set(etat).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        view.edtNomEtat.text.clear()
+
+                        successDialog()
+                        context?.toast("Success")
+                        toggleSection(view.btnToggleEtat, view.lytExpandEtat, nestedScrollView)
+                    } else {
+
+                        errorDialog(it.exception?.message)
+                        context?.toast(it.exception?.message ?: "Erreur inconnue !")
+                    }
                 }
             }
         }
@@ -381,11 +470,23 @@ class EnregFragment : Fragment() {
             if (view.edtNomLieu.text.isBlank()) {
                 view.edtNomLieu.error = getString(R.string.input_empty)
             } else {
-                val lieu = Lieu(System.nanoTime(), edtNomLieu.text.toString().trim())
-                enregViewModel.saveLieu(lieu) {
-                    view.edtNomLieu.text.clear()
-                    toggleSection(view.btnToggleLieu, view.lytExpandLieu, nestedScrollView)
-                    context?.toast("Success")
+
+                val lieuRef = db.collection("lieux").document()
+                val lieu = Lieu(lieuRef.id, edtNomLieu.text.toString().trim())
+
+                showProgressDialog()
+                lieuRef.set(lieu).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        view.edtNomLieu.text.clear()
+                        toggleSection(view.btnToggleLieu, view.lytExpandLieu, nestedScrollView)
+
+                        successDialog()
+                        context?.toast("Success")
+                    } else {
+
+                        errorDialog(it.exception?.message)
+                        context?.toast(it.exception?.message ?: "Erreur inconnue !")
+                    }
                 }
             }
         }
@@ -404,11 +505,24 @@ class EnregFragment : Fragment() {
             if (view.edtNomRole.text.isBlank()) {
                 view.edtNomRole.error = getString(R.string.input_empty)
             } else {
-                val role = Role(System.nanoTime(), edtNomRole.text.toString().trim())
-                enregViewModel.saveRole(role) {
-                    view.edtNomRole.text.clear()
-                    toggleSection(view.btnToggleRole, view.lytExpandRole, nestedScrollView)
-                    context?.toast("Success")
+
+                val rolesRef = db.collection("roles").document()
+                val role = Role(rolesRef.id, edtNomRole.text.toString().trim())
+
+
+                showProgressDialog()
+                rolesRef.set(role).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        view.edtNomRole.text.clear()
+                        toggleSection(view.btnToggleRole, view.lytExpandRole, nestedScrollView)
+
+                        successDialog()
+                        context?.toast("Success")
+                    } else {
+
+                        errorDialog(it.exception?.message)
+                        context?.toast(it.exception?.message ?: "Erreur inconnue !")
+                    }
                 }
             }
         }
@@ -427,11 +541,22 @@ class EnregFragment : Fragment() {
             if (view.edtNomTransit.text.isBlank()) {
                 view.edtNomTransit.error = getString(R.string.input_empty)
             } else {
-                val transit = Transit(System.nanoTime(), edtNomTransit.text.toString().trim())
-                enregViewModel.saveTransit(transit) {
-                    view.edtNomTransit.text.clear()
-                    toggleSection(view.btnToggleTransit, view.lytExpandTransit, nestedScrollView)
-                    context?.toast("Success")
+                val transitRef = db.collection("transits").document()
+                val transit = Transit(transitRef.id, edtNomTransit.text.toString().trim())
+
+                showProgressDialog()
+                transitRef.set(transit).addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        view.edtNomTransit.text.clear()
+                        toggleSection(view.btnToggleTransit, view.lytExpandTransit, nestedScrollView)
+
+                        successDialog()
+                        context?.toast("Success")
+                    } else {
+
+                        errorDialog(it.exception?.message)
+                        context?.toast(it.exception?.message ?: "Erreur inconnue !")
+                    }
                 }
             }
         }

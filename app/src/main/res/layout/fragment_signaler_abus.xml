@@ -41,6 +41,7 @@
                 <Spinner
                     style="@style/EditText.Flat.Grey"
                     android:layout_width="match_parent"
+                    android:id="@+id/spinnerBus"
                     android:layout_height="@dimen/spacing_xmlarge"
                     android:background="@drawable/edit_text_round_bg_white"
                     android:minHeight="@dimen/spacing_xmlarge"

@@ -3,11 +3,12 @@ package org.pbreakers.mobile.getticket.model.repository
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import io.reactivex.Completable
+import io.reactivex.Single
+import org.pbreakers.mobile.getticket.model.api.BilletApi
 import org.pbreakers.mobile.getticket.model.dao.BilletDao
 import org.pbreakers.mobile.getticket.model.entity.Billet
-import javax.inject.Inject
 
-class BilletRepository @Inject constructor(private val dao: BilletDao) {
+class BilletRepository(private val dao: BilletDao, private val api: BilletApi) {
 
     fun count(): LiveData<Int> {
         refresh()
@@ -21,6 +22,11 @@ class BilletRepository @Inject constructor(private val dao: BilletDao) {
     fun findByIdUser(id: Long): LiveData<List<Billet>> {
         refresh()
         return dao.findByIdUser(id)
+    }
+
+    fun findById(id: Long): Single<Billet> {
+        refresh()
+        return dao.findByIdWithRx(id)
     }
 
     fun findAll(): DataSource.Factory<Int, Billet> {

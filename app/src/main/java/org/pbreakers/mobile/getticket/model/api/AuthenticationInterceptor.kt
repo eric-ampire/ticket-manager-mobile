@@ -1,9 +1,8 @@
-package org.pbreakers.mobile.getticket.api
+package org.pbreakers.mobile.getticket.model.api
 
 import java.io.IOException
 
 import okhttp3.Interceptor
-import okhttp3.Request
 import okhttp3.Response
 
 class AuthenticationInterceptor(private val authToken: String) : Interceptor {

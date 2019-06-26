@@ -27,7 +27,7 @@
                 android:layout_height="match_parent" />
 
             <include
-                android:visibility="@{viewModel.adapter.isEmptyData.get()}"
+                android:visibility="@{viewModel.adapter.emptyViewVisibility.get()}"
                 layout="@layout/item_no_data" />
         </FrameLayout>
 

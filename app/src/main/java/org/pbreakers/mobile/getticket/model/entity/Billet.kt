@@ -8,19 +8,19 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 import java.util.*
 
-@Entity(
-    indices = [Index("idVoyage", "idUtilisateur", "idEtat")],
-    foreignKeys = [
-        ForeignKey(entity = Etat::class, parentColumns = ["idEtat"], childColumns = ["idEtat"]),
-        ForeignKey(entity = Utilisateur::class, parentColumns = ["idUtilisateur"], childColumns = ["idUtilisateur"]),
-        ForeignKey(entity = Voyage::class, parentColumns = ["idVoyage"], childColumns = ["idVoyage"])
-    ]
-)
+//@Entity(
+//    indices = [Index("idVoyage", "idUtilisateur", "idEtat")],
+//    foreignKeys = [
+//        ForeignKey(entity = Etat::class, parentColumns = ["idEtat"], childColumns = ["idEtat"]),
+//        ForeignKey(entity = Utilisateur::class, parentColumns = ["idUtilisateur"], childColumns = ["idUtilisateur"]),
+//        ForeignKey(entity = Voyage::class, parentColumns = ["idVoyage"], childColumns = ["idVoyage"])
+//    ]
+//)
 @Parcelize
 data class Billet(
-    @PrimaryKey val idBillet: Long,
-    val dateBillet: Date,
-    val idVoyage: Long,
-    val idUtilisateur: Long,
-    val idEtat: Long
+    val idBillet: String = "",
+    val dateBillet: Date = Date(),
+    val idVoyage: String = "",
+    val idUtilisateur: String = "",
+    var idEtat: String = ""
 ) : Parcelable

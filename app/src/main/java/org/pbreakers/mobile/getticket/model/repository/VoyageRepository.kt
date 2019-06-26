@@ -3,11 +3,11 @@ package org.pbreakers.mobile.getticket.model.repository
 import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import io.reactivex.Completable
+import org.pbreakers.mobile.getticket.model.api.VoyageApi
 import org.pbreakers.mobile.getticket.model.dao.VoyageDao
 import org.pbreakers.mobile.getticket.model.entity.Voyage
-import javax.inject.Inject
 
-class VoyageRepository @Inject constructor(private val dao: VoyageDao) {
+class VoyageRepository(private val dao: VoyageDao, private val api: VoyageApi) {
 
     fun findAll(): DataSource.Factory<Int, Voyage> {
         refresh()

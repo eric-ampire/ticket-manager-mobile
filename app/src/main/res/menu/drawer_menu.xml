@@ -6,6 +6,7 @@
         <item
             android:id="@+id/homeFragment"
             android:icon="@drawable/ic_home"
+            app:actionLayout="@layout/badge_navigation_colored"
             android:title="Voyage" />
     </group>
     <group

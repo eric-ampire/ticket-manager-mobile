@@ -1,88 +1,82 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import org.pbreakers.mobile.getticket.app.App
+import androidx.lifecycle.ViewModel
+import com.google.firebase.firestore.*
 import org.pbreakers.mobile.getticket.model.entity.*
-import org.pbreakers.mobile.getticket.model.repository.*
-import javax.inject.Inject
 
-class EnregViewModel(val app: Application) : AndroidViewModel(app) {
+class EnregViewModel : ViewModel() {
 
-    @Inject lateinit var roleRepository: RoleRepository
-    @Inject lateinit var agencyRepository: AgenceRepository
-    @Inject lateinit var etatRepository: EtatRepository
-    @Inject lateinit var transitRepository: TransitRepository
-    @Inject lateinit var lieuRepository: LieuRepository
-    @Inject lateinit var userRepository: UtilisateurRepository
-    @Inject lateinit var busRepository: BusRepository
-    @Inject lateinit var voyageRepository: VoyageRepository
-    @Inject lateinit var pointArretRepository: PointArretRepository
+    private val db by lazy {
+        FirebaseFirestore.getInstance()
+    }
 
-    val role     = MutableLiveData<List<Role>>().apply { value = arrayListOf() }
-    val agences  = MutableLiveData<List<Agence>>().apply { value = arrayListOf() }
-    val bus      = MutableLiveData<List<Bus>>().apply { value = arrayListOf() }
-    val etats    = MutableLiveData<List<Etat>>().apply { value = arrayListOf() }
-    val transits = MutableLiveData<List<Transit>>().apply { value = arrayListOf() }
-    val lieu     = MutableLiveData<List<Lieu>>().apply { value = arrayListOf() }
-    val voyages  = MutableLiveData<List<Voyage>>().apply { value = arrayListOf() }
+    val role: LiveData<List<Role>>
+        get() = _role
+
+    val agences: LiveData<List<Agence>>
+        get() = _agences
+
+    val bus: LiveData<List<Bus>>
+        get() = _bus
+
+    val etats: LiveData<List<Etat>>
+        get() = _etats
+
+    val transits: LiveData<List<Transit>>
+        get() = _transits
+
+    val lieu: LiveData<List<Lieu>>
+        get() = _lieu
+
+    val voyages: LiveData<List<Voyage>>
+        get() = _voyages
+
+
+    private val _role     = MutableLiveData<List<Role>>().apply { value = arrayListOf() }
+    private val _agences  = MutableLiveData<List<Agence>>().apply { value = arrayListOf() }
+    private val _bus      = MutableLiveData<List<Bus>>().apply { value = arrayListOf() }
+    private val _etats    = MutableLiveData<List<Etat>>().apply { value = arrayListOf() }
+    private val _transits = MutableLiveData<List<Transit>>().apply { value = arrayListOf() }
+    private val _lieu     = MutableLiveData<List<Lieu>>().apply { value = arrayListOf() }
+    private val _voyages  = MutableLiveData<List<Voyage>>().apply { value = arrayListOf() }
 
     init {
-        val application = app as App
-        application.appComponent.inject(this)
 
-        roleRepository.findAll().observeForever   { role.value = it }
-        agencyRepository.findAll().observeForever { agences.value = it }
-        busRepository.findAllLiveData().observeForever { bus.value = it }
-        etatRepository.findAll().observeForever { etats.value = it }
-        transitRepository.findAll().observeForever { transits.value = it }
-        lieuRepository.findAll().observeForever { lieu.value = it }
-        voyageRepository.findAllLiveData().observeForever { voyages.value = it }
-    }
+        db.collection("roles").addSnapshotListener { snapshot, exception ->
+            if (exception != null || snapshot == null) return@addSnapshotListener
+            _role.postValue(snapshot.toObjects(Role::class.java))
+        }
 
-    fun findRole(): LiveData<List<Role>> {
-        return roleRepository.findAll()
-    }
+        db.collection("agences").addSnapshotListener { snapshot, exception ->
+            if (exception != null || snapshot == null) return@addSnapshotListener
+            _agences.postValue(snapshot.toObjects(Agence::class.java))
+        }
 
-    fun saveAgence(agency: Agence, function: () -> Unit) {
-        agencyRepository.add(agency, function)
-    }
+        db.collection("bus").addSnapshotListener { snapshot, exception ->
+            if (exception != null || snapshot == null) return@addSnapshotListener
+            _bus.postValue(snapshot.toObjects(Bus::class.java))
+        }
 
-    fun saveEtat(etat: Etat, function: () -> Unit) {
-        etatRepository.add(etat, function)
-    }
+        db.collection("etats").addSnapshotListener { snapshot, exception ->
+            if (exception != null || snapshot == null) return@addSnapshotListener
+            _etats.postValue(snapshot.toObjects(Etat::class.java))
+        }
 
-    fun saveLieu(lieu: Lieu, function: () -> Unit) {
-        lieuRepository.add(lieu, function)
-    }
+        db.collection("transits").addSnapshotListener { snapshot, exception ->
+            if (exception != null || snapshot == null) return@addSnapshotListener
+            _transits.postValue(snapshot.toObjects(Transit::class.java))
+        }
 
-    fun saveRole(role: Role, function: () -> Unit) {
-        roleRepository.add(role, function)
-    }
+        db.collection("lieux").addSnapshotListener { snapshot, exception ->
+            if (exception != null || snapshot == null) return@addSnapshotListener
+            _lieu.postValue(snapshot.toObjects(Lieu::class.java))
+        }
 
-    fun saveTransit(transit: Transit, function: () -> Unit) {
-        transitRepository.add(transit, function)
-    }
-
-    fun saveUser(user: Utilisateur, function: () -> Unit) {
-        userRepository.add(user, function)
-    }
-
-    fun saveBus(bus: Bus, function: () -> Unit) {
-        busRepository.add(bus, function)
-    }
-
-    fun findAgency(): LiveData<List<Agence>> {
-        return agencyRepository.findAll()
-    }
-
-    fun saveVoyage(voyage: Voyage, function: () -> Unit) {
-        voyageRepository.add(voyage, function)
-    }
-
-    fun savePointArret(pointArret: PointArret, function: () -> Unit) {
-        pointArretRepository.add(pointArret, function)
+        db.collection("voyages").addSnapshotListener { snapshot, exception ->
+            if (exception != null || snapshot == null) return@addSnapshotListener
+            _voyages.postValue(snapshot.toObjects(Voyage::class.java))
+        }
     }
 }

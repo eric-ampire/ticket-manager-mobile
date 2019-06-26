@@ -1,24 +1,20 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
-import android.app.Application
 import androidx.databinding.ObservableField
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
+import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Completable
 import io.reactivex.Maybe
-import org.pbreakers.mobile.getticket.app.App
-import org.pbreakers.mobile.getticket.model.entity.Billet
-import org.pbreakers.mobile.getticket.model.entity.Etat
-import org.pbreakers.mobile.getticket.model.entity.Voyage
+import org.koin.core.KoinComponent
+import org.koin.core.inject
+import org.pbreakers.mobile.getticket.model.entity.*
 import org.pbreakers.mobile.getticket.model.repository.*
-import javax.inject.Inject
 
-class DetailVoyageViewModel(val app: Application) : AndroidViewModel(app) {
+class DetailVoyageViewModel : ViewModel(), KoinComponent {
 
-    @Inject lateinit var agencyRepository: AgenceRepository
-    @Inject lateinit var etatRepository: EtatRepository
-    @Inject lateinit var lieuRepository: LieuRepository
-    @Inject lateinit var busRepository: BusRepository
-    @Inject lateinit var billetRepository: BilletRepository
+    private val db by lazy {
+        FirebaseFirestore.getInstance()
+    }
 
     lateinit var voyage: Voyage
 
@@ -28,11 +24,6 @@ class DetailVoyageViewModel(val app: Application) : AndroidViewModel(app) {
     val bus    = ObservableField<String>()
     val agence = ObservableField<String>()
 
-    init {
-        val application = app as App
-        application.appComponent.inject(this)
-    }
-
     fun init() {
         findDestinationById(voyage.idDestination)
         findProvenanceById(voyage.idProvenance)
@@ -40,38 +31,52 @@ class DetailVoyageViewModel(val app: Application) : AndroidViewModel(app) {
         findBusById(voyage.idBus)
     }
 
-    private fun findProvenanceById(id: Long) {
-        lieuRepository.findById(id).observeForever {
-            prov.set(it.nomLieu)
+    private fun findProvenanceById(id: String) {
+        val lieuRef = db.collection("lieux").document(id)
+        lieuRef.get().addOnSuccessListener {
+            val currentLieu = it.toObject(Lieu::class.java) ?: return@addOnSuccessListener
+            prov.set(currentLieu.nomLieu)
+        }.addOnFailureListener {
+
         }
     }
 
-    private fun findDestinationById(id: Long) {
-        lieuRepository.findById(id).observeForever {
-            desti.set(it.nomLieu)
+    private fun findDestinationById(id: String) {
+        val lieuRef = db.collection("lieux").document(id)
+        lieuRef.get().addOnSuccessListener {
+            val currentLieu = it.toObject(Lieu::class.java) ?: return@addOnSuccessListener
+            desti.set(currentLieu.nomLieu)
+        }.addOnFailureListener {
+
         }
     }
 
-    private fun findBusById(id: Long) {
-        busRepository.findById(id).observeForever { aBus ->
-            agencyRepository.findById(aBus.idAgence).observeForever { agency ->
-                bus.set(aBus.nomBus)
-                agence.set(agency.nomAgence)
+    private fun findBusById(id: String) {
+        // Todo: run transaction
+        val busRef = db.collection("bus").document(id)
+        busRef.get().addOnSuccessListener {
+            val currentBus = it.toObject(Bus::class.java) ?: return@addOnSuccessListener
+
+            val agenceRef = db.collection("agences").document(currentBus.idAgence)
+            agenceRef.get().addOnSuccessListener { doc ->
+                val currentAgence = doc.toObject(Agence::class.java)
+
+                if (currentAgence != null) {
+                    bus.set(currentBus.nomBus)
+                    agence.set(currentAgence.nomAgence)
+                }
             }
         }
     }
 
-    private fun findEtatById(id: Long) {
-        etatRepository.findById(id).observeForever {
-            etat.set(it.nomEtat)
+    private fun findEtatById(id: String) {
+
+        val etatRef = db.collection("etats").document(id)
+        etatRef.get().addOnSuccessListener {
+            val currentEtat = it.toObject(Etat::class.java) ?: return@addOnSuccessListener
+            etat.set(currentEtat.nomEtat)
+        }.addOnFailureListener {
+
         }
-    }
-
-    fun findEtatByName(name: String): Maybe<Etat> {
-        return etatRepository.findByName(name)
-    }
-
-    fun saveBillet(ticket: Billet): Completable{
-        return billetRepository.add(ticket)
     }
 }

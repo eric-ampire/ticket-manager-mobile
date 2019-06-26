@@ -8,6 +8,7 @@ import android.widget.PopupMenu
 import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.get
 import androidx.navigation.Navigation.findNavController
@@ -16,22 +17,21 @@ import io.reactivex.CompletableObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import org.pbreakers.mobile.getticket.adapter.OnItemClickListener
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.pbreakers.mobile.getticket.adapter.common.OnItemClickListener
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.adapter.VoyageAdapter
 import org.pbreakers.mobile.getticket.databinding.FragmentHomeBinding
 import org.pbreakers.mobile.getticket.model.entity.Voyage
+import org.pbreakers.mobile.getticket.util.LoadingState
+import org.pbreakers.mobile.getticket.view.activity.MainActivity
 import org.pbreakers.mobile.getticket.viewmodel.HomeViewModel
 
 
 class HomeFragment : Fragment(), OnItemClickListener<Voyage> {
 
 
-    private val homeViewModel by lazy {
-        ViewModelProviders.of(this).get<HomeViewModel>().apply {
-            this.adapter = VoyageAdapter(this@HomeFragment, this)
-        }
-    }
+    private val homeViewModel: HomeViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +43,10 @@ class HomeFragment : Fragment(), OnItemClickListener<Voyage> {
             lifecycleOwner = viewLifecycleOwner
         }
 
-        homeViewModel.init()
+        homeViewModel.run {
+            this.adapter = VoyageAdapter(this@HomeFragment)
+            init()
+        }
 
         return binding.root
     }
@@ -66,6 +69,23 @@ class HomeFragment : Fragment(), OnItemClickListener<Voyage> {
         // Todo: Using constant
         val bundle = bundleOf("voyage" to item)
         findNavController(view).navigate(R.id.action_homeFragment_to_detailVoyageFragment, bundle)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val mainActivity = activity as MainActivity
+
+        homeViewModel.getLoadingState().observe(this, Observer {
+            when(it.status) {
+                LoadingState.Status.ERROR, LoadingState.Status.LOADED -> {
+                    mainActivity.hideProgressBar()
+                }
+
+                else -> {
+                    mainActivity.showProgressBar()
+                }
+            }
+        })
     }
 
     private fun createPopupMenu(view: View, item: Voyage) {
@@ -112,24 +132,17 @@ class HomeFragment : Fragment(), OnItemClickListener<Voyage> {
 
     private fun deleteVoyage(dialog: KAlertDialog, item: Voyage) {
 
-        homeViewModel.deleteVoyage(item)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : CompletableObserver {
-                override fun onComplete() {
-                    dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
-                }
+        val deleteTask = homeViewModel.deleteVoyage(item).delete()
 
-                override fun onSubscribe(d: Disposable) {
-                    dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
-                }
-
-                override fun onError(e: Throwable) {
-                    dialog.contentText = e.message
-                    dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
-                }
-            })
-
+        dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
+        deleteTask.addOnCompleteListener {
+            if (it.isSuccessful) {
+                dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
+            } else {
+                dialog.contentText = it.exception?.message ?: "Erreur inconnue !"
+                dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
+            }
+        }
     }
 
 
