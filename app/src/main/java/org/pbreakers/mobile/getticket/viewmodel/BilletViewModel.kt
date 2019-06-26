@@ -1,50 +1,73 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
-import io.reactivex.Completable
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import org.pbreakers.mobile.getticket.adapter.BilletAdapter
 import org.pbreakers.mobile.getticket.model.entity.Billet
-import org.pbreakers.mobile.getticket.model.entity.Etat
-import org.pbreakers.mobile.getticket.model.repository.BilletRepository
-import org.pbreakers.mobile.getticket.model.repository.EtatRepository
+import org.pbreakers.mobile.getticket.util.LoadingState
 
 class BilletViewModel : ViewModel(), KoinComponent {
 
     lateinit var adapter: BilletAdapter
-    private val repository: BilletRepository by inject()
-    private val etatEepository: EtatRepository by inject()
+    private val loadingState = MutableLiveData<LoadingState>()
+
+
+    private val db by lazy {
+        FirebaseFirestore.getInstance()
+    }
 
     init {
 
-        val config = PagedList.Config.Builder()
-            .setPageSize(3)
-            .build()
+        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+        val billetCol = db.collection("billets").whereEqualTo("idUtilisateur", currentUserId)
 
-        val data = LivePagedListBuilder(repository.findAll(), config).build()
+        loadingState.postValue(LoadingState.RUNNING)
 
-        data.observeForever {
-            adapter.submitList(it)
+        billetCol.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            if (firebaseFirestoreException != null || querySnapshot == null) {
+                loadingState.postValue(LoadingState.error(firebaseFirestoreException?.message))
+                return@addSnapshotListener
+            }
+
+            val billets = querySnapshot.toObjects(Billet::class.java)
+            adapter.submitList(billets)
+            loadingState.postValue(LoadingState.LOADED)
         }
     }
 
-    fun findBilletByIdUser(id: Long) {
-        repository.findByIdUser(id)
+    fun findCurrentUserTicket() {
+        val currentUserId = FirebaseAuth.getInstance().currentUser!!.uid
+        val billetCol = db.collection("billets").whereEqualTo("idUtilisateur", currentUserId)
+        billetCol.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            if (firebaseFirestoreException != null || querySnapshot == null) return@addSnapshotListener
+
+            val billets = querySnapshot.toObjects(Billet::class.java)
+            adapter.submitList(billets)
+        }
     }
 
-    fun findEtatById(id: Long): LiveData<Etat> {
-        return etatEepository.findById(id)
+    fun findAllTicket() {
+        val billetCol = db.collection("billets")
+        billetCol.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            if (firebaseFirestoreException != null || querySnapshot == null) return@addSnapshotListener
+
+            val billets = querySnapshot.toObjects(Billet::class.java)
+            adapter.submitList(billets)
+        }
     }
+
+    fun getLoadingState(): LiveData<LoadingState> = loadingState
 
     fun findAll(): LiveData<List<Billet>> {
-        return repository.findAllLiveData()
+        return MutableLiveData<List<Billet>>()
     }
 
-    fun deleteBillet(billet: Billet): Completable {
-        return repository.remove(billet)
+    fun deleteBillet(billet: Billet): Task<Void> {
+        return db.collection("billets").document(billet.idBillet).delete()
     }
 }

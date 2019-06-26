@@ -1,51 +1,73 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
-import androidx.databinding.ObservableField
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.firestore.FirebaseFirestore
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import org.pbreakers.mobile.getticket.model.entity.Billet
+import org.pbreakers.mobile.getticket.model.entity.Etat
 import org.pbreakers.mobile.getticket.model.entity.Utilisateur
 import org.pbreakers.mobile.getticket.model.entity.Voyage
-import org.pbreakers.mobile.getticket.model.repository.EtatRepository
-import org.pbreakers.mobile.getticket.model.repository.UtilisateurRepository
-import org.pbreakers.mobile.getticket.model.repository.VoyageRepository
 
 class DetailBilletViewModel : ViewModel(), KoinComponent {
 
     lateinit var billet: Billet
+    private val db by lazy { FirebaseFirestore.getInstance() }
 
-    private val etatRepository: EtatRepository        by inject()
-    private val voyageRepository: VoyageRepository    by inject()
-    private val userRepository: UtilisateurRepository by inject()
-
-
-    val etat = ObservableField<String>()
-    val user = ObservableField<Utilisateur>()
-    val voyage = ObservableField<Voyage>()
-
-    fun init() {
-        findUserById(billet.idUtilisateur)
-        findEtatById(billet.idEtat)
-        findVoyageById(billet.idVoyage)
-    }
-
-    private fun findVoyageById(idVoyage: Long) {
-        voyageRepository.findById(idVoyage).observeForever {
-            voyage.set(it)
+    private val _user by lazy {
+        MutableLiveData<Utilisateur>().also {
+            findUserById(billet.idUtilisateur)
         }
     }
 
-    private fun findEtatById(idEtat: Long) {
-        etatRepository.findById(idEtat).observeForever {
-            etat.set(it.nomEtat)
+    private val _etat by lazy {
+        MutableLiveData<String>().also {
+            findEtatById(billet.idEtat)
         }
     }
 
-    private fun findUserById(idUtilisateur: Long) {
-        // Todo: You have to do it in the view
-        userRepository.findById(idUtilisateur).observeForever {
-            user.set(it)
+    private val _voyage by lazy {
+        MutableLiveData<Voyage>().also {
+            findVoyageById(billet.idVoyage)
+        }
+    }
+
+    val etat: LiveData<String>
+        get() = _etat
+
+    val user: LiveData<Utilisateur>
+        get() = _user
+
+    val voyage: LiveData<Voyage>
+        get() = _voyage
+
+
+
+    private fun findVoyageById(idVoyage: String) {
+
+        val voyageRef = db.collection("voyages").document(idVoyage)
+        voyageRef.addSnapshotListener { snapshot, exception ->
+            if (exception != null || snapshot == null) return@addSnapshotListener
+            _voyage.postValue(snapshot.toObject(Voyage::class.java))
+        }
+    }
+
+    private fun findEtatById(idEtat: String) {
+
+        val etatRef = db.collection("etats").document(idEtat)
+        etatRef.addSnapshotListener { snapshot, exception ->
+            if (exception != null || snapshot == null) return@addSnapshotListener
+            _etat.postValue(snapshot.toObject(Etat::class.java)?.nomEtat)
+        }
+    }
+
+    private fun findUserById(idUtilisateur: String) {
+
+        val userRef = db.collection("users").document(idUtilisateur)
+        userRef.addSnapshotListener { snapshot, exception ->
+            if (exception != null || snapshot == null) return@addSnapshotListener
+            _user.postValue(snapshot.toObject(Utilisateur::class.java))
         }
     }
 }

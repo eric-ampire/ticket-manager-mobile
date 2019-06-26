@@ -106,11 +106,11 @@ class ModifierVoyageFragment : Fragment() {
     }
 
     private fun processUpdate(voyage: Voyage, dialog: KAlertDialog) {
+        dialog.show()
+
         modifierVoyageViewModel.update(voyage)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : CompletableObserver {
-                override fun onComplete() {
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
                     cleanText(
                         edtRefVoyage,
                         edtHeureDepartVoyage,
@@ -122,17 +122,11 @@ class ModifierVoyageFragment : Fragment() {
 
                     dialog.contentText = "La mise a jour a été effectuée avec succes !"
                     dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
-                }
-
-                override fun onSubscribe(d: Disposable) {
-                    dialog.show()
-                }
-
-                override fun onError(e: Throwable) {
-                    dialog.contentText = e.message
+                } else {
+                    dialog.contentText = it.exception?.message ?: "Unknown errors"
                     dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
                 }
-            })
+            }
 
     }
 

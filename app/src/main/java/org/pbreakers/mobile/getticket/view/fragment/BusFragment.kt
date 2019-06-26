@@ -26,6 +26,7 @@ import org.pbreakers.mobile.getticket.adapter.common.OnItemClickListener
 import org.pbreakers.mobile.getticket.databinding.FragmentBusBinding
 import org.pbreakers.mobile.getticket.model.entity.Bus
 import org.pbreakers.mobile.getticket.util.LoadingState
+import org.pbreakers.mobile.getticket.view.activity.MainActivity
 import org.pbreakers.mobile.getticket.viewmodel.BusViewModel
 
 
@@ -42,7 +43,7 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
         }
 
         busViewModel.run {
-            adapter = BusAdapter(this@BusFragment, this)
+            adapter = BusAdapter(this@BusFragment)
             loadingState.observe(this@BusFragment, this@BusFragment)
         }
 
@@ -67,6 +68,20 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
         view.swipeRefreshLayoutBus.setOnRefreshListener {
             busViewModel.init()
         }
+
+        val mainActivity = activity as MainActivity
+
+        busViewModel.getLoadingState().observe(this, Observer {
+            when(it.status) {
+                LoadingState.Status.ERROR, LoadingState.Status.LOADED -> {
+                    mainActivity.hideProgressBar()
+                }
+
+                else -> {
+                    mainActivity.showProgressBar()
+                }
+            }
+        })
     }
 
     override fun onChanged(loadingState: LoadingState) {
@@ -145,23 +160,17 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
     }
 
     private fun deleteBus(dialog: KAlertDialog, item: Bus) {
+        dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
         busViewModel.removeBus(item)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : CompletableObserver {
-                override fun onComplete() {
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    dialog.contentText = "Opération s'est derouler avec success !"
                     dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
-                }
-
-                override fun onSubscribe(d: Disposable) {
-                    dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
-                }
-
-                override fun onError(e: Throwable) {
-                    dialog.contentText = e.message
+                } else {
+                    dialog.contentText = it.exception?.message ?: "Unknow error !"
                     dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
                 }
-            })
+            }
 
     }
 }

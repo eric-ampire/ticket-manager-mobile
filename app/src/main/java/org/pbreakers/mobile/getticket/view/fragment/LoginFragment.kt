@@ -1,6 +1,7 @@
 package org.pbreakers.mobile.getticket.view.fragment
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.FragmentLoginBinding
 import org.pbreakers.mobile.getticket.model.entity.Utilisateur
 import org.pbreakers.mobile.getticket.util.modifierDialog
+import org.pbreakers.mobile.getticket.view.activity.MainActivity
 import org.pbreakers.mobile.getticket.viewmodel.AuthViewModel
 
 
@@ -59,29 +61,23 @@ class LoginFragment : Fragment() {
     private fun login(view: View) {
         val dialog = KAlertDialog(context, KAlertDialog.PROGRESS_TYPE).apply {
             contentText = "Verification en cour.."
-            titleText = "Login"
+            titleText = "Connexion"
+            show()
         }
 
-        authViewModel.login()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : MaybeObserver<Utilisateur> {
-                override fun onComplete() {
-                    dialog.modifierDialog(KAlertDialog.ERROR_TYPE, "Error", "Aucun utilisateur n'a ete trouver")
-                }
+        authViewModel.login().addOnCompleteListener {
+            if (it.isSuccessful) {
+                dialog.modifierDialog(KAlertDialog.SUCCESS_TYPE, "Connexion", "Authentification success")
 
-                override fun onSuccess(t: Utilisateur) {
-                    dialog.modifierDialog(KAlertDialog.SUCCESS_TYPE, "Success", "Authentification success")
-                }
+            } else {
+                dialog.modifierDialog(KAlertDialog.ERROR_TYPE, "Connexion", it.exception?.message ?: "Probleme inconnue !")
+            }
+        }
 
-                override fun onSubscribe(d: Disposable) {
-                    dialog.show()
-                }
-
-                override fun onError(e: Throwable) {
-                    dialog.modifierDialog(KAlertDialog.ERROR_TYPE, "Error", e.message ?: "Erreur inconnue")
-                }
-            })
-
+        dialog.setConfirmClickListener {
+            if (it.alerType == KAlertDialog.SUCCESS_TYPE) {
+                startActivity(Intent(context, MainActivity::class.java))
+            }
+        }
     }
 }

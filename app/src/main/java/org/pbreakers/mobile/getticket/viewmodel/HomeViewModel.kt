@@ -1,43 +1,47 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
-import io.reactivex.Completable
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import org.pbreakers.mobile.getticket.adapter.VoyageAdapter
-import org.pbreakers.mobile.getticket.model.entity.Lieu
 import org.pbreakers.mobile.getticket.model.entity.Voyage
-import org.pbreakers.mobile.getticket.model.repository.LieuRepository
-import org.pbreakers.mobile.getticket.model.repository.VoyageRepository
+import org.pbreakers.mobile.getticket.util.LoadingState
 
 
 class HomeViewModel : ViewModel(), KoinComponent {
 
     lateinit var adapter: VoyageAdapter
-    private val repository: VoyageRepository   by inject()
-    private val lieuRepository: LieuRepository by inject()
 
-    fun findLieuById(id: Long): LiveData<Lieu> {
-        return lieuRepository.findById(id)
+    private val db by lazy {
+        FirebaseFirestore.getInstance()
     }
 
     fun init() {
 
-        val config = PagedList.Config.Builder()
-            .setPageSize(3)
-            .build()
+        loadingState.postValue(LoadingState.RUNNING)
+        db.collection("voyages").also {
+            it.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
 
-        val data = LivePagedListBuilder(repository.findAll(), config).build()
+                if (firebaseFirestoreException != null && querySnapshot == null) {
+                    loadingState.postValue(LoadingState.error(firebaseFirestoreException.message))
+                    return@addSnapshotListener
+                }
+                val voyages = querySnapshot?.toObjects(Voyage::class.java)
+                adapter.submitList(voyages!!)
 
-        data.observeForever {
-            adapter.submitList(it)
+                loadingState.postValue(LoadingState.LOADED)
+            }
         }
     }
 
-    fun deleteVoyage(item: Voyage): Completable {
-        return repository.remove(item)
+    private val loadingState = MutableLiveData<LoadingState>()
+
+    fun getLoadingState(): LiveData<LoadingState> = loadingState
+
+    fun deleteVoyage(item: Voyage): DocumentReference {
+        return db.collection("voyages").document(item.idVoyage)
     }
 }
