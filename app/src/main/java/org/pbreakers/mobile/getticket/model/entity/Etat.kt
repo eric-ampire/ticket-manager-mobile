@@ -12,4 +12,11 @@ data class Etat(
     val nomEtat: String = ""
 ) : Parcelable {
     override fun toString(): String = nomEtat
+
+    companion object {
+        const val IN_PROGRESS = "progress"
+        const val UNAVAILABLE = "unvailable"
+        const val FINISHED = "finished"
+        const val ATTENTE = "attente"
+    }
 }

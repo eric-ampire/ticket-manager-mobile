@@ -14,9 +14,9 @@ data class Role(
     override fun toString() = nomRole
 
     companion object {
-        const val CLIENT: Long = 2
-        const val ADMIN: Long = 1
-        const val HOTESSE: Long = 3
-        const val AGENT_LOCAL: Long = 4
+        const val CLIENT = "user"
+        const val ADMIN = "admin"
+        const val HOTESSE = "hotesse"
+        const val AGENT_LOCAL = "agent"
     }
 }
