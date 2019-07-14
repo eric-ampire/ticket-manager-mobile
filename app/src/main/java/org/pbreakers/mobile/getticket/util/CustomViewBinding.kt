@@ -40,28 +40,28 @@ fun bindSpinnerAdapter(spinner: Spinner, data: List<*>?) {
 }
 
 @BindingAdapter(value = ["bindDate"])
-fun bindDate(textView: TextView, date: Date?) {
+fun TextView.bindDate(date: Date?) {
     if (date == null) {
-        textView.text = Date().getFormattedDate("dd/MM/yyyy")
+        text = Date().getFormattedDate(context.getString(R.string.date_format))
     } else {
-        textView.text = date.getFormattedDate("dd/MM/yyyy")
+        text = date.getFormattedDate(context.getString(R.string.date_format))
     }
 }
 
 @BindingAdapter(value = ["bindDateAndTime"])
-fun bindDateAndTime(textView: TextView, date: Date?) {
+fun TextView.bindDateAndTime(date: Date?) {
     if (date == null) {
-        textView.text = "- - -"
+        text = "- - -"
     } else {
-        textView.text = date.getFormattedDate("dd/MM/yyyy à HH:mm")
+        text = date.getFormattedDate(context.getString(R.string.datetime_format))
     }
 }
 
 @BindingAdapter(value = ["bindTime"])
-fun bindTime(textView: TextView, date: Date?) {
+fun TextView.bindTime(date: Date?) {
     if (date == null) {
-        textView.text = Date().getFormattedDate("HH:mm")
+        text = Date().getFormattedDate(context.getString(R.string.time_format))
     } else {
-        textView.text = date.getFormattedDate("HH:mm")
+        text = date.getFormattedDate(context.getString(R.string.time_format))
     }
 }
