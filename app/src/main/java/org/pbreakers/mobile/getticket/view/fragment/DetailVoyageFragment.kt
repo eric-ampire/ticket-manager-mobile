@@ -5,29 +5,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation.findNavController
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.kinda.alert.KAlertDialog
-import io.reactivex.CompletableObserver
-import io.reactivex.MaybeObserver
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_voyage_detail.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.FragmentVoyageDetailBinding
 import org.pbreakers.mobile.getticket.model.entity.Billet
 import org.pbreakers.mobile.getticket.model.entity.Etat
 import org.pbreakers.mobile.getticket.model.entity.Voyage
-import org.pbreakers.mobile.getticket.util.Session
 import org.pbreakers.mobile.getticket.util.Tools.toggleSection
 import org.pbreakers.mobile.getticket.viewmodel.DetailVoyageViewModel
 import java.util.*
@@ -40,7 +31,7 @@ class DetailVoyageFragment : Fragment(), KoinComponent {
 
     // Todo: You have to use the constant
     private val currentVoyage by lazy {
-        arguments?.getParcelable<Voyage>("voyage")
+        DetailVoyageFragmentArgs.fromBundle(arguments!!).voyage
     }
 
     private val detailVoyageViewModel: DetailVoyageViewModel by viewModel()
@@ -101,62 +92,42 @@ class DetailVoyageFragment : Fragment(), KoinComponent {
                 it.alerType == KAlertDialog.SUCCESS_TYPE -> {
 
                     dialog.dismissWithAnimation()
-                    findNavController(btn).navigate(R.id.action_detailVoyageFragment_to_homeFragment)
+                    findNavController(btnReserve).navigate(R.id.action_detailVoyageFragment_to_homeFragment)
                 }
                 it.alerType == KAlertDialog.WARNING_TYPE -> {
                     dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
-                    findEtatInfo(btn)
+                    checkTravelState()
                 }
             }
         }
     }
 
-    private fun findEtatInfo(btn: View) {
-        val db = FirebaseFirestore.getInstance()
-        val etatRef = db.collection("etats").document(currentVoyage!!.idEtat)
-
-        // Todo: Tu doit verifier si le voyage et en cour
-        etatRef.get().addOnCompleteListener {
-            if (it.isSuccessful && it.result != null) {
-                val etat = it.result!!.toObject(Etat::class.java) ?: return@addOnCompleteListener
-                getUserInfo(etat, btn)
-            } else {
-                dialog.contentText = it.exception?.message ?: "Erreur inconnue"
-                dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
-            }
+    private fun checkTravelState() {
+        if (currentVoyage!!.idEtat == Etat.ATTENTE) {
+            saveTickedWithPendingState(Etat.ATTENTE)
+        } else {
+            dialog.contentText = "Impossible de reserver sur ce voyage !"
+            dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
         }
     }
 
-    private fun getUserInfo(etat: Etat, btn: View) {
-
-        // Find current user
+    private fun saveTickedWithPendingState(idState: String) {
         val idUser = FirebaseAuth.getInstance().currentUser!!.uid
-        val db = FirebaseFirestore.getInstance()
-        val billetRef = db.collection("billets").document()
-
         val ticket = Billet(
-            idBillet = billetRef.id,
             idVoyage = currentVoyage!!.idVoyage,
-            idEtat = etat.idEtat,
+            idEtat = idState,
             idUtilisateur = idUser,
             dateBillet = Date()
         )
 
-        saveTicket(ticket, billetRef)
-    }
+        detailVoyageViewModel.saveTicket(ticket).addOnSuccessListener {
+            dialog.contentText = "Votre reservation s'est passer avec success !"
+            dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
 
-    private fun saveTicket(ticket: Billet, billetRef: DocumentReference) {
+        }.addOnFailureListener {
 
-        dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
-
-        billetRef.set(ticket).addOnCompleteListener {
-            if (it.isSuccessful) {
-                dialog.contentText = "Votre reservation s'est passer avec success !"
-                dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
-            } else {
-                dialog.contentText = it.exception?.message ?: "Erreur inconnue !"
-                dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
-            }
+            dialog.contentText = it.message ?: "Erreur inconnue !"
+            dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
         }
 
         dialog.setConfirmClickListener {

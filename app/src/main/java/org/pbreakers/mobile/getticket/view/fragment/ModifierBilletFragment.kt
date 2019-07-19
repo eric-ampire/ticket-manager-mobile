@@ -33,7 +33,7 @@ import kotlin.properties.Delegates
 class ModifierBilletFragment : Fragment() {
 
     private val currentBillet by lazy {
-        arguments?.getParcelable<Billet>("billet")
+        ModifierBilletFragmentArgs.fromBundle(arguments!!).billet
     }
 
     private var dialog: KAlertDialog by Delegates.notNull()

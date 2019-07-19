@@ -38,10 +38,17 @@ class BilletFragment : Fragment(), OnItemClickListener<Billet> {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = inflate<FragmentBilletBinding>(inflater, R.layout.fragment_billet, container, false).apply {
+        binding = FragmentBilletBinding.inflate(inflater).apply {
             viewModel = billetViewModel
             lifecycleOwner = viewLifecycleOwner
         }
+
+        val billetAdapter = BilletAdapter(this@BilletFragment)
+        binding.ticketList.adapter = billetAdapter
+
+        billetViewModel.tickets.observe(this, Observer {
+            billetAdapter.submitList(it)
+        })
 
         return binding.root
     }
@@ -67,12 +74,10 @@ class BilletFragment : Fragment(), OnItemClickListener<Billet> {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-        billetViewModel.adapter = BilletAdapter(this@BilletFragment)
     }
 
     override fun onClick(view: View, item: Billet, position: Int) {
-        val bundle = bundleOf("billet" to item)
-        findNavController(view).navigate(R.id.action_billetFragment_to_detailBilletFragment, bundle)
+        findNavController(view).navigate(BilletFragmentDirections.actionBilletFragmentToDetailBilletFragment(item))
     }
 
     override fun onClickPopupButton(view: View, item: Billet, position: Int) {
@@ -84,8 +89,7 @@ class BilletFragment : Fragment(), OnItemClickListener<Billet> {
         popupMenu.setOnMenuItemClickListener {
             return@setOnMenuItemClickListener when(it.itemId) {
                 R.id.menu_item_edit -> {
-                    val bundle = bundleOf("billet" to item)
-                    findNavController(view).navigate(R.id.action_billetFragment_to_modifierBilletFragment, bundle)
+                    findNavController(view).navigate(BilletFragmentDirections.actionBilletFragmentToModifierBilletFragment(item))
                     true
                 }
 
@@ -110,21 +114,8 @@ class BilletFragment : Fragment(), OnItemClickListener<Billet> {
             if (it.alerType == KAlertDialog.SUCCESS_TYPE || it.alerType == KAlertDialog.ERROR_TYPE) {
                 it.dismissWithAnimation()
             } else {
-                deleteBillet(billet, dialog)
-            }
-        }
-    }
-
-    private fun deleteBillet(billet: Billet, dialog: KAlertDialog) {
-        dialog.contentText = "Suppression en cour"
-        dialog.changeAlertType(KAlertDialog.PROGRESS_TYPE)
-
-        billetViewModel.deleteBillet(billet).addOnCompleteListener {
-            if (it.isSuccessful) {
-                dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
-            } else {
-                dialog.contentText = it.exception?.message ?: "Erreur inconnue"
-                dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
+                billetViewModel.deleteBillet(billet)
+                it.changeAlertType(KAlertDialog.SUCCESS_TYPE)
             }
         }
     }

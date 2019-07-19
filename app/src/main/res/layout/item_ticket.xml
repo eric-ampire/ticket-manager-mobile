@@ -11,6 +11,8 @@
         <variable
             name="etat"
             type="org.pbreakers.mobile.getticket.model.entity.Etat" />
+
+        <variable name="userName" type="String" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -21,52 +23,80 @@
         android:layout_height="wrap_content">
 
         <LinearLayout
-            android:padding="10dp"
-            android:gravity="center"
-            android:weightSum="10"
-            android:orientation="horizontal"
+            android:id="@+id/lytCardView"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/lytCardView"
+                android:layout_margin="10dp"
                 android:gravity="left|center"
                 android:padding="10dp"
                 android:textAlignment="gravity"
                 android:layout_weight="9"
+                android:text="@{userName}"
                 android:drawableTint="@color/blue_500"
-                android:drawableStart="@drawable/ic_today_black"
+                android:drawableStart="@drawable/ic_person"
                 android:drawablePadding="16dp"
-                bindDateAndTime="@{ticket.dateBillet}"
                 android:textColor="@android:color/black"
                 android:textStyle="bold"
-                tools:text="Lundi 12/12/2018"
+                tools:text="Eric Ampire"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
-            <TextView
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
-                android:paddingBottom="8dp"
-                android:textStyle="bold"
-                android:textColor="@android:color/white"
-                android:paddingTop="8dp"
-                tools:text="En cours"
-                android:background="@drawable/bg_round_blue"
-                android:text="@{etat.nomEtat}"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <View
+                android:background="@color/green_50"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp" />
 
-            <ImageView
-                android:id="@+id/btnMore"
-                android:layout_weight="1"
-                android:gravity="right|center"
-                android:textAlignment="center"
-                android:padding="8dp"
-                app:srcCompat="@drawable/ic_more_vert"
-                android:layout_width="30dp"
-                android:layout_height="40dp" />
+            <LinearLayout
+                android:padding="10dp"
+                android:gravity="center"
+                android:weightSum="10"
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
+                <TextView
+                    android:gravity="left|center"
+                    android:padding="10dp"
+                    android:textAlignment="gravity"
+                    android:layout_weight="9"
+                    android:drawableTint="@color/blue_500"
+                    android:drawableStart="@drawable/ic_today_black"
+                    android:drawablePadding="16dp"
+                    bindDateAndTime="@{ticket.dateBillet}"
+                    android:textColor="@android:color/black"
+                    tools:text="Lundi 12/12/2018"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
+                    android:paddingBottom="8dp"
+                    android:textStyle="bold"
+                    android:textColor="@android:color/white"
+                    android:paddingTop="8dp"
+                    tools:text="En cours"
+                    android:background="@drawable/bg_round_blue"
+                    android:text="@{etat.nomEtat}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:id="@+id/btnMore"
+                    android:layout_weight="1"
+                    android:gravity="right|center"
+                    android:textAlignment="center"
+                    android:padding="8dp"
+                    app:srcCompat="@drawable/ic_more_vert"
+                    android:layout_width="30dp"
+                    android:layout_height="40dp" />
+
+            </LinearLayout>
         </LinearLayout>
+
+
     </androidx.cardview.widget.CardView>
 </layout>

@@ -25,11 +25,7 @@ class MainViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    private val countBillet: MutableLiveData<Int> by lazy {
-        MutableLiveData<Int>().also {
-            setBilletCount()
-        }
-    }
+    private val countBillet = MutableLiveData<Int>()
 
     private val countVoyage: MutableLiveData<Int> by lazy {
         MutableLiveData<Int>().also {
@@ -46,8 +42,25 @@ class MainViewModel : ViewModel(), KoinComponent {
         userRoleRef.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
             if (firebaseFirestoreException != null && querySnapshot == null) return@addSnapshotListener
 
-            val role = querySnapshot!!.toObject(Role::class.java)
+            val role = querySnapshot!!.toObject(Role::class.java) ?: return@addSnapshotListener
             userRole.postValue(role)
+
+            if (role.idRole == Role.ADMIN) {
+                setAllBilletCount()
+            } else {
+                setBilletCount()
+            }
+        }
+    }
+
+    private fun setAllBilletCount() {
+        val billetRef = db.collection("billets")
+
+        billetRef.addSnapshotListener { querySnapshot, firebaseFirestoreException ->
+            if (firebaseFirestoreException != null && querySnapshot == null) return@addSnapshotListener
+
+            val count = querySnapshot!!.toObjects(Billet::class.java).size
+            countBillet.postValue(count)
         }
     }
 

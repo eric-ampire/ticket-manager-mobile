@@ -108,9 +108,7 @@ class BusFragment : Fragment(), OnItemClickListener<Bus>, Observer<LoadingState>
     }
 
     override fun onClick(view: View, item: Bus, position: Int) {
-
-        val bundle = bundleOf("bus" to item)
-        findNavController(view).navigate(R.id.action_busFragment_to_busDetailFragment, bundle)
+        findNavController(view).navigate(BusFragmentDirections.actionBusFragmentToBusDetailFragment(item))
     }
 
     private fun createPopupMenu(view: View, item: Bus) {

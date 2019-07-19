@@ -3,7 +3,6 @@ package org.pbreakers.mobile.getticket.view.fragment
 
 import android.Manifest
 import android.app.Activity
-import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -15,21 +14,13 @@ import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.Result
 import com.kinda.alert.KAlertDialog
-import io.reactivex.CompletableObserver
-import io.reactivex.SingleObserver
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_scanning.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
-import org.jetbrains.anko.toast
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.model.entity.Billet
 import org.pbreakers.mobile.getticket.model.entity.Etat
@@ -139,78 +130,48 @@ class ScanningFragment : Fragment(), ZXingScannerView.ResultHandler, KoinCompone
     }
 
     private fun isValidTicket(billet: Billet) {
-        val db = FirebaseFirestore.getInstance()
-        val etatRef = db.collection("etats").document(billet.idEtat)
 
-        dialog.run {
-            titleText = "Etat"
-            contentText = "Verification etat billet ..."
-        }
+        when(billet.idEtat) {
 
-        etatRef.get().addOnCompleteListener {
-            if (it.isSuccessful) {
-                val ticketState = it.result?.toObject(Etat::class.java) ?: return@addOnCompleteListener
+            Etat.CONSOMMER -> {
+                dialog.changeAlertType(KAlertDialog.WARNING_TYPE)
+                dialog.contentText = "Ce billet est deja consommer"
+                dialog.titleText = "Erreur"
+            }
 
-                when {
-                    ticketState.nomEtat.contains("consomme", ignoreCase = true) -> {
-                        dialog.changeAlertType(KAlertDialog.WARNING_TYPE)
-                        dialog.contentText = "Ce billet est deja consommer"
-                        dialog.titleText = "Erreur"
-                    }
+            Etat.ATTENTE -> {
+                dialog.changeAlertType(KAlertDialog.WARNING_TYPE)
+                dialog.contentText = "L'administrateur n'a pas encore valider le billet !"
+                dialog.titleText = "Erreur"
+            }
 
-                    ticketState.nomEtat.contains("attente", ignoreCase = true) -> {
-                        dialog.changeAlertType(KAlertDialog.WARNING_TYPE)
-                        dialog.contentText = "L'administrateur n'a pas encore valider le billet !"
-                        dialog.titleText = "Erreur"
-                    }
+            Etat.IN_PROGRESS -> {
+                dialog.dismissWithAnimation()
+                changeTicketStateAndShowDetail(billet)
+            }
 
-                    ticketState.nomEtat.contains("cour", ignoreCase = true) -> {
-                        dialog.dismissWithAnimation()
-                        showDetailBillet(billet)
-                    }
-
-                    else -> {
-                        dialog.run {
-                            dialog.changeAlertType(KAlertDialog.WARNING_TYPE)
-                            titleText = "Etat"
-                            contentText = "Impossible de verifier l'etat du billet ..."
-                        }
-                    }
-                }
-
-            } else {
-                context?.toast(it.exception?.message ?: "Erreur inconnue")
+            else -> {
+                dialog.changeAlertType(KAlertDialog.WARNING_TYPE)
+                dialog.titleText = "Etat"
+                dialog.contentText = "Impossible de verifier l'etat du billet ..."
             }
         }
     }
 
-    private fun showDetailBillet(billet: Billet) {
-        val bundle = bundleOf("billet" to billet)
-        Navigation.findNavController(btnLaunchScanner)
-            .navigate(R.id.action_scanningFragment_to_detailBilletFragment, bundle)
-    }
+    private fun changeTicketStateAndShowDetail(billet: Billet) {
 
-    // Todo: ca ne doit pas etre ici
-    private fun updateEtatBillet(billet: Billet, dialog: KAlertDialog) {
-//        billet.apply { idEtat = 4 }
-//
-//        scannerViewModel.updateBillet(billet)
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .subscribe(object : CompletableObserver {
-//                override fun onComplete() {
-//
-//                }
-//
-//                override fun onSubscribe(d: Disposable) {
-//                }
-//
-//                override fun onError(e: Throwable) {
-//                    dialog.titleText = "Erreur"
-//                    dialog.contentText = e.message
-//                    dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
-//                }
-//            })
+        val task = scannerViewModel.updateBillet(billet)
 
+        task.addOnSuccessListener {
+            val bundle = bundleOf("billet" to billet)
+            Navigation.findNavController(btnLaunchScanner)
+                .navigate(R.id.action_scanningFragment_to_detailBilletFragment, bundle)
+        }
+
+        task.addOnFailureListener {
+            dialog.changeAlertType(KAlertDialog.WARNING_TYPE)
+            dialog.titleText = "Etat"
+            dialog.contentText = "Impossible de modifier l'etat du billet ..."
+        }
     }
 }

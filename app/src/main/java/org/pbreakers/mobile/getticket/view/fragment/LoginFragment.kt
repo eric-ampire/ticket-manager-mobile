@@ -8,16 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import com.kinda.alert.KAlertDialog
-import io.reactivex.MaybeObserver
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.fragment_login.*
 import org.jetbrains.anko.design.snackbar
+import android.text.method.HideReturnsTransformationMethod as ShowPassword
+import android.text.method.PasswordTransformationMethod as HidePassword
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.FragmentLoginBinding
-import org.pbreakers.mobile.getticket.model.entity.Utilisateur
 import org.pbreakers.mobile.getticket.util.modifierDialog
 import org.pbreakers.mobile.getticket.view.activity.MainActivity
 import org.pbreakers.mobile.getticket.viewmodel.AuthViewModel
@@ -55,10 +54,26 @@ class LoginFragment : Fragment() {
             return
         }
 
-        login(view)
+        login()
     }
 
-    private fun login(view: View) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        btnCreateAccount.setOnClickListener {
+            Navigation.findNavController(it).navigate(R.id.action_loginFragment_to_registrationFragment)
+        }
+
+        cbxShowPassword.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                edtPassword.transformationMethod = ShowPassword.getInstance()
+            } else {
+                edtPassword.transformationMethod = HidePassword.getInstance()
+            }
+        }
+    }
+
+    private fun login() {
         val dialog = KAlertDialog(context, KAlertDialog.PROGRESS_TYPE).apply {
             contentText = "Verification en cour.."
             titleText = "Connexion"
@@ -77,6 +92,8 @@ class LoginFragment : Fragment() {
         dialog.setConfirmClickListener {
             if (it.alerType == KAlertDialog.SUCCESS_TYPE) {
                 startActivity(Intent(context, MainActivity::class.java))
+            } else {
+                dialog.dismissWithAnimation()
             }
         }
     }

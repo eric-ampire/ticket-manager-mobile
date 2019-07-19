@@ -11,6 +11,7 @@ import io.reactivex.Single
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import org.pbreakers.mobile.getticket.model.entity.Billet
+import org.pbreakers.mobile.getticket.model.entity.Etat
 import org.pbreakers.mobile.getticket.model.repository.BilletRepository
 
 class ScannerViewModel : ViewModel(), KoinComponent {
@@ -23,8 +24,9 @@ class ScannerViewModel : ViewModel(), KoinComponent {
         return db.collection("billets").document(idBillet).get()
     }
 
-    fun updateBillet(billet: Billet): Completable {
-        // Todo: Implementation
-        TODO()
+    fun updateBillet(billet: Billet): Task<Void> {
+        return db.collection("billets")
+            .document(billet.idBillet)
+            .update("idEtat", Etat.CONSOMMER)
     }
 }

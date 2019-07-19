@@ -31,7 +31,7 @@ class ModifierBusFragment : Fragment() {
 
     private lateinit var binding: FragmentModifierBusBinding
     private val currentBus by lazy {
-        arguments?.getParcelable<Bus>("bus")
+        ModifierBusFragmentArgs.fromBundle(arguments!!).bus
     }
 
     private val modifierBusViewModel by viewModel<ModifierBusViewModel>()

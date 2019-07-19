@@ -80,11 +80,17 @@
         <action
             android:id="@+id/action_detailVoyageFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <argument
+            android:name="voyage"
+            app:argType="org.pbreakers.mobile.getticket.model.entity.Voyage" />
     </fragment>
     <fragment
         android:id="@+id/busDetailFragment"
         android:name="org.pbreakers.mobile.getticket.view.fragment.BusDetailFragment"
-        android:label="Detail Bus" />
+        android:label="Detail Bus" >
+        <argument android:name="bus"
+            app:argType="org.pbreakers.mobile.getticket.model.entity.Bus" />
+    </fragment>
     <fragment
         android:id="@+id/billetFragment"
         android:name="org.pbreakers.mobile.getticket.view.fragment.BilletFragment"
@@ -139,11 +145,18 @@
         <action
             android:id="@+id/action_modifierVoyageFragment_to_homeFragment"
             app:destination="@id/homeFragment" />
+        <argument
+            android:name="voyage"
+            app:argType="org.pbreakers.mobile.getticket.model.entity.Voyage" />
     </fragment>
     <fragment
         android:id="@+id/detailBilletFragment"
         android:name="org.pbreakers.mobile.getticket.view.fragment.DetailBilletFragment"
-        android:label="Detail Billet" />
+        android:label="Detail Billet" >
+        <argument
+            android:name="billet"
+            app:argType="org.pbreakers.mobile.getticket.model.entity.Billet" />
+    </fragment>
     <fragment
         android:id="@+id/modifierBilletFragment"
         android:name="org.pbreakers.mobile.getticket.view.fragment.ModifierBilletFragment"
@@ -152,6 +165,9 @@
         <action
             android:id="@+id/action_modifierBilletFragment_to_billetFragment"
             app:destination="@id/billetFragment" />
+        <argument
+            android:name="billet"
+            app:argType="org.pbreakers.mobile.getticket.model.entity.Billet" />
     </fragment>
     <fragment
         android:id="@+id/modifierBusFragment"
@@ -160,5 +176,8 @@
         <action
             android:id="@+id/action_modifierBusFragment_to_busFragment"
             app:destination="@id/busFragment" />
+        <argument
+            android:name="bus"
+            app:argType="org.pbreakers.mobile.getticket.model.entity.Bus" />
     </fragment>
 </navigation>

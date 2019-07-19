@@ -66,9 +66,8 @@ class HomeFragment : Fragment(), OnItemClickListener<Voyage> {
     }
 
     private fun showVoyageDetailFragment(item: Voyage, view: View) {
-        // Todo: Using constant
-        val bundle = bundleOf("voyage" to item)
-        findNavController(view).navigate(R.id.action_homeFragment_to_detailVoyageFragment, bundle)
+        findNavController(view)
+            .navigate(HomeFragmentDirections.actionHomeFragmentToDetailVoyageFragment(item))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -118,8 +117,8 @@ class HomeFragment : Fragment(), OnItemClickListener<Voyage> {
                 }
 
                 R.id.menu_item_edit -> {
-                    val bundle = bundleOf("voyage" to item)
-                    findNavController(view).navigate(R.id.action_homeFragment_to_modifierVoyageFragment, bundle)
+                    findNavController(view)
+                        .navigate(HomeFragmentDirections.actionHomeFragmentToModifierVoyageFragment(item))
                     true
                 }
 
