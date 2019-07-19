@@ -7,7 +7,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.ui.NavigationUI.*
 import com.google.firebase.auth.FirebaseAuth
@@ -17,12 +16,15 @@ import kotlinx.android.synthetic.main.header_drawer.*
 import org.jetbrains.anko.startActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.KoinComponent
+import org.koin.core.inject
 import org.pbreakers.mobile.getticket.R
+import org.pbreakers.mobile.getticket.util.*
 import org.pbreakers.mobile.getticket.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity(), KoinComponent {
 
     private val mainViewModel by viewModel<MainViewModel>()
+    private val session by inject<Session>()
 
     private val navController by lazy {
         findNavController(this, R.id.navHostFragment)
@@ -109,29 +111,33 @@ class MainActivity : AppCompatActivity(), KoinComponent {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_logout -> {
-                val dialog = KAlertDialog(this, KAlertDialog.WARNING_TYPE).apply {
-                    titleText = "Deconnexion"
-                    confirmText = "Deconnecter"
-                    contentText = "Etes vous sur de vouloir vous deconnectez ?"
-                    show()
-                }
 
-                dialog.setConfirmClickListener {
-                    if (it.alerType == KAlertDialog.WARNING_TYPE) {
-                        it.changeAlertType(KAlertDialog.SUCCESS_TYPE)
-                    }
-
-                    if (it.alerType == KAlertDialog.SUCCESS_TYPE) {
-                        FirebaseAuth.getInstance().signOut()
-                        finish()
-
-                        startActivity<AuthActivity>()
-                    }
-                }
+                logout()
             }
 
             else -> onNavDestinationSelected(item, navController)
         }
         return true
+    }
+
+    private fun logout() {
+        val dialog = getDialogInstance(this).apply {
+            dialogWarning("Etes vous sur de vouloir vous deconnectez ?")
+            setCancelable(false)
+            show()
+        }
+
+        dialog.setConfirmClickListener {
+            if (it.alerType == KAlertDialog.WARNING_TYPE) {
+                it.dialogSuccess("Deconnexion success")
+                FirebaseAuth.getInstance().signOut()
+                session.destroy()
+
+            } else if (it.alerType == KAlertDialog.SUCCESS_TYPE) {
+
+                finish()
+                startActivity<AuthActivity>()
+            }
+        }
     }
 }
