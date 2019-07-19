@@ -18,7 +18,7 @@ import java.util.*
 //)
 @Parcelize
 data class Billet(
-    val idBillet: String = "",
+    var idBillet: String = "",
     val dateBillet: Date = Date(),
     val idVoyage: String = "",
     val idUtilisateur: String = "",

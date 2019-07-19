@@ -14,6 +14,7 @@ data class Etat(
     override fun toString(): String = nomEtat
 
     companion object {
+        const val CONSOMMER = "consommer"
         const val IN_PROGRESS = "progress"
         const val UNAVAILABLE = "unvailable"
         const val FINISHED = "finished"
