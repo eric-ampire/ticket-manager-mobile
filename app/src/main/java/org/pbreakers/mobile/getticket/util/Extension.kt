@@ -1,5 +1,6 @@
 package org.pbreakers.mobile.getticket.util
 
+import android.content.Context
 import android.widget.EditText
 import android.widget.Spinner
 import com.kinda.alert.KAlertDialog
@@ -13,6 +14,35 @@ fun KAlertDialog.modifierDialog(type: Int, title: String, content: String) {
     changeAlertType(type)
     contentText = content
     titleText = title
+}
+
+// Todo: i18n
+fun KAlertDialog.dialogSuccess(message: String) {
+    changeAlertType(KAlertDialog.SUCCESS_TYPE)
+    contentText = message
+    titleText = "Success"
+}
+
+fun getDialogInstance(context: Context): KAlertDialog {
+    return KAlertDialog(context, KAlertDialog.WARNING_TYPE)
+}
+
+fun KAlertDialog.dialogError(message: String) {
+    changeAlertType(KAlertDialog.ERROR_TYPE)
+    contentText = message
+    titleText = "Erreur"
+}
+
+fun KAlertDialog.dialogProgress(message: String) {
+    changeAlertType(KAlertDialog.PROGRESS_TYPE)
+    contentText = message
+    titleText = "Chargement"
+}
+
+fun KAlertDialog.dialogWarning(message: String) {
+    changeAlertType(KAlertDialog.WARNING_TYPE)
+    contentText = message
+    titleText = "Avertissement"
 }
 
 fun EditText.isInvalidInput(errorMessage: String): Boolean {
