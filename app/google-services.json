@@ -42,6 +42,122 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891741422001:android:7bfbfc8fcfa46fd6",
+        "android_client_info": {
+          "package_name": "org.pbreakers.mobile.getticket.admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "891741422001-7uh8baouo31tc65t1kq3olc6kcqb1qtt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzTTcX8D0ptz-XzMEntvfMHCVLyWPzYKI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "891741422001-7uh8baouo31tc65t1kq3olc6kcqb1qtt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891741422001:android:72ca485fecbbb91d",
+        "android_client_info": {
+          "package_name": "org.pbreakers.mobile.getticket.client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "891741422001-7uh8baouo31tc65t1kq3olc6kcqb1qtt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzTTcX8D0ptz-XzMEntvfMHCVLyWPzYKI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "891741422001-7uh8baouo31tc65t1kq3olc6kcqb1qtt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891741422001:android:4802ed70acb7cc34",
+        "android_client_info": {
+          "package_name": "org.pbreakers.mobile.getticket.hotesse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "891741422001-7uh8baouo31tc65t1kq3olc6kcqb1qtt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzTTcX8D0ptz-XzMEntvfMHCVLyWPzYKI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "891741422001-7uh8baouo31tc65t1kq3olc6kcqb1qtt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:891741422001:android:abdfc70a9a861ce3",
+        "android_client_info": {
+          "package_name": "org.pbreakers.mobile.getticket.local"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "891741422001-7uh8baouo31tc65t1kq3olc6kcqb1qtt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCzTTcX8D0ptz-XzMEntvfMHCVLyWPzYKI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "891741422001-7uh8baouo31tc65t1kq3olc6kcqb1qtt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
     }
   ],
   "configuration_version": "1"

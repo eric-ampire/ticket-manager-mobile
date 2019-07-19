@@ -119,3 +119,36 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:20.1.0'
     implementation 'com.google.firebase:firebase-messaging:19.0.1'
 }
+
+android {
+    flavorDimensions "mode"
+    productFlavors {
+        admin {
+            versionCode 30000 + android.defaultConfig.versionCode
+            dimension "mode"
+            applicationIdSuffix ".admin"
+            versionNameSuffix "-admin"
+        }
+
+        client {
+            versionCode 20000 + android.defaultConfig.versionCode
+            dimension "mode"
+            applicationIdSuffix ".client"
+            versionNameSuffix "-client"
+        }
+
+        local {
+            versionCode 10000 + android.defaultConfig.versionCode
+            dimension "mode"
+            applicationIdSuffix ".local"
+            versionNameSuffix "-local"
+        }
+
+        hotesse {
+            versionCode 40000 + android.defaultConfig.versionCode
+            dimension "mode"
+            applicationIdSuffix ".hotesse"
+            versionNameSuffix "-hotesse"
+        }
+    }
+}
