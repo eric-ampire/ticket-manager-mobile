@@ -19,7 +19,7 @@ import org.pbreakers.mobile.getticket.viewmodel.DetailBilletViewModel
 class DetailBilletFragment : Fragment() {
 
     private val currentBillet by lazy {
-        arguments?.getParcelable<Billet>("billet")
+        DetailBilletFragmentArgs.fromBundle(arguments!!).billet
     }
 
     private val detailBilletViewModel: DetailBilletViewModel by viewModel()

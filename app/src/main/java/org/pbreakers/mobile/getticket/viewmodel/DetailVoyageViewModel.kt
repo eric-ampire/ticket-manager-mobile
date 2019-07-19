@@ -2,6 +2,7 @@ package org.pbreakers.mobile.getticket.viewmodel
 
 import androidx.databinding.ObservableField
 import androidx.lifecycle.ViewModel
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import io.reactivex.Completable
 import io.reactivex.Maybe
@@ -67,6 +68,16 @@ class DetailVoyageViewModel : ViewModel(), KoinComponent {
                 }
             }
         }
+    }
+
+    fun saveTicket(ticket: Billet): Task<Void> {
+        // Find current user
+        val db = FirebaseFirestore.getInstance()
+        val billetRef = db.collection("billets").document()
+
+        ticket.idBillet = billetRef.id
+
+        return billetRef.set(ticket)
     }
 
     private fun findEtatById(id: String) {

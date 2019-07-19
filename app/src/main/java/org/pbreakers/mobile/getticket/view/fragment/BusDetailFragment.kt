@@ -17,7 +17,7 @@ import org.pbreakers.mobile.getticket.viewmodel.BusDetailViewModel
 class BusDetailFragment : Fragment() {
 
     private val currentBus: Bus? by lazy {
-        arguments?.getParcelable<Bus>("bus")
+        BusDetailFragmentArgs.fromBundle(arguments!!).bus
     }
 
     private val detailBusViewModel: BusDetailViewModel by viewModel()
@@ -33,9 +33,9 @@ class BusDetailFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         val binding by lazy {
-            inflate<FragmentBusDetailBinding>(inflater, R.layout.fragment_bus_detail, container, false).apply {
-                this.bus = currentBus
-                this.viewModel = detailBusViewModel
+            FragmentBusDetailBinding.inflate(inflater).apply {
+                bus = currentBus
+                viewModel = detailBusViewModel
                 lifecycleOwner = viewLifecycleOwner
             }
         }

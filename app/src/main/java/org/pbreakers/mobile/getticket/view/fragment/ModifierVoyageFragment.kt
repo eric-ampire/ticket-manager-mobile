@@ -28,7 +28,7 @@ class ModifierVoyageFragment : Fragment() {
 
     private lateinit var binding: FragmentModifierVoyageBinding
     private val currentVoyage by lazy {
-        arguments?.getParcelable<Voyage>("voyage")
+        ModifierVoyageFragmentArgs.fromBundle(arguments!!).voyage
     }
 
     private val modifierVoyageViewModel by viewModel<ModifierVoyageViewModel>()
@@ -38,7 +38,7 @@ class ModifierVoyageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = inflate<FragmentModifierVoyageBinding>(inflater, R.layout.fragment_modifier_voyage, container, false).apply {
+        binding = FragmentModifierVoyageBinding.inflate(inflater).apply {
             lifecycleOwner = viewLifecycleOwner
             voyage = currentVoyage
             viewModel = modifierVoyageViewModel
@@ -56,7 +56,7 @@ class ModifierVoyageFragment : Fragment() {
 
     private fun initUpdateVoyage(fab: View) {
 
-        if (voyageInputInvalid() || currentVoyage == null) return
+        if (voyageInputInvalid()) return
 
         val bus = spinnerBusVoyage.selectedItem as Bus
         val destination = spinnerDestiVoyage.selectedItem as Lieu
@@ -65,7 +65,7 @@ class ModifierVoyageFragment : Fragment() {
         val etat = spinnerEtatVoyage.selectedItem as Etat
 
         val voyage = Voyage(
-            idVoyage = currentVoyage!!.idVoyage,
+            idVoyage = currentVoyage.idVoyage,
             referenceVoyage = edtRefVoyage.text.toString().trim(),
             idBus = bus.idBus,
             idProvenance = provenance.idLieu,
@@ -96,7 +96,8 @@ class ModifierVoyageFragment : Fragment() {
 
             if (dialog.alerType == KAlertDialog.SUCCESS_TYPE) {
                 dialog.dismissWithAnimation()
-                findNavController(fab).navigate(R.id.action_modifierVoyageFragment_to_homeFragment)
+                findNavController(fab)
+                    .navigate(ModifierBilletFragmentDirections.actionModifierBilletFragmentToBilletFragment())
             }
 
             if (dialog.alerType == KAlertDialog.ERROR_TYPE) {
@@ -165,7 +166,7 @@ class ModifierVoyageFragment : Fragment() {
             edtDateDepartVoyage.isInvalidInput(getString(R.string.input_empty))   -> true
             edtHeureArriveVoyage.isInvalidInput(getString(R.string.input_empty))  -> true
             edtDateDestiVoyage.isInvalidInput(getString(R.string.input_empty))    -> true
-            edtPrixVoyage.isInvalidInput(getString(R.string.input_empty))          -> true
+            edtPrixVoyage.isInvalidInput(getString(R.string.input_empty))         -> true
 
             else -> false
         }

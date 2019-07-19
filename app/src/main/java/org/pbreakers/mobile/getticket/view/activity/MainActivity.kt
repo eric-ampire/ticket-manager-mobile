@@ -3,25 +3,21 @@ package org.pbreakers.mobile.getticket.view.activity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.TextView
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import androidx.lifecycle.get
 import androidx.navigation.Navigation
-import androidx.navigation.ui.NavigationUI.setupWithNavController
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.ui.NavigationUI.*
 import com.google.firebase.auth.FirebaseAuth
+import com.kinda.alert.KAlertDialog
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.header_drawer.*
+import org.jetbrains.anko.startActivity
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import org.pbreakers.mobile.getticket.R
-import org.pbreakers.mobile.getticket.model.entity.Role
-import org.pbreakers.mobile.getticket.util.Session
 import org.pbreakers.mobile.getticket.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity(), KoinComponent {
@@ -29,36 +25,34 @@ class MainActivity : AppCompatActivity(), KoinComponent {
     private val mainViewModel by viewModel<MainViewModel>()
 
     private val navController by lazy {
-        Navigation.findNavController(this, R.id.navHostFragment)
+        findNavController(this, R.id.navHostFragment)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        initToolbar()
         setupDrawerLayout()
     }
 
     private fun setupDrawerLayout() {
-        setSupportActionBar(mainToolbar)
-        val toggle = object :
-            ActionBarDrawerToggle(this, drawerLayout, mainToolbar, R.string.open_drawer, R.string.close_drawer) {
-            override fun onDrawerOpened(drawerView: View) {
-                super.onDrawerOpened(drawerView)
-                loadUserInfo()
-            }
-        }
 
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
+        loadUserInfo()
 
         // Connect listener to navigation view
         setupWithNavController(navigationView, navController)
+        setupActionBarWithNavController(this, navController, drawerLayout)
+    }
 
-        // Change title
-        navController.addOnDestinationChangedListener { _, destination, _ ->
-            supportActionBar?.subtitle = destination.label
-        }
+    private fun initToolbar() {
+        setSupportActionBar(mainToolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeButtonEnabled(true)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        return navigateUp(navController, drawerLayout)
     }
 
     private fun loadUserInfo() {
@@ -113,10 +107,31 @@ class MainActivity : AppCompatActivity(), KoinComponent {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            R.id.aboutFragment -> navController.navigate(R.id.action_homeFragment_to_aboutFragment)
-//            R.id.settingFragment -> navController.navigate(R.id.action_homeFragment_to_settingFragment)
-//        }
+        when (item.itemId) {
+            R.id.menu_logout -> {
+                val dialog = KAlertDialog(this, KAlertDialog.WARNING_TYPE).apply {
+                    titleText = "Deconnexion"
+                    confirmText = "Deconnecter"
+                    contentText = "Etes vous sur de vouloir vous deconnectez ?"
+                    show()
+                }
+
+                dialog.setConfirmClickListener {
+                    if (it.alerType == KAlertDialog.WARNING_TYPE) {
+                        it.changeAlertType(KAlertDialog.SUCCESS_TYPE)
+                    }
+
+                    if (it.alerType == KAlertDialog.SUCCESS_TYPE) {
+                        FirebaseAuth.getInstance().signOut()
+                        finish()
+
+                        startActivity<AuthActivity>()
+                    }
+                }
+            }
+
+            else -> onNavDestinationSelected(item, navController)
+        }
         return true
     }
 }

@@ -29,14 +29,27 @@ fun bindImageUrl(imageView: ImageView, url: String?, placeholder: Drawable) {
 }
 
 @BindingAdapter(value = ["setAdapter"])
-fun bindSpinnerAdapter(spinner: Spinner, data: List<*>?) {
+fun Spinner.bindSpinnerAdapter(data: List<*>?) {
 
     if (data == null) return
 
-    ArrayAdapter(spinner.context, android.R.layout.simple_spinner_item, data).run {
+    ArrayAdapter(context, android.R.layout.simple_spinner_item, data).run {
         setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = this
+        adapter = this
     }
+}
+
+@BindingAdapter(value = ["setData", "currentItem"], requireAll = true)
+fun Spinner.bindSpinnerData(data: List<*>?, currentItem: Any) {
+
+    if (data == null) return
+
+    ArrayAdapter(context, android.R.layout.simple_spinner_item, data).run {
+        setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        adapter = this
+    }
+
+    setSelection(data.indexOf(currentItem), true)
 }
 
 @BindingAdapter(value = ["bindDate"])

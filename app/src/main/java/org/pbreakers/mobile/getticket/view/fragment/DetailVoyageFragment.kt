@@ -31,7 +31,7 @@ class DetailVoyageFragment : Fragment(), KoinComponent {
 
     // Todo: You have to use the constant
     private val currentVoyage by lazy {
-        arguments?.getParcelable<Voyage>("voyage")
+        DetailVoyageFragmentArgs.fromBundle(arguments!!).voyage
     }
 
     private val detailVoyageViewModel: DetailVoyageViewModel by viewModel()
