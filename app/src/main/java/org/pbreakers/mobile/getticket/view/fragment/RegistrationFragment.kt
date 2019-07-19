@@ -5,21 +5,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil.inflate
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.kinda.alert.KAlertDialog
-import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.fragment_registration.*
-import kotlinx.android.synthetic.main.fragment_registration.cbxShowPassword
-import kotlinx.android.synthetic.main.fragment_registration.edtPassword
 import org.koin.androidx.viewmodel.ext.android.viewModel
-
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.FragmentRegistrationBinding
-import org.pbreakers.mobile.getticket.util.isInvalidInput
+import org.pbreakers.mobile.getticket.util.*
 import org.pbreakers.mobile.getticket.view.activity.MainActivity
 import org.pbreakers.mobile.getticket.viewmodel.AuthViewModel
 
@@ -31,10 +27,33 @@ class RegistrationFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = inflate<FragmentRegistrationBinding>(inflater, R.layout.fragment_registration, container, false).apply {
+        val binding = FragmentRegistrationBinding.inflate(inflater).apply {
             viewModel = authViewModel
             lifecycleOwner = viewLifecycleOwner
         }
+
+        val dialog = getDialogInstance(requireContext()).apply {
+            dialogProgress("Opération en cour d'execution")
+            setCancelable(false)
+        }
+
+        dialog.setConfirmClickListener {
+            if (it.alerType == KAlertDialog.SUCCESS_TYPE) {
+                dialog.dismissWithAnimation()
+                startActivity(Intent(activity, MainActivity::class.java))
+                requireActivity().finish()
+            } else {
+                dialog.dismissWithAnimation()
+            }
+        }
+
+        authViewModel.loadingState.observe(this, Observer {
+            when (it.status) {
+                LoadingState.Status.RUNNING -> dialog.show()
+                LoadingState.Status.ERROR -> dialog.dialogError(it.message ?: "Probleme inconnue !")
+                LoadingState.Status.LOADED -> dialog.dialogSuccess("Authentification success")
+            }
+        })
 
         return binding.root
     }
@@ -67,30 +86,6 @@ class RegistrationFragment : Fragment() {
     }
 
     private fun signUp() {
-        val dialog = KAlertDialog(context, KAlertDialog.PROGRESS_TYPE).apply {
-            titleText = "Sign Up"
-            contentText = "Operation en cour d'execution"
-            setCancelable(false)
-            show()
-        }
-
-        authViewModel.signUp({
-            dialog.changeAlertType(KAlertDialog.SUCCESS_TYPE)
-
-        }) {
-            dialog.changeAlertType(KAlertDialog.ERROR_TYPE)
-            dialog.titleText = "Erreur"
-            dialog.contentText = it
-        }
-
-        dialog.setConfirmClickListener {
-            if (it.alerType == KAlertDialog.SUCCESS_TYPE) {
-                dialog.dismissWithAnimation()
-                startActivity(Intent(activity, MainActivity::class.java))
-                activity?.finish()
-            } else {
-                dialog.dismissWithAnimation()
-            }
-        }
+        authViewModel.signUp()
     }
 }
