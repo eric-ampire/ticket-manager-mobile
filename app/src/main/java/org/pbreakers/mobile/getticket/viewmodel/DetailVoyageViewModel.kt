@@ -1,5 +1,6 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -46,8 +47,8 @@ class DetailVoyageViewModel : ViewModel(), KoinComponent {
     private fun findProvenanceById(id: String) {
         val lieuRef = db.collection("lieux").document(id)
         lieuRef.addSnapshotListener { snapshot, exception ->
-            if (exception != null || snapshot == null) {
-                _prov.value = snapshot!!.toObject(Lieu::class.java)?.nomLieu
+            if (exception == null && snapshot?.exists() != null) {
+                _prov.value = snapshot.toObject(Lieu::class.java)?.nomLieu
             }
         }
     }
@@ -55,8 +56,8 @@ class DetailVoyageViewModel : ViewModel(), KoinComponent {
     private fun findDestinationById(id: String) {
         val lieuRef = db.collection("lieux").document(id)
         lieuRef.addSnapshotListener { snapshot, exception ->
-            if (exception != null || snapshot == null) {
-                _desti.value = snapshot!!.toObject(Lieu::class.java)?.nomLieu
+            if (exception == null && snapshot?.exists() != null) {
+                _desti.value = snapshot.toObject(Lieu::class.java)?.nomLieu
             }
         }
     }
@@ -64,12 +65,12 @@ class DetailVoyageViewModel : ViewModel(), KoinComponent {
     private fun findBusById(id: String) {
         val busRef = db.collection("bus").document(id)
         busRef.addSnapshotListener { snapshot, exception ->
-            if (exception != null || snapshot == null) {
-                val currentBus = snapshot!!.toObject(Bus::class.java) ?: return@addSnapshotListener
+            if (exception == null && snapshot?.exists() != null) {
+                val currentBus = snapshot.toObject(Bus::class.java) ?: return@addSnapshotListener
                 val agenceRef = db.collection("agences").document(currentBus.idAgence)
                 agenceRef.addSnapshotListener { snapshotAgence, exceptionAgence ->
-                    if (exceptionAgence != null || snapshotAgence == null) {
-                        val currentAgence = snapshotAgence!!.toObject(Agence::class.java)
+                    if (exceptionAgence == null && snapshotAgence?.exists() != null) {
+                        val currentAgence = snapshotAgence.toObject(Agence::class.java)
                         _bus.value = currentBus.nomBus
                         _agence.value = currentAgence?.nomAgence
                     }
@@ -91,8 +92,8 @@ class DetailVoyageViewModel : ViewModel(), KoinComponent {
 
         val etatRef = db.collection("etats").document(id)
         etatRef.addSnapshotListener { snapshot, exception ->
-            if (exception != null || snapshot == null) {
-                _etat.value = snapshot!!.toObject(Etat::class.java)?.nomEtat
+            if (exception == null && snapshot?.exists() != null) {
+                _etat.value = snapshot.toObject(Etat::class.java)?.nomEtat
             }
         }
     }
