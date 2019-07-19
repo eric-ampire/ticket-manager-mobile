@@ -112,6 +112,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="-4dp"
                             android:layout_marginRight="-4dp"
+                            android:id="@+id/edtPassword"
                             android:inputType="textPassword"
                             android:maxLength="50"
                             android:text="@={viewModel.password}"
@@ -127,12 +128,13 @@
                             android:layout_height="@dimen/spacing_middle" />
 
                         <androidx.appcompat.widget.AppCompatCheckBox
+                            android:id="@+id/cbxShowPassword"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="-4dp"
                             android:layout_marginTop="@dimen/spacing_middle"
                             android:layout_marginRight="-4dp"
-                            android:text="Keep me Signed in"
+                            android:text="Afficher mot de passe"
                             android:textColor="@color/blue_600"
                             android:textStyle="bold"
                             android:theme="@style/Checkbox.Blue" />
@@ -142,17 +144,18 @@
                             android:layout_height="@dimen/spacing_middle" />
 
                         <TextView
-                            android:id="@+id/forgot_password"
+                            android:padding="10dp"
+                            android:id="@+id/btnCreateAccount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="right|end"
                             android:layout_marginTop="@dimen/spacing_medium"
                             android:clickable="true"
                             android:focusable="true"
-                            android:text="Forgot Password ?"
+                            android:text="Creez un compte"
                             android:textAlignment="center"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                            android:textColor="@color/grey_20"
+                            android:textColor="@color/blue_600"
                             android:textStyle="bold" />
 
                     </LinearLayout>
