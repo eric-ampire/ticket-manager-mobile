@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Get Ticket Admin</string>
+    <string name="open_drawer">Open</string>
+    <string name="close_drawer">Close</string>
+
+    <string name="HIDE">Cacher</string>
+    <string name="SAVE">Enreg.</string>
+    <string name="lbl_nom">Nom</string>
+    <string name="input_empty">Le champ ne doit pas etre vide</string>
+    <string name="password_wrong">Le mot de passe ne correspond pas</string>
+    <string name="provenance_prompte">Provenance</string>
+    <string name="medium_lorem_ipsum">Quisque imperdiet nunc at massa dictum volutpat. Etiam id orci ipsum. Integer id ex dignissim</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="date_format">dd/MM/yyyy</string>
+    <string name="datetime_format">dd/MM/yyyy à HH:mm</string>
+    <string name="time_format">HH:mm</string>
+
+</resources>
