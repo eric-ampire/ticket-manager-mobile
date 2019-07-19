@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.databinding.DataBindingUtil.inflate
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -41,7 +42,7 @@ class EnregFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        binding = inflate<FragmentEnregBinding>(inflater, R.layout.fragment_enreg, container, false).apply {
+        binding = FragmentEnregBinding.inflate(inflater).apply {
             lifecycleOwner = this@EnregFragment
             viewModel = enregViewModel
         }
@@ -328,8 +329,6 @@ class EnregFragment : Fragment() {
 
             val userRef = db.collection("users").document()
 
-
-
             val role = binding.edtRoleUser.selectedItem as Role
             val user = Utilisateur(
                 userRef.id,
@@ -339,23 +338,17 @@ class EnregFragment : Fragment() {
                 role.idRole
             )
 
-//            val authTask = FirebaseAuth.getInstance().signInWithEmailAndPassword(user.pseudoUtilisateur, user.passwordUtilisateur)
-//            authTask.addOnCompleteListener {
-//                if ()
-//            }
-//
-//            userRef.set
-
-            // Todo: Show progress bar
-//            enregViewModel.saveUser(user) {
-//                cleanText(edtNomUser, edtPseudoUser, edtPasswordUser, edtPasswordConfirmUser)
-//
-//                toggleSection(view.btnToggleUser, view.lytExpandUser, nestedScrollView)
-//                context?.toast("Success")
-//            }
-
-            view.snackbar("Success")
-            toggleSection(view.btnToggleUser, view.lytExpandUser, nestedScrollView)
+            enregViewModel.createUser(user)
+            enregViewModel.loadingState.observe(this, Observer {
+                when (it.status) {
+                    LoadingState.Status.RUNNING -> showProgressDialog()
+                    LoadingState.Status.ERROR -> errorDialog(it.message)
+                    LoadingState.Status.LOADED -> {
+                        successDialog()
+                        toggleSection(view.btnToggleUser, view.lytExpandUser, nestedScrollView)
+                    }
+                }
+            })
         }
     }
 
