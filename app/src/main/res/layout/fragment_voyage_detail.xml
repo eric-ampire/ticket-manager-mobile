@@ -65,7 +65,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:textStyle="bold"
-                                android:text="@{viewModel.etat.get()}"
+                                android:text="@{viewModel.etat}"
                                 tools:text="Disponible"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                                 android:textColor="@color/blue_500" />
@@ -276,7 +276,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="@{viewModel.prov.get()}"
+                                        android:text="@{viewModel.prov}"
                                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                         android:textColor="@color/grey_80" />
 
@@ -303,7 +303,7 @@
                                     <TextView
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
-                                        android:text="@{viewModel.desti.get()}"
+                                        android:text="@{viewModel.desti}"
                                         android:textAppearance="@style/TextAppearance.AppCompat.Small"
                                         android:textColor="@color/grey_80" />
 
@@ -415,7 +415,7 @@
                                     android:paddingLeft="8dp"
                                     android:gravity="left|center"
                                     tools:text="Mulikap"
-                                    android:text="@{viewModel.agence.get()}"
+                                    android:text="@{viewModel.agence}"
                                     android:background="@color/grey_5"
                                     android:textColor="@color/grey_60" />
 
@@ -443,7 +443,7 @@
                                     android:paddingStart="8dp"
                                     android:gravity="left|center"
                                     tools:text="Mulikap"
-                                    android:text="@{viewModel.bus.get()}"
+                                    android:text="@{viewModel.bus}"
                                     android:background="@color/grey_5"
                                     android:textColor="@color/grey_60" />
 

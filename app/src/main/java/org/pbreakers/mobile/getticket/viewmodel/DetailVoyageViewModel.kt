@@ -1,15 +1,12 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
-import androidx.databinding.ObservableField
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
-import io.reactivex.Completable
-import io.reactivex.Maybe
 import org.koin.core.KoinComponent
-import org.koin.core.inject
 import org.pbreakers.mobile.getticket.model.entity.*
-import org.pbreakers.mobile.getticket.model.repository.*
 
 class DetailVoyageViewModel : ViewModel(), KoinComponent {
 
@@ -19,11 +16,25 @@ class DetailVoyageViewModel : ViewModel(), KoinComponent {
 
     lateinit var voyage: Voyage
 
-    val prov   = ObservableField<String>()
-    val desti  = ObservableField<String>()
-    val etat   = ObservableField<String>()
-    val bus    = ObservableField<String>()
-    val agence = ObservableField<String>()
+    private val _prov = MutableLiveData<String>()
+    val prov: LiveData<String>
+        get() = _prov
+
+    private val _desti = MutableLiveData<String>()
+    val desti: LiveData<String>
+        get() = _desti
+
+    private val _etat = MutableLiveData<String>()
+    val etat: LiveData<String>
+        get() = _etat
+
+    private val _bus = MutableLiveData<String>()
+    val bus: LiveData<String>
+        get() = _bus
+
+    private val _agence = MutableLiveData<String>()
+    val agence: LiveData<String>
+        get() = _agence
 
     fun init() {
         findDestinationById(voyage.idDestination)
@@ -34,37 +45,34 @@ class DetailVoyageViewModel : ViewModel(), KoinComponent {
 
     private fun findProvenanceById(id: String) {
         val lieuRef = db.collection("lieux").document(id)
-        lieuRef.get().addOnSuccessListener {
-            val currentLieu = it.toObject(Lieu::class.java) ?: return@addOnSuccessListener
-            prov.set(currentLieu.nomLieu)
-        }.addOnFailureListener {
-
+        lieuRef.addSnapshotListener { snapshot, exception ->
+            if (exception != null || snapshot == null) {
+                _prov.value = snapshot!!.toObject(Lieu::class.java)?.nomLieu
+            }
         }
     }
 
     private fun findDestinationById(id: String) {
         val lieuRef = db.collection("lieux").document(id)
-        lieuRef.get().addOnSuccessListener {
-            val currentLieu = it.toObject(Lieu::class.java) ?: return@addOnSuccessListener
-            desti.set(currentLieu.nomLieu)
-        }.addOnFailureListener {
-
+        lieuRef.addSnapshotListener { snapshot, exception ->
+            if (exception != null || snapshot == null) {
+                _desti.value = snapshot!!.toObject(Lieu::class.java)?.nomLieu
+            }
         }
     }
 
     private fun findBusById(id: String) {
-        // Todo: run transaction
         val busRef = db.collection("bus").document(id)
-        busRef.get().addOnSuccessListener {
-            val currentBus = it.toObject(Bus::class.java) ?: return@addOnSuccessListener
-
-            val agenceRef = db.collection("agences").document(currentBus.idAgence)
-            agenceRef.get().addOnSuccessListener { doc ->
-                val currentAgence = doc.toObject(Agence::class.java)
-
-                if (currentAgence != null) {
-                    bus.set(currentBus.nomBus)
-                    agence.set(currentAgence.nomAgence)
+        busRef.addSnapshotListener { snapshot, exception ->
+            if (exception != null || snapshot == null) {
+                val currentBus = snapshot!!.toObject(Bus::class.java) ?: return@addSnapshotListener
+                val agenceRef = db.collection("agences").document(currentBus.idAgence)
+                agenceRef.addSnapshotListener { snapshotAgence, exceptionAgence ->
+                    if (exceptionAgence != null || snapshotAgence == null) {
+                        val currentAgence = snapshotAgence!!.toObject(Agence::class.java)
+                        _bus.value = currentBus.nomBus
+                        _agence.value = currentAgence?.nomAgence
+                    }
                 }
             }
         }
@@ -72,7 +80,6 @@ class DetailVoyageViewModel : ViewModel(), KoinComponent {
 
     fun saveTicket(ticket: Billet): Task<Void> {
         // Find current user
-        val db = FirebaseFirestore.getInstance()
         val billetRef = db.collection("billets").document()
 
         ticket.idBillet = billetRef.id
@@ -83,11 +90,10 @@ class DetailVoyageViewModel : ViewModel(), KoinComponent {
     private fun findEtatById(id: String) {
 
         val etatRef = db.collection("etats").document(id)
-        etatRef.get().addOnSuccessListener {
-            val currentEtat = it.toObject(Etat::class.java) ?: return@addOnSuccessListener
-            etat.set(currentEtat.nomEtat)
-        }.addOnFailureListener {
-
+        etatRef.addSnapshotListener { snapshot, exception ->
+            if (exception != null || snapshot == null) {
+                _etat.value = snapshot!!.toObject(Etat::class.java)?.nomEtat
+            }
         }
     }
 }
