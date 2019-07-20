@@ -1,0 +1,59 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!-- Todo: i18n -->
+    <group
+        android:id="@+id/grp_1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/homeFragment"
+            android:icon="@drawable/ic_home"
+            app:actionLayout="@layout/badge_navigation_colored"
+            android:title="Voyage" />
+    </group>
+    <group
+        android:id="@+id/grp_2"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/busFragment"
+            android:icon="@drawable/ic_directions_bus"
+            android:title="Bus"
+            app:actionLayout="@layout/badge_navigation_colored" />
+        <item
+            android:id="@+id/billetFragment"
+            android:icon="@drawable/ic_receipt_black"
+            android:title="Billets"
+            app:actionLayout="@layout/badge_navigation_colored" />
+        <item
+            android:id="@+id/rechercheFragment"
+            android:icon="@drawable/ic_search"
+            android:title="Recherche" />
+    </group>
+
+    <item
+        android:checkableBehavior="single"
+        android:title="Checking">
+        <group
+            android:id="@+id/grp_4"
+            android:checkableBehavior="single">
+            <item
+                android:id="@+id/enregFragment"
+                android:icon="@drawable/ic_edit_black"
+                android:title="Enregistrement" />
+        </group>
+    </item>
+
+    <group
+        android:id="@+id/grp_5"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/settingFragment"
+            android:icon="@drawable/ic_settings"
+            android:title="Settings" />
+
+        <item
+            android:id="@+id/aboutFragment"
+            android:icon="@drawable/ic_help"
+            android:title="A propos" />
+    </group>
+</menu>
