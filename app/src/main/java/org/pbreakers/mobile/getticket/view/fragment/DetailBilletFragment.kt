@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fragment_detail_billet.view.*
 import net.glxn.qrgen.android.QRCode
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import org.pbreakers.mobile.getticket.R
 import org.pbreakers.mobile.getticket.databinding.FragmentDetailBilletBinding
 import org.pbreakers.mobile.getticket.model.entity.Billet
@@ -22,22 +23,19 @@ class DetailBilletFragment : Fragment() {
         DetailBilletFragmentArgs.fromBundle(arguments!!).billet
     }
 
-    private val detailBilletViewModel: DetailBilletViewModel by viewModel()
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+        val detailBilletViewModel: DetailBilletViewModel by viewModel {
+            parametersOf(currentBillet)
+        }
+
         val binding by lazy {
-            inflate<FragmentDetailBilletBinding>(inflater, R.layout.fragment_detail_billet, container, false).apply {
+            FragmentDetailBilletBinding.inflate(inflater).apply {
                 viewModel = detailBilletViewModel
                 lifecycleOwner = viewLifecycleOwner
             }
-        }
-
-        detailBilletViewModel.run {
-            billet = currentBillet!!
         }
 
         return binding.root
@@ -45,7 +43,7 @@ class DetailBilletFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val qrCodeBitmap = QRCode.from(currentBillet!!.idBillet).bitmap()
+        val qrCodeBitmap = QRCode.from(currentBillet.idBillet).bitmap()
         view.ivQrCodeBillet.setImageBitmap(qrCodeBitmap)
     }
 }

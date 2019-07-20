@@ -10,9 +10,8 @@ import org.pbreakers.mobile.getticket.model.entity.Etat
 import org.pbreakers.mobile.getticket.model.entity.Utilisateur
 import org.pbreakers.mobile.getticket.model.entity.Voyage
 
-class DetailBilletViewModel : ViewModel(), KoinComponent {
+class DetailBilletViewModel(var billet: Billet) : ViewModel(), KoinComponent {
 
-    lateinit var billet: Billet
     private val db by lazy { FirebaseFirestore.getInstance() }
 
     private val _user by lazy {

@@ -1,6 +1,5 @@
 package org.pbreakers.mobile.getticket.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,12 +7,17 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import org.koin.core.KoinComponent
 import org.pbreakers.mobile.getticket.model.entity.*
+import org.pbreakers.mobile.getticket.util.LoadingState
 
 class DetailVoyageViewModel : ViewModel(), KoinComponent {
 
     private val db by lazy {
         FirebaseFirestore.getInstance()
     }
+
+    private val _loadingState = MutableLiveData<LoadingState>()
+    val loadingState: LiveData<LoadingState>
+        get() = _loadingState
 
     lateinit var voyage: Voyage
 
@@ -79,13 +83,19 @@ class DetailVoyageViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    fun saveTicket(ticket: Billet): Task<Void> {
+    fun saveTicket(ticket: Billet) {
         // Find current user
+        _loadingState.value = LoadingState.RUNNING
         val billetRef = db.collection("billets").document()
-
         ticket.idBillet = billetRef.id
 
-        return billetRef.set(ticket)
+        billetRef.set(ticket).addOnCompleteListener {
+            if (it.isSuccessful) {
+                _loadingState.value = LoadingState.LOADED
+            } else {
+                _loadingState.value = LoadingState.error(it.exception?.message)
+            }
+        }
     }
 
     private fun findEtatById(id: String) {

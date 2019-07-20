@@ -16,6 +16,7 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import org.pbreakers.mobile.getticket.model.api.*
 import org.pbreakers.mobile.getticket.model.dao.*
+import org.pbreakers.mobile.getticket.model.entity.Billet
 import org.pbreakers.mobile.getticket.model.repository.*
 import org.pbreakers.mobile.getticket.util.Session
 import org.pbreakers.mobile.getticket.viewmodel.*
@@ -147,7 +148,7 @@ val viewModelModule = module {
     viewModel { BilletViewModel() }
     viewModel { BusViewModel() }
     viewModel { BusDetailViewModel() }
-    viewModel { DetailBilletViewModel() }
+    viewModel { (item: Billet) -> DetailBilletViewModel(item) }
     viewModel { DetailVoyageViewModel() }
     viewModel { EnregViewModel() }
     viewModel { HomeViewModel() }
