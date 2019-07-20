@@ -10,7 +10,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Utilisateur(
-    val idUtilisateur: String = "",
+    var idUtilisateur: String = "",
     val nomUtilisateur: String = "",
     val pseudoUtilisateur: String = "",
     val passwordUtilisateur: String = "",
