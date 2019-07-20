@@ -144,7 +144,6 @@
                             android:layout_height="@dimen/spacing_middle" />
 
                         <TextView
-                            android:visibility="gone"
                             android:padding="10dp"
                             android:id="@+id/btnCreateAccount"
                             android:layout_width="wrap_content"
